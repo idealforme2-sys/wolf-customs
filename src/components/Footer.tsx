@@ -140,7 +140,7 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} Wolf Customs. All rights reserved.
           </p>
           <p className="text-gray-500 text-sm flex items-center gap-1">
-            Designed in Adelaide, SA
+            Wolf Customs
           </p>
         </div>
       </div>

@@ -1,13 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Volume2, VolumeX } from "lucide-react";
 import { cn } from "../utils/cn";
 import Magnetic from "./Magnetic";
 import wolfLogoImg from "../wolf.jpg";
+import bgMusic from "../Morning-Routine-Lofi-Study-Music(chosic.com).mp3";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [hasInteracted, setHasInteracted] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +20,66 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // We keep the volume slightly lower so it's pleasant
+    audio.volume = 0.5;
+
+    const tryPlayAudio = () => {
+      if (!isMuted && audio.paused) {
+        audio.play().catch(() => {
+          // Browser is still blocking autoplay, ignore and wait for next interaction
+        });
+      }
+    };
+
+    // Try playing immediately
+    tryPlayAudio();
+
+    // Attach listeners to document to unlock audio
+    const unlockAudio = () => {
+      tryPlayAudio();
+      
+      // If it successfully started playing, we don't need to aggressively listen anymore
+      if (!audio.paused) {
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('scroll', unlockAudio);
+        document.removeEventListener('touchstart', unlockAudio);
+        document.removeEventListener('keydown', unlockAudio);
+      }
+    };
+
+    document.addEventListener('click', unlockAudio, { passive: true });
+    document.addEventListener('scroll', unlockAudio, { passive: true });
+    document.addEventListener('touchstart', unlockAudio, { passive: true });
+    document.addEventListener('keydown', unlockAudio, { passive: true });
+
+    return () => {
+      document.removeEventListener('click', unlockAudio);
+      document.removeEventListener('scroll', unlockAudio);
+      document.removeEventListener('touchstart', unlockAudio);
+      document.removeEventListener('keydown', unlockAudio);
+    };
+  }, [isMuted]);
+
+  const toggleMute = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const newMutedState = !isMuted;
+    setIsMuted(newMutedState);
+    audio.muted = newMutedState;
+
+    // To be absolutely certain the player behaves, we also explicitly pause or play it
+    if (newMutedState) {
+      audio.pause();
+    } else {
+      audio.play().catch(console.error);
+    }
+  };
 
   const navLinks = [
     { name: "Services", href: "#services" },
@@ -26,6 +90,9 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Background Audio */}
+      <audio ref={audioRef} src={bgMusic} loop muted={isMuted} className="hidden" />
+
       {/* Top Banner */}
       <div className="bg-wolf-red text-white text-[10px] md:text-xs font-heading tracking-[0.2em] uppercase py-2.5 px-4 text-center relative z-60 font-bold">
         Emergency Accident? We handle your insurance paperwork. call 24/7:{" "}
@@ -36,26 +103,38 @@ export default function Navbar() {
       <nav
         className={cn(
           "fixed left-0 right-0 z-50 transition-all duration-500",
+          "border-b",
           isScrolled
-            ? "top-0 bg-wolf-black/80 backdrop-blur-xl py-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-b border-wolf-gunmetal/50"
-            : "top-8 md:top-9 bg-transparent py-8",
+            ? "top-0 bg-wolf-black/80 backdrop-blur-xl py-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-wolf-gunmetal/50"
+            : "top-8 md:top-9 bg-transparent py-8 border-transparent",
         )}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
-          <Magnetic>
-            <a
-              href="#"
-              className="text-3xl font-heading font-black tracking-widest flex items-center gap-3 group"
+          <div className="flex items-center gap-6">
+            <Magnetic>
+              <a
+                href="#"
+                className="text-3xl font-heading font-black tracking-widest flex items-center gap-3 group"
+              >
+                <img 
+                  src={wolfLogoImg} 
+                  alt="Wolf Customs Logo" 
+                  className="w-12 h-12 object-cover object-center rounded-full group-hover:scale-110 transition-transform duration-500 border-2 border-wolf-gunmetal"
+                />
+                <span className="text-wolf-red group-hover:text-white transition-colors duration-500 ml-2">WOLF</span>
+                <span className="text-white group-hover:text-wolf-red transition-colors duration-500">CUSTOMS</span>
+              </a>
+            </Magnetic>
+
+            {/* Audio Toggle */}
+            <button 
+              onClick={toggleMute}
+              className="p-2 text-gray-400 hover:text-wolf-red transition-colors duration-300"
+              aria-label={isMuted ? "Unmute background music" : "Mute background music"}
             >
-              <img 
-                src={wolfLogoImg} 
-                alt="Wolf Customs Logo" 
-                className="w-12 h-12 object-cover object-center rounded-full group-hover:scale-110 transition-transform duration-500 border-2 border-wolf-gunmetal"
-              />
-              <span className="text-wolf-red group-hover:text-white transition-colors duration-500 ml-2">WOLF</span>
-              <span className="text-white group-hover:text-wolf-red transition-colors duration-500">CUSTOMS</span>
-            </a>
-          </Magnetic>
+              {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+            </button>
+          </div>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-10">

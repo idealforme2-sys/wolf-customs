@@ -1,7 +1,13 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Magnetic from "./Magnetic";
+
+import slide1 from "../1.jpg";
+import slide2 from "../2.jpg";
+import slide3 from "../3.jpg";
+
+const slides = [slide1, slide2, slide3];
 
 export default function Hero() {
   const ref = useRef(null);
@@ -10,9 +16,17 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 6000); // 6 seconds per slide
+    return () => clearInterval(timer);
+  }, []);
+
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
 
   const textVariants = {
     hidden: { opacity: 0, y: 100 },
@@ -30,12 +44,28 @@ export default function Hero() {
   return (
     <section
       ref={ref}
-      className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-wolf-black"
+      className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-wolf-black pt-32 pb-24"
     >
-      {/* Dynamic Background */}
-      <motion.div style={{ y, scale }} className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-wolf-black/80 via-wolf-black/50 to-wolf-black z-10" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(230,0,0,0.2)_0%,transparent_70%)] z-10 mix-blend-screen" />
+      {/* Dynamic Background Slideshow */}
+      <motion.div style={{ y }} className="absolute inset-0 z-0">
+        <AnimatePresence mode="popLayout">
+          <motion.img
+            key={currentSlide}
+            src={slides[currentSlide]}
+            alt={`Hero Background ${currentSlide + 1}`}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ 
+              opacity: { duration: 1.5, ease: "easeInOut" },
+              scale: { duration: 6, ease: "linear" } 
+            }}
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+        </AnimatePresence>
+        {/* Dark Overlays for Text Legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-wolf-black/90 via-wolf-black/60 to-wolf-black z-10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(230,0,0,0.15)_0%,transparent_70%)] z-10 mix-blend-screen" />
       </motion.div>
 
       {/* Background Marquee */}
@@ -53,14 +83,14 @@ export default function Hero() {
       {/* Content */}
       <motion.div
         style={{ opacity }}
-        className="relative z-30 max-w-7xl mx-auto px-6 lg:px-8 w-full flex flex-col items-center text-center mt-16"
+        className="relative z-30 max-w-7xl mx-auto px-6 lg:px-8 w-full flex flex-col items-center text-center"
       >
         {/* Top Label */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 1.2, ease: "easeOut" }}
-          className="flex items-center gap-4 mb-8"
+          className="flex items-center gap-4 mb-6"
         >
           <div className="h-[1px] w-8 md:w-16 bg-wolf-red" />
           <span className="text-wolf-red font-heading tracking-[0.4em] uppercase text-xs md:text-sm font-bold">
