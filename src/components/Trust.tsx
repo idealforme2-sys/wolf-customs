@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { Star, Award, ShieldCheck, Clock } from "lucide-react";
 
 const stats = [
-  { icon: Award, value: "15+", label: "Years Experience" },
-  { icon: Star, value: "500+", label: "Projects Completed" },
+  { icon: Award, value: "5+", label: "Years Experience" },
+  { icon: Star, value: "100+", label: "Projects Completed" },
   { icon: ShieldCheck, value: "100%", label: "Satisfaction Guarantee" },
   { icon: Clock, value: "24/7", label: "Secure Facility" },
 ];

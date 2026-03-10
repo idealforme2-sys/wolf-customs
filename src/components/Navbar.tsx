@@ -2,7 +2,9 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "../utils/cn";
+import { cn } from "../utils/cn";
 import Magnetic from "./Magnetic";
+import WolfLogo from "../assets/wolf-logo.svg?react";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -44,8 +46,9 @@ export default function Navbar() {
           <Magnetic>
             <a
               href="#"
-              className="text-3xl font-heading font-black tracking-widest flex items-center gap-2 group"
+              className="text-3xl font-heading font-black tracking-widest flex items-center gap-3 group"
             >
+              <WolfLogo className="w-10 h-10 group-hover:scale-110 transition-transform duration-500" />
               <span className="text-wolf-red group-hover:text-white transition-colors duration-500">WOLF</span>
               <span className="text-white group-hover:text-wolf-red transition-colors duration-500">CUSTOMS</span>
             </a>

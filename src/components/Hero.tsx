@@ -36,11 +36,6 @@ export default function Hero() {
       <motion.div style={{ y, scale }} className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-wolf-black/80 via-wolf-black/50 to-wolf-black z-10" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(230,0,0,0.2)_0%,transparent_70%)] z-10 mix-blend-screen" />
-        <img
-          src="https://images.unsplash.com/photo-1611821064430-0d40221e4e03?q=80&w=2070&auto=format&fit=crop"
-          alt="Premium Car Restoration"
-          className="w-full h-full object-cover"
-        />
       </motion.div>
 
       {/* Background Marquee */}
@@ -189,7 +184,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 3.5, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3"
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3"
       >
         <span className="text-[10px] uppercase tracking-[0.3em] text-gray-500 font-heading font-bold">
           Scroll
