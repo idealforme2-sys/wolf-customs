@@ -214,14 +214,14 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 3.5, duration: 1 }}
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-3"
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1.5"
       >
-        <span className="text-[10px] uppercase tracking-[0.3em] text-gray-500 font-heading font-bold">
+        <span className="text-[8px] uppercase tracking-[0.3em] text-gray-500 font-heading font-bold">
           Scroll
         </span>
-        <div className="w-[1px] h-16 bg-gray-800 relative overflow-hidden">
+        <div className="w-[1px] h-6 bg-gray-800 relative overflow-hidden">
           <motion.div
-            animate={{ y: [0, 64] }}
+            animate={{ y: [0, 24] }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
             className="w-full h-1/2 bg-wolf-red absolute top-0"
           />
