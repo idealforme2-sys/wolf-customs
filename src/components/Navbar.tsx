@@ -25,45 +25,32 @@ export default function Navbar() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    // We keep the volume slightly lower so it's pleasant
     audio.volume = 0.5;
 
-    const tryPlayAudio = () => {
-      if (!isMuted && audio.paused) {
-        audio.play().catch(() => {
-          // Browser is still blocking autoplay, ignore and wait for next interaction
-        });
-      }
+    const attemptPlay = () => {
+      audio.play().then(() => {
+        setIsMuted(false);
+      }).catch((error) => {
+        if (error.name === 'NotAllowedError') {
+          console.warn("Autoplay with sound prevented by browser. Falling back to muted autoplay.");
+          setIsMuted(true);
+          audio.muted = true;
+          audio.play().catch(console.error);
+        } else {
+          // It might be a loading/buffer abort, wait and try again or ignore
+          console.error("Audio playback failed for another reason:", error);
+        }
+      });
     };
 
-    // Try playing immediately
-    tryPlayAudio();
+    // If already buffered enough to play, try it. Otherwise wait for it.
+    if (audio.readyState >= 2) {
+      attemptPlay();
+    } else {
+      audio.addEventListener('canplay', attemptPlay, { once: true });
+    }
 
-    // Attach listeners to document to unlock audio
-    const unlockAudio = () => {
-      tryPlayAudio();
-      
-      // If it successfully started playing, we don't need to aggressively listen anymore
-      if (!audio.paused) {
-        document.removeEventListener('click', unlockAudio);
-        document.removeEventListener('scroll', unlockAudio);
-        document.removeEventListener('touchstart', unlockAudio);
-        document.removeEventListener('keydown', unlockAudio);
-      }
-    };
-
-    document.addEventListener('click', unlockAudio, { passive: true });
-    document.addEventListener('scroll', unlockAudio, { passive: true });
-    document.addEventListener('touchstart', unlockAudio, { passive: true });
-    document.addEventListener('keydown', unlockAudio, { passive: true });
-
-    return () => {
-      document.removeEventListener('click', unlockAudio);
-      document.removeEventListener('scroll', unlockAudio);
-      document.removeEventListener('touchstart', unlockAudio);
-      document.removeEventListener('keydown', unlockAudio);
-    };
-  }, [isMuted]);
+  }, []);
 
   const toggleMute = () => {
     const audio = audioRef.current;
@@ -73,10 +60,8 @@ export default function Navbar() {
     setIsMuted(newMutedState);
     audio.muted = newMutedState;
 
-    // To be absolutely certain the player behaves, we also explicitly pause or play it
-    if (newMutedState) {
-      audio.pause();
-    } else {
+    if (!newMutedState) {
+      // If we are unmuting, make sure it's playing
       audio.play().catch(console.error);
     }
   };
