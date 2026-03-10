@@ -5,7 +5,7 @@ import customPaintImg from '../assets/images/gallery/gallery_custom_paint.png';
 import fullResprayImg from '../assets/images/gallery/gallery_full_respray.png';
 import panelRepairImg from '../assets/images/gallery/gallery_panel_repair.png';
 import classicRestorationImg from '../assets/images/gallery/gallery_classic_restoration.png';
-import rustTreatmentImg from '../assets/images/gallery/gallery_rust_treatment.png';
+import rustTreatmentImg from '../../public/images/gallery/rust_treatment_new.png';
 
 const projects = [
   {
