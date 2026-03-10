@@ -3,7 +3,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "../utils/cn";
 import Magnetic from "./Magnetic";
-import WolfLogo from "../assets/wolf-logo.svg?react";
+
+const WolfLogo = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M300 150 L220 280 L250 350 L300 450 L350 350 L380 280 Z" fill="none" stroke="currentColor" strokeWidth="15" strokeLinejoin="round"/>
+    <path d="M300 150 L250 250 L300 320 L350 250 Z" fill="none" stroke="currentColor" strokeWidth="8" strokeLinejoin="round"/>
+    <path d="M220 280 L180 160 L240 220" fill="none" stroke="currentColor" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M380 280 L420 160 L360 220" fill="none" stroke="currentColor" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M260 270 L280 290" fill="none" stroke="currentColor" strokeWidth="10" strokeLinecap="round"/>
+    <path d="M340 270 L320 290" fill="none" stroke="currentColor" strokeWidth="10" strokeLinecap="round"/>
+  </svg>
+);
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
