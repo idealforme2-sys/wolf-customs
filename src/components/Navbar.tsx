@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "../utils/cn";
-import { cn } from "../utils/cn";
 import Magnetic from "./Magnetic";
 import WolfLogo from "../assets/wolf-logo.svg?react";
 
