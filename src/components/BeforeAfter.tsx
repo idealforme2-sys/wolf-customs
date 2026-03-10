@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion } from "framer-motion";import beforeImg from "../before.jpg";
+import afterImg from "../after.jpg";
 
 export default function BeforeAfter() {
   const [sliderPosition, setSliderPosition] = useState(50);
@@ -62,7 +63,7 @@ export default function BeforeAfter() {
           {/* After Image (Base) */}
           <div className="absolute inset-0">
             <img
-              src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?q=80&w=2000&auto=format&fit=crop"
+              src={afterImg}
               alt="Restored Car"
               className="w-full h-full object-cover"
               draggable="false"
@@ -80,7 +81,7 @@ export default function BeforeAfter() {
             }}
           >
             <img
-              src="https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?q=80&w=2000&auto=format&fit=crop"
+              src={beforeImg}
               alt="Rusty Car"
               className="w-full h-full object-cover grayscale opacity-80"
               draggable="false"

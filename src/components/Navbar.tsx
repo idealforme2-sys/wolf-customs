@@ -3,17 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { cn } from "../utils/cn";
 import Magnetic from "./Magnetic";
-
-const WolfLogo = ({ className }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M300 150 L220 280 L250 350 L300 450 L350 350 L380 280 Z" fill="none" stroke="currentColor" strokeWidth="15" strokeLinejoin="round"/>
-    <path d="M300 150 L250 250 L300 320 L350 250 Z" fill="none" stroke="currentColor" strokeWidth="8" strokeLinejoin="round"/>
-    <path d="M220 280 L180 160 L240 220" fill="none" stroke="currentColor" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M380 280 L420 160 L360 220" fill="none" stroke="currentColor" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M260 270 L280 290" fill="none" stroke="currentColor" strokeWidth="10" strokeLinecap="round"/>
-    <path d="M340 270 L320 290" fill="none" stroke="currentColor" strokeWidth="10" strokeLinecap="round"/>
-  </svg>
-);
+import wolfLogoImg from "../wolf.jpg";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -37,7 +27,7 @@ export default function Navbar() {
   return (
     <>
       {/* Top Banner */}
-      <div className="bg-wolf-red text-white text-[10px] md:text-xs font-heading tracking-[0.2em] uppercase py-2.5 px-4 text-center relative z-[60] font-bold">
+      <div className="bg-wolf-red text-white text-[10px] md:text-xs font-heading tracking-[0.2em] uppercase py-2.5 px-4 text-center relative z-60 font-bold">
         Emergency Accident? We handle your insurance paperwork. call 24/7:{" "}
         <a href="tel:0881234567" className="font-black hover:underline ml-1">
           (08) 8123 4567
@@ -57,8 +47,12 @@ export default function Navbar() {
               href="#"
               className="text-3xl font-heading font-black tracking-widest flex items-center gap-3 group"
             >
-              <WolfLogo className="w-10 h-10 group-hover:scale-110 transition-transform duration-500" />
-              <span className="text-wolf-red group-hover:text-white transition-colors duration-500">WOLF</span>
+              <img 
+                src={wolfLogoImg} 
+                alt="Wolf Customs Logo" 
+                className="w-12 h-12 object-cover object-center rounded-full group-hover:scale-110 transition-transform duration-500 border-2 border-wolf-gunmetal"
+              />
+              <span className="text-wolf-red group-hover:text-white transition-colors duration-500 ml-2">WOLF</span>
               <span className="text-white group-hover:text-wolf-red transition-colors duration-500">CUSTOMS</span>
             </a>
           </Magnetic>
