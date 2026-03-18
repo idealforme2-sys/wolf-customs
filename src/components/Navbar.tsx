@@ -95,16 +95,16 @@ export default function Navbar() {
         )}
       >
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 md:gap-6">
             <Magnetic>
               <a
                 href="#"
-                className="text-3xl font-heading font-black tracking-widest flex items-center gap-3 group"
+                className="text-2xl md:text-3xl font-heading font-black tracking-[0.1em] md:tracking-widest flex items-center gap-2 md:gap-3 group"
               >
                 <img 
                   src={wolfLogoImg} 
                   alt="Wolf Customs Logo" 
-                  className="w-12 h-12 object-cover object-center rounded-full group-hover:scale-110 transition-transform duration-500 border-2 border-wolf-gunmetal"
+                  className="w-10 h-10 md:w-12 md:h-12 object-cover object-center rounded-full group-hover:scale-110 transition-transform duration-500 border-2 border-wolf-gunmetal"
                 />
                 <span className="text-wolf-red group-hover:text-white transition-colors duration-500 ml-2">WOLF</span>
                 <span className="text-white group-hover:text-wolf-red transition-colors duration-500">CUSTOMS</span>

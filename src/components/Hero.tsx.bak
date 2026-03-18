@@ -1,7 +1,13 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Magnetic from "./Magnetic";
+
+import slide1 from "../1.jpg";
+import slide2 from "../2.jpg";
+import slide3 from "../3.jpg";
+
+const slides = [slide1, slide2, slide3];
 
 export default function Hero() {
   const ref = useRef(null);
@@ -9,6 +15,15 @@ export default function Hero() {
     target: ref,
     offset: ["start start", "end start"],
   });
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 6000); // 6 seconds per slide
+    return () => clearInterval(timer);
+  }, []);
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
@@ -31,28 +46,39 @@ export default function Hero() {
       ref={ref}
       className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-wolf-black pt-32 pb-24"
     >
-      {/* Dynamic Background Video */}
+      {/* Dynamic Background Slideshow */}
       <motion.div style={{ y }} className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          muted
-          playsInline
-          onTimeUpdate={(e) => {
-            const video = e.currentTarget;
-            // Cut the last 4 seconds of the video as requested
-            if (video.duration && video.currentTime >= video.duration - 4) {
-              video.currentTime = 0;
-              video.play();
-            }
-          }}
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        >
-          <source src="/hero-background.mp4" type="video/mp4" />
-        </video>
+        <AnimatePresence mode="popLayout">
+          <motion.img
+            key={currentSlide}
+            src={slides[currentSlide]}
+            alt={`Hero Background ${currentSlide + 1}`}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.05 }}
+            transition={{ 
+              opacity: { duration: 1.5, ease: "easeInOut" },
+              scale: { duration: 6, ease: "linear" } 
+            }}
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+        </AnimatePresence>
         {/* Dark Overlays for Text Legibility */}
         <div className="absolute inset-0 bg-gradient-to-b from-wolf-black/90 via-wolf-black/60 to-wolf-black z-10" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(230,0,0,0.15)_0%,transparent_70%)] z-10 mix-blend-screen" />
       </motion.div>
+
+      {/* Background Marquee */}
+      <div className="absolute top-1/2 -translate-y-1/2 w-full z-10 opacity-5 pointer-events-none overflow-hidden">
+        <div className="marquee-container">
+          <div className="marquee-content text-[20vw] font-heading font-black leading-none">
+            WOLF CUSTOMS • WOLF CUSTOMS • WOLF CUSTOMS • WOLF CUSTOMS • 
+          </div>
+          <div className="marquee-content text-[20vw] font-heading font-black leading-none" aria-hidden="true">
+            WOLF CUSTOMS • WOLF CUSTOMS • WOLF CUSTOMS • WOLF CUSTOMS • 
+          </div>
+        </div>
+      </div>
 
       {/* Content */}
       <motion.div
@@ -73,31 +99,31 @@ export default function Hero() {
           <div className="h-[1px] w-8 md:w-16 bg-wolf-red" />
         </motion.div>
 
-        <div className="relative mb-6">
+        <div className="overflow-hidden relative mb-6">
           <h1 className="text-[14vw] md:text-[9vw] lg:text-[8rem] font-heading font-black tracking-tighter leading-[0.85] uppercase flex flex-col items-center">
-            <div className="flex overflow-visible">
-              {["W", "O", "L", "F"].map((char, i) => (
+            <div className="flex overflow-hidden">
+              {["P", "R", "E", "C", "I", "S", "I", "O", "N"].map((char, i) => (
                 <motion.span
                   key={i}
                   custom={i}
                   variants={textVariants}
                   initial="hidden"
                   animate="visible"
-                  className="text-white drop-shadow-2xl"
+                  className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 drop-shadow-2xl"
                 >
                   {char}
                 </motion.span>
               ))}
             </div>
-            <div className="flex overflow-visible mt-2">
-              {["C", "U", "S", "T", "O", "M", "S"].map((char, i) => (
+            <div className="flex overflow-hidden mt-2">
+              {["F", "I", "N", "I", "S", "H", "."].map((char, i) => (
                 <motion.span
                   key={i}
-                  custom={i + 4}
+                  custom={i + 9}
                   variants={textVariants}
                   initial="hidden"
                   animate="visible"
-                  className="text-wolf-red drop-shadow-2xl"
+                  className="text-transparent bg-clip-text bg-gradient-to-b from-wolf-red to-red-900 drop-shadow-2xl"
                 >
                   {char}
                 </motion.span>
