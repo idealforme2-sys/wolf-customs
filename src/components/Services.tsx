@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Wrench, Car, Paintbrush, ShieldAlert, Palette, SprayCan, ShieldCheck, Award, CheckCircle, MapPin, Shield, Star, Zap, Settings, LucideIcon } from 'lucide-react';

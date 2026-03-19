@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Phone, Mail, Clock, ChevronDown, UploadCloud, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { db } from "../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
