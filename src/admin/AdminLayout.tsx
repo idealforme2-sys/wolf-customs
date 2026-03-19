@@ -8,7 +8,7 @@ export default function AdminLayout() {
 
   const handleLogout = async () => {
     await signOut(auth);
-    navigate("/admin");
+    navigate("/");
   };
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>

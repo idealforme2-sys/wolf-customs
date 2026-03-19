@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Volume2, VolumeX } from "lucide-react";
 import { cn } from "../utils/cn";
+import { Link } from "react-router-dom";
 import Magnetic from "./Magnetic";
 import wolfLogoImg from "../wolf.jpg";
 import bgMusic from "../Morning-Routine-Lofi-Study-Music(chosic.com).mp3";
@@ -134,15 +135,25 @@ export default function Navbar() {
                 </a>
               </Magnetic>
             ))}
-            <Magnetic>
-              <a
-                href="#contact"
-                className="px-8 py-3 bg-transparent border border-wolf-red text-wolf-red hover:bg-wolf-red hover:text-white transition-all duration-500 font-heading tracking-[0.2em] text-xs font-bold uppercase relative overflow-hidden group"
-              >
-                <span className="relative z-10">GET QUOTE</span>
-                <div className="absolute inset-0 bg-wolf-red transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out" />
-              </a>
-            </Magnetic>
+            <div className="flex items-center gap-6">
+              <Magnetic>
+                <Link
+                  to="/admin"
+                  className="text-[10px] font-heading font-bold tracking-widest uppercase text-gray-500 hover:text-white transition-colors"
+                >
+                  Owner Login
+                </Link>
+              </Magnetic>
+              <Magnetic>
+                <a
+                  href="#contact"
+                  className="px-8 py-3 bg-transparent border border-wolf-red text-wolf-red hover:bg-wolf-red hover:text-white transition-all duration-500 font-heading tracking-[0.2em] text-xs font-bold uppercase relative overflow-hidden group"
+                >
+                  <span className="relative z-10">GET QUOTE</span>
+                  <div className="absolute inset-0 bg-wolf-red transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+                </a>
+              </Magnetic>
+            </div>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -188,6 +199,19 @@ export default function Navbar() {
                 >
                   GET QUOTE
                 </motion.a>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7 }}
+                >
+                  <Link
+                    to="/admin"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="text-sm font-heading font-bold tracking-widest uppercase text-gray-500 hover:text-wolf-red transition-colors"
+                  >
+                    Owner Login
+                  </Link>
+                </motion.div>
               </div>
             </motion.div>
           )}
