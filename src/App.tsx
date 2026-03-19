@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -14,8 +15,12 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Preloader from "./components/Preloader";
 import CustomCursor from "./components/CustomCursor";
+import AdminLogin from "./admin/AdminLogin";
+import AdminLayout from "./admin/AdminLayout";
+import QuotesDashboard from "./admin/QuotesDashboard";
+import ProtectedRoute from "./admin/ProtectedRoute";
 
-export default function App() {
+function PublicSite() {
   const [loading, setLoading] = useState(true);
 
   return (
@@ -42,5 +47,19 @@ export default function App() {
       </main>
       <Footer />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<PublicSite />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+          <Route path="/admin/quotes" element={<QuotesDashboard />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
