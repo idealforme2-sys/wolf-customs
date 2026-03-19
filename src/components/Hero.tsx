@@ -39,8 +39,8 @@ export default function Hero() {
           playsInline
           onTimeUpdate={(e) => {
             const video = e.currentTarget;
-            // Cut the last 4 seconds of the video as requested
-            if (video.duration && video.currentTime >= video.duration - 4) {
+            // Cut the last 7 seconds of the video as requested
+            if (video.duration && video.currentTime >= video.duration - 7) {
               video.currentTime = 0;
               video.play();
             }
@@ -73,8 +73,8 @@ export default function Hero() {
           <div className="h-[1px] w-8 md:w-16 bg-wolf-red" />
         </motion.div>
 
-        <div className="relative mb-6">
-          <h1 className="text-[14vw] md:text-[9vw] lg:text-[8rem] font-heading font-black tracking-tighter leading-[0.85] uppercase flex flex-col items-center">
+        <div className="overflow-visible relative mb-6">
+          <h1 className="text-[14vw] md:text-[9vw] lg:text-[8rem] font-heading font-black tracking-normal leading-[0.85] uppercase flex flex-col items-center">
             <div className="flex overflow-visible">
               {["W", "O", "L", "F"].map((char, i) => (
                 <motion.span
@@ -83,7 +83,7 @@ export default function Hero() {
                   variants={textVariants}
                   initial="hidden"
                   animate="visible"
-                  className="text-white drop-shadow-2xl"
+                  className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500 drop-shadow-2xl p-[0.2em] -m-[0.2em]"
                 >
                   {char}
                 </motion.span>
@@ -97,7 +97,7 @@ export default function Hero() {
                   variants={textVariants}
                   initial="hidden"
                   animate="visible"
-                  className="text-wolf-red drop-shadow-2xl"
+                  className="text-transparent bg-clip-text bg-gradient-to-b from-wolf-red to-red-900 drop-shadow-2xl p-[0.2em] -m-[0.2em]"
                 >
                   {char}
                 </motion.span>
