@@ -26,7 +26,6 @@ function PublicSite() {
   return (
     <div className="min-h-screen bg-wolf-black text-white selection:bg-wolf-red selection:text-white relative">
       <div className="noise-bg" />
-      <CustomCursor />
       
       <AnimatePresence mode="wait">
         {loading && <Preloader key="preloader" onComplete={() => setLoading(false)} />}
@@ -53,6 +52,7 @@ function PublicSite() {
 export default function App() {
   return (
     <BrowserRouter>
+      <CustomCursor />
       <Routes>
         <Route path="/" element={<PublicSite />} />
         <Route path="/admin" element={<AdminLogin />} />

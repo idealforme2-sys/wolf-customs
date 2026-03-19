@@ -61,8 +61,8 @@ export default function QuotesDashboard() {
   );
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-8">
+    <div className="p-4 md:p-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-heading font-bold uppercase tracking-widest">
             Quote <span className="text-wolf-red">Requests</span>
@@ -70,14 +70,14 @@ export default function QuotesDashboard() {
           <p className="text-gray-500 text-sm mt-1">{quotes.length} total submissions</p>
         </div>
 
-        <div className="relative">
+        <div className="relative w-full md:w-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search by name or service..."
-            className="bg-wolf-gray border border-wolf-gunmetal pl-10 pr-4 py-2 text-sm text-white focus:outline-none focus:border-wolf-red transition-colors w-72"
+            placeholder="Search quotes..."
+            className="bg-wolf-gray border border-wolf-gunmetal pl-10 pr-4 py-3 md:py-2 text-sm text-white focus:outline-none focus:border-wolf-red transition-colors w-full md:w-72"
           />
         </div>
       </div>
@@ -93,17 +93,19 @@ export default function QuotesDashboard() {
               {/* Row Header */}
               <button
                 onClick={() => setExpandedId(expandedId === q.id ? null : q.id)}
-                className="w-full flex items-center justify-between px-6 py-4 hover:bg-wolf-gunmetal/30 transition-colors"
+                className="w-full flex items-center justify-between px-4 py-4 md:px-6 hover:bg-wolf-gunmetal/30 transition-colors"
               >
-                <div className="flex items-center gap-6">
-                  <span className={`px-3 py-1 text-xs font-heading uppercase tracking-widest border ${STATUS_COLORS[q.status] || STATUS_COLORS.new}`}>
-                    {q.status || "new"}
-                  </span>
-                  <span className="font-heading font-bold text-white">{q.name}</span>
-                  <span className="text-gray-500 text-sm">{q.service}</span>
+                <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-6 text-left">
+                  <div className="flex items-center gap-3">
+                    <span className={`px-3 py-1 text-[10px] md:text-xs font-heading uppercase tracking-widest border ${STATUS_COLORS[q.status] || STATUS_COLORS.new}`}>
+                      {q.status || "new"}
+                    </span>
+                    <span className="font-heading font-bold text-white text-sm md:text-base">{q.name}</span>
+                  </div>
+                  <span className="text-gray-500 text-xs md:text-sm truncate max-w-[200px] md:max-w-none">{q.service}</span>
                 </div>
-                <div className="flex items-center gap-4">
-                  <span className="text-gray-500 text-xs flex items-center gap-1">
+                <div className="flex items-center gap-3 md:gap-4 shrink-0">
+                  <span className="text-gray-500 text-xs hidden md:flex items-center gap-1">
                     <Calendar className="w-3 h-3" /> {formatDate(q.createdAt)}
                   </span>
                   {expandedId === q.id ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
@@ -112,8 +114,8 @@ export default function QuotesDashboard() {
 
               {/* Expanded Details */}
               {expandedId === q.id && (
-                <div className="px-6 pb-6 border-t border-wolf-gunmetal pt-4 space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="px-4 md:px-6 pb-6 border-t border-wolf-gunmetal pt-4 space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4">
                     <div>
                       <p className="text-xs font-heading uppercase tracking-widest text-gray-500 mb-1">Phone</p>
                       <p className="text-white flex items-center gap-2"><Phone className="w-4 h-4 text-wolf-red" /> {q.phone}</p>
