@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Lock, Mail } from "lucide-react";
@@ -9,6 +9,7 @@ export default function AdminLogin() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [resetMsg, setResetMsg] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -22,6 +23,17 @@ export default function AdminLogin() {
       setError("Invalid email or password.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!email) { setError("Enter your email first."); return; }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setResetMsg("Password reset email sent! Check your inbox.");
+      setError("");
+    } catch {
+      setError("Could not send reset email. Check the address.");
     }
   };
 
@@ -69,6 +81,7 @@ export default function AdminLogin() {
           </div>
 
           {error && <p className="text-red-400 text-sm">{error}</p>}
+          {resetMsg && <p className="text-green-400 text-sm">{resetMsg}</p>}
 
           <button
             type="submit"
@@ -76,6 +89,14 @@ export default function AdminLogin() {
             className="w-full bg-wolf-red text-white font-heading tracking-widest uppercase py-3 hover:bg-wolf-red-hover transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Signing In...</> : "Sign In"}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleForgotPassword}
+            className="w-full text-center text-xs text-gray-500 hover:text-wolf-red transition-colors mt-2"
+          >
+            Forgot your password?
           </button>
         </form>
       </div>
