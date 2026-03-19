@@ -1,5 +1,8 @@
 import { motion } from 'framer-motion';
-import { Wrench, Car, Paintbrush, ShieldAlert, Palette, SprayCan, ShieldCheck, Award, CheckCircle, MapPin } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase';
+import { Wrench, Car, Paintbrush, ShieldAlert, Palette, SprayCan, ShieldCheck, Award, CheckCircle, MapPin, Shield, Star, Zap, Settings, LucideIcon } from 'lucide-react';
 
 import paintPanelImg from '../assets/images/services/paint_panel_repairs.png';
 import vehicleResImg from '../assets/images/services/vehicle_restorations.png';
@@ -8,6 +11,10 @@ import rustImg from '../assets/images/services/rust_repairs.png';
 import customPaintImg from '../assets/images/services/custom_paint_jobs.png';
 import sprayImg from '../assets/images/services/spray_painting.png';
 
+const ICON_MAP: Record<string, LucideIcon> = {
+  Wrench, Car, Paintbrush, ShieldAlert, Palette, SprayCan, Shield, Star, Zap, Settings,
+};
+
 const features = [
   { title: 'Insurance Work', desc: 'All Providers Accepted', icon: ShieldCheck },
   { title: 'Dealership Approved', desc: 'Fleet & Trade Standards', icon: Award },
@@ -15,47 +22,37 @@ const features = [
   { title: 'Locally Owned', desc: 'Salisbury South, SA', icon: MapPin },
 ];
 
-const services = [
-  {
-    title: 'Paint & Panel Repairs',
-    description: 'Expert collision repair and dent removal to restore your vehicle to factory condition. We use advanced techniques to ensure a seamless finish.',
-    icon: Wrench,
-    image: paintPanelImg,
-  },
-  {
-    title: 'Vehicle Restorations',
-    description: 'Full nut-and-bolt restorations for classic and muscle cars. Bringing legends back to life with uncompromising attention to detail.',
-    icon: Car,
-    image: vehicleResImg,
-  },
-  {
-    title: 'Full Car Resprays',
-    description: 'Complete color changes or factory-matched resprays using premium automotive paints in our climate-controlled spray booths.',
-    icon: Paintbrush,
-    image: fullResprayImg,
-  },
-  {
-    title: 'Rust Repairs',
-    description: 'Professional rust cutting, custom metal fabrication, and anti-corrosion treatment to protect your investment for decades.',
-    icon: ShieldAlert,
-    image: rustImg,
-  },
-  {
-    title: 'Custom Paint Jobs',
-    description: 'Show-quality custom finishes, pearls, candies, flakes, and bespoke designs tailored to your exact vision.',
-    icon: Palette,
-    image: customPaintImg,
-  },
-  {
-    title: 'Spray Painting',
-    description: 'High-end spray painting services for parts, panels, motorcycles, and accessories with perfect color matching.',
-    icon: SprayCan,
-    image: sprayImg,
-  },
+const DEFAULT_SERVICES = [
+  { title: 'Paint & Panel Repairs', description: 'Expert collision repair and dent removal to restore your vehicle to factory condition. We use advanced techniques to ensure a seamless finish.', icon: Wrench, image: paintPanelImg },
+  { title: 'Vehicle Restorations', description: 'Full nut-and-bolt restorations for classic and muscle cars. Bringing legends back to life with uncompromising attention to detail.', icon: Car, image: vehicleResImg },
+  { title: 'Full Car Resprays', description: 'Complete color changes or factory-matched resprays using premium automotive paints in our climate-controlled spray booths.', icon: Paintbrush, image: fullResprayImg },
+  { title: 'Rust Repairs', description: 'Professional rust cutting, custom metal fabrication, and anti-corrosion treatment to protect your investment for decades.', icon: ShieldAlert, image: rustImg },
+  { title: 'Custom Paint Jobs', description: 'Show-quality custom finishes, pearls, candies, flakes, and bespoke designs tailored to your exact vision.', icon: Palette, image: customPaintImg },
+  { title: 'Spray Painting', description: 'High-end spray painting services for parts, panels, motorcycles, and accessories with perfect color matching.', icon: SprayCan, image: sprayImg },
 ];
+
+interface FirestoreService { title: string; description: string; image: string; icon: string; order: number; }
+
+function useServices() {
+  const [services, setServices] = useState(DEFAULT_SERVICES);
+  useEffect(() => {
+    const q = query(collection(db, "services"), orderBy("order", "asc"));
+    const unsub = onSnapshot(q, (snap) => {
+      if (snap.empty) return; // keep defaults
+      setServices(snap.docs.map((d) => {
+        const data = d.data() as FirestoreService;
+        return { title: data.title, description: data.description, icon: ICON_MAP[data.icon] || Wrench, image: data.image || '' };
+      }));
+    });
+    return unsub;
+  }, []);
+  return services;
+}
+
 
 
 export default function Services() {
+  const services = useServices();
   return (
     <section id="services" className="py-32 bg-wolf-black relative">
       {/* Background Elements */}

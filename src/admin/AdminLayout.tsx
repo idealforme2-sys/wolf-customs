@@ -1,7 +1,7 @@
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import { LayoutDashboard, FileText, LogOut } from "lucide-react";
+import { LayoutDashboard, FileText, LogOut, Edit3 } from "lucide-react";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
@@ -33,6 +33,9 @@ export default function AdminLayout() {
         <nav className="flex-none md:flex-1 flex flex-row md:flex-col overflow-x-auto py-2 md:py-4 px-2 md:px-0 space-x-2 md:space-x-0 md:space-y-1">
           <NavLink to="/admin/quotes" className={linkClass}>
             <FileText className="w-4 h-4" /> Quotes
+          </NavLink>
+          <NavLink to="/admin/content" className={linkClass}>
+            <Edit3 className="w-4 h-4" /> Content
           </NavLink>
           <NavLink to="/admin/dashboard" className={linkClass}>
             <LayoutDashboard className="w-4 h-4" /> Overview
