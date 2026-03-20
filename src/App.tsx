@@ -18,6 +18,7 @@ import CustomCursor from "./components/CustomCursor";
 import AdminLogin from "./admin/AdminLogin";
 import AdminLayout from "./admin/AdminLayout";
 import QuotesDashboard from "./admin/QuotesDashboard";
+import OverviewDashboard from "./admin/OverviewDashboard";
 import ProtectedRoute from "./admin/ProtectedRoute";
 
 function PublicSite() {
@@ -58,6 +59,7 @@ export default function App() {
         <Route path="/admin" element={<AdminLogin />} />
         <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
           <Route path="/admin/quotes" element={<QuotesDashboard />} />
+          <Route path="/admin/dashboard" element={<OverviewDashboard />} />
         </Route>
       </Routes>
     </BrowserRouter>
