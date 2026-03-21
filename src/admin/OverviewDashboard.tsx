@@ -144,6 +144,17 @@ export default function OverviewDashboard() {
         <div className="space-y-4">
           <h2 className="text-sm font-heading uppercase tracking-widest text-gray-400">Quick Actions</h2>
           <div className="space-y-2">
+            <Link
+              to="/admin/content"
+              className="flex items-center justify-between p-4 bg-wolf-black border border-wolf-gunmetal hover:border-wolf-red transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <Users className="w-4 h-4 text-gray-400 group-hover:text-wolf-red transition-colors" />
+                <span className="text-sm text-white">Manage Content</span>
+              </div>
+              <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-white transition-colors" />
+            </Link>
+
             <Link 
               to="/admin/quotes" 
               className="flex items-center justify-between p-4 bg-wolf-black border border-wolf-gunmetal hover:border-wolf-red transition-all group"
@@ -154,17 +165,6 @@ export default function OverviewDashboard() {
               </div>
               <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-white transition-colors" />
             </Link>
-            
-            <button 
-              className="w-full flex items-center justify-between p-4 bg-wolf-black border border-wolf-gunmetal hover:border-wolf-red transition-all group opacity-50 cursor-not-allowed"
-              title="Coming in Phase 4"
-            >
-              <div className="flex items-center gap-3">
-                <Users className="w-4 h-4 text-gray-400" />
-                <span className="text-sm text-white">Manage Content</span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-gray-600" />
-            </button>
           </div>
         </div>
       </div>

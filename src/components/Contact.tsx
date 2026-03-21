@@ -1,16 +1,20 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { MapPin, Phone, Mail, Clock, ChevronDown, UploadCloud, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { db } from "../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { useSiteContent } from "./SiteContentProvider";
+import { uploadToCloudinary } from "../utils/cloudinary";
 
 export default function Contact() {
+  const { content } = useSiteContent();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [files, setFiles] = useState<FileList | null>(null);
   const [fileName, setFileName] = useState("");
+  const serviceOptions = [...new Set(content.services.items.map((item) => item.title).filter(Boolean).concat("Other"))];
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitStatus('idle');
@@ -28,18 +32,7 @@ export default function Contact() {
       const imageUrls: string[] = [];
       if (files && files.length > 0) {
         for (let i = 0; i < files.length; i++) {
-          const fileData = new FormData();
-          fileData.append('file', files[i]);
-          fileData.append('upload_preset', 'WolfCustoms'); // Your Unsigned Preset
-
-          const res = await fetch(`https://api.cloudinary.com/v1_1/dqfltczlj/image/upload`, {
-            method: 'POST',
-            body: fileData,
-          });
-          const uploadedFile = await res.json();
-          if (uploadedFile.secure_url) {
-            imageUrls.push(uploadedFile.secure_url);
-          }
+          imageUrls.push(await uploadToCloudinary(files[i]));
         }
       }
 
@@ -79,7 +72,7 @@ export default function Contact() {
               viewport={{ once: true }}
               className="text-4xl md:text-6xl font-heading font-bold uppercase tracking-tight mb-8"
             >
-              Get In <span className="text-wolf-red">Touch</span>
+              {content.contact.title} <span className="text-wolf-red">{content.contact.highlight}</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -88,8 +81,7 @@ export default function Contact() {
               transition={{ delay: 0.2 }}
               className="text-gray-400 text-lg mb-12 max-w-md"
             >
-              Visit our Adelaide workshop or send us a message to discuss your
-              next automotive project.
+              {content.contact.description}
             </motion.p>
 
             <div className="space-y-8">
@@ -107,11 +99,7 @@ export default function Contact() {
                   <h4 className="font-heading font-bold uppercase tracking-widest text-white mb-1">
                     Location
                   </h4>
-                  <p className="text-gray-400">
-                    77A Rundle Road
-                    <br />
-                    Salisbury South SA 5106
-                  </p>
+                  <p className="text-gray-400 whitespace-pre-line">{content.business.address}</p>
                 </div>
               </motion.div>
 
@@ -129,7 +117,9 @@ export default function Contact() {
                   <h4 className="font-heading font-bold uppercase tracking-widest text-white mb-1">
                     Phone
                   </h4>
-                  <p className="text-gray-400">0412 345 678</p>
+                  <a href={content.business.phoneHref} className="text-gray-400 hover:text-white transition-colors">
+                    {content.business.phoneDisplay}
+                  </a>
                 </div>
               </motion.div>
 
@@ -137,7 +127,27 @@ export default function Contact() {
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: 0.45 }}
+                className="flex items-start gap-4"
+              >
+                <div className="w-12 h-12 bg-wolf-gunmetal flex items-center justify-center shrink-0">
+                  <Mail className="w-6 h-6 text-wolf-red" />
+                </div>
+                <div>
+                  <h4 className="font-heading font-bold uppercase tracking-widest text-white mb-1">
+                    Email
+                  </h4>
+                  <a href={`mailto:${content.business.email}`} className="text-gray-400 hover:text-white transition-colors">
+                    {content.business.email}
+                  </a>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.55 }}
                 className="flex items-start gap-4"
               >
                 <div className="w-12 h-12 bg-wolf-gunmetal flex items-center justify-center shrink-0">
@@ -147,11 +157,7 @@ export default function Contact() {
                   <h4 className="font-heading font-bold uppercase tracking-widest text-white mb-1">
                     Hours
                   </h4>
-                  <p className="text-gray-400">
-                    Mon - Fri: 8:00 AM - 5:00 PM
-                    <br />
-                    Saturday & Sunday : Closed
-                  </p>
+                  <p className="text-gray-400 whitespace-pre-line">{content.business.hours}</p>
                 </div>
               </motion.div>
             </div>
@@ -165,7 +171,7 @@ export default function Contact() {
               className="mt-12 w-full h-64 border border-wolf-gunmetal grayscale hover:grayscale-0 transition-all duration-500"
             >
               <iframe 
-                src="https://maps.google.com/maps?q=Wolf+Customs,77A+Rundle+Rd,+Salisbury+South+SA+5106&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+                src={content.business.mapEmbedUrl}
                 width="100%" 
                 height="100%" 
                 style={{ border: 0 }} 
@@ -186,7 +192,7 @@ export default function Contact() {
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-wolf-red" />
             <h3 className="text-2xl font-heading font-bold uppercase tracking-wide mb-8 text-white">
-              Request a Quote
+              {content.contact.quoteTitle}
             </h3>
 
             <form className="space-y-6" onSubmit={handleSubmit}>
@@ -238,12 +244,9 @@ export default function Contact() {
                     name="service"
                     className="w-full bg-wolf-black border border-wolf-gunmetal px-4 py-3 text-white focus:outline-none focus:border-wolf-red transition-colors appearance-none cursor-pointer"
                   >
-                    <option>Full Car Respray</option>
-                    <option>Vehicle Restoration</option>
-                    <option>Paint & Panel Repair</option>
-                    <option>Rust Repair</option>
-                    <option>Custom Paint Job</option>
-                    <option>Other</option>
+                    {serviceOptions.map((option) => (
+                      <option key={option}>{option}</option>
+                    ))}
                   </select>
                   <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-wolf-red pointer-events-none" />
                 </div>

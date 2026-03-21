@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import Magnetic from './Magnetic';
+import { useSiteContent } from './SiteContentProvider';
 
 export default function CTA() {
+  const { content } = useSiteContent();
   return (
     <section className="relative py-40 overflow-hidden flex items-center justify-center bg-wolf-black">
       {/* Background Image */}
@@ -25,7 +27,7 @@ export default function CTA() {
         >
           <div className="h-[1px] w-12 bg-wolf-red" />
           <span className="text-wolf-red font-heading tracking-[0.3em] uppercase text-sm font-bold">
-            Start Your Journey
+            {content.cta.eyebrow}
           </span>
           <div className="h-[1px] w-12 bg-wolf-red" />
         </motion.div>
@@ -37,8 +39,8 @@ export default function CTA() {
           transition={{ duration: 0.8 }}
           className="text-6xl md:text-8xl lg:text-9xl font-heading font-black uppercase tracking-tighter mb-8 text-white leading-[0.9]"
         >
-          Bring Your Car <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-b from-wolf-red to-red-900 drop-shadow-2xl">Back To Life</span>
+          {content.cta.title} <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-b from-wolf-red to-red-900 drop-shadow-2xl">{content.cta.highlight}</span>
         </motion.h2>
 
         <motion.p
@@ -48,7 +50,7 @@ export default function CTA() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-xl md:text-2xl text-gray-400 mb-16 max-w-3xl mx-auto font-light leading-relaxed"
         >
-          Ready to start your restoration project or need a flawless respray? Contact our Adelaide workshop today for a consultation.
+          {content.cta.description}
         </motion.p>
 
         <motion.div
@@ -63,7 +65,7 @@ export default function CTA() {
               href="#contact"
               className="inline-flex group relative px-12 py-6 bg-wolf-red text-white font-heading text-xl tracking-[0.2em] uppercase overflow-hidden items-center justify-center gap-4 font-bold shadow-[0_0_40px_rgba(230,0,0,0.4)] hover:shadow-[0_0_60px_rgba(230,0,0,0.6)] transition-shadow duration-500"
             >
-              <span className="relative z-10">Get a Free Quote</span>
+              <span className="relative z-10">{content.cta.buttonLabel}</span>
               <ChevronRight className="relative z-10 w-6 h-6 group-hover:translate-x-2 transition-transform" />
               <div className="absolute inset-0 bg-white transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out" />
               <div className="absolute inset-0 bg-wolf-red-hover transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out delay-75" />

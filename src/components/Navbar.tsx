@@ -3,16 +3,25 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Volume2, VolumeX } from "lucide-react";
 import { cn } from "../utils/cn";
 import { Link } from "react-router-dom";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { auth } from "../firebase";
 import Magnetic from "./Magnetic";
+import { useSiteContent } from "./SiteContentProvider";
 import wolfLogoImg from "../wolf.jpg";
 import bgMusic from "../Morning-Routine-Lofi-Study-Music(chosic.com).mp3";
 
 export default function Navbar() {
+  const { content } = useSiteContent();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, setUser);
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,6 +82,8 @@ export default function Navbar() {
     { name: "Process", href: "#process" },
     { name: "Contact", href: "#contact" },
   ];
+  const ownerPortalLink = user ? "/admin/dashboard" : "/admin";
+  const ownerPortalLabel = user ? "Owner Dashboard" : "Owner Login";
 
   return (
     <>
@@ -81,9 +92,9 @@ export default function Navbar() {
 
       {/* Top Banner */}
       <div className="bg-wolf-red text-white text-[10px] md:text-xs font-heading tracking-[0.2em] uppercase py-2.5 px-4 text-center relative z-60 font-bold">
-        Emergency Accident? We handle your insurance paperwork. call 24/7:{" "}
-        <a href="tel:0881234567" className="font-black hover:underline ml-1">
-          (08) 8123 4567
+        {content.topBanner.text}{" "}
+        <a href={content.topBanner.phoneHref} className="font-black hover:underline ml-1">
+          {content.topBanner.phoneDisplay}
         </a>
       </div>
       <nav
@@ -138,10 +149,12 @@ export default function Navbar() {
             <div className="flex items-center gap-6">
               <Magnetic>
                 <Link
-                  to="/admin"
-                  className="text-[10px] font-heading font-bold tracking-widest uppercase text-gray-500 hover:text-white transition-colors"
+                  to={ownerPortalLink}
+                  className={`text-[10px] font-heading font-bold tracking-widest uppercase transition-colors ${
+                    user ? "text-wolf-red hover:text-white" : "text-gray-500 hover:text-white"
+                  }`}
                 >
-                  Owner Login
+                  {ownerPortalLabel}
                 </Link>
               </Magnetic>
               <Magnetic>
@@ -205,11 +218,13 @@ export default function Navbar() {
                   transition={{ delay: 0.7 }}
                 >
                   <Link
-                    to="/admin"
+                    to={ownerPortalLink}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-sm font-heading font-bold tracking-widest uppercase text-gray-500 hover:text-wolf-red transition-colors"
+                    className={`text-sm font-heading font-bold tracking-widest uppercase transition-colors ${
+                      user ? "text-wolf-red hover:text-white" : "text-gray-500 hover:text-wolf-red"
+                    }`}
                   >
-                    Owner Login
+                    {ownerPortalLabel}
                   </Link>
                 </motion.div>
               </div>

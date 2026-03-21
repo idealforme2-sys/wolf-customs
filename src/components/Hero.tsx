@@ -2,8 +2,10 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { useRef } from "react";
 import Magnetic from "./Magnetic";
+import { useSiteContent } from "./SiteContentProvider";
 
 export default function Hero() {
+  const { content } = useSiteContent();
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -37,9 +39,8 @@ export default function Hero() {
           autoPlay
           muted
           playsInline
-          onTimeUpdate={(e) => {
-            const video = e.currentTarget;
-            // Cut the last 7 seconds of the video as requested
+          onTimeUpdate={(event) => {
+            const video = event.currentTarget;
             if (video.duration && video.currentTime >= video.duration - 7) {
               video.currentTime = 0;
               video.play();
@@ -49,17 +50,14 @@ export default function Hero() {
         >
           <source src="/hero-background.mp4" type="video/mp4" />
         </video>
-        {/* Dark Overlays for Text Legibility */}
         <div className="absolute inset-0 bg-gradient-to-b from-wolf-black/90 via-wolf-black/60 to-wolf-black z-10" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(230,0,0,0.15)_0%,transparent_70%)] z-10 mix-blend-screen" />
       </motion.div>
 
-      {/* Content */}
       <motion.div
         style={{ opacity }}
         className="relative z-30 max-w-7xl mx-auto px-6 lg:px-8 w-full flex flex-col items-center text-center"
       >
-        {/* Top Label */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -68,7 +66,7 @@ export default function Hero() {
         >
           <div className="h-[1px] w-8 md:w-16 bg-wolf-red" />
           <span className="text-wolf-red font-heading tracking-[0.4em] uppercase text-xs md:text-sm font-bold">
-            Adelaide's Premier Auto Studio
+            {content.hero.eyebrow}
           </span>
           <div className="h-[1px] w-8 md:w-16 bg-wolf-red" />
         </motion.div>
@@ -112,8 +110,7 @@ export default function Hero() {
           transition={{ duration: 1, delay: 2.5 }}
           className="text-lg md:text-2xl text-gray-300 max-w-3xl mb-12 font-light leading-relaxed"
         >
-          Professional vehicle restorations, custom paintwork and panel repairs.
-          We bring automotive legends back to life.
+          {content.hero.description}
         </motion.p>
 
         <motion.div
@@ -127,7 +124,7 @@ export default function Hero() {
               href="#contact"
               className="group relative px-10 py-5 bg-wolf-red text-white font-heading tracking-[0.2em] uppercase overflow-hidden flex items-center justify-center gap-3 text-sm font-bold shadow-[0_0_30px_rgba(230,0,0,0.3)] hover:shadow-[0_0_50px_rgba(230,0,0,0.5)] transition-shadow duration-500"
             >
-              <span className="relative z-10">Request Quote</span>
+              <span className="relative z-10">{content.hero.primaryCtaLabel}</span>
               <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               <div className="absolute inset-0 bg-white transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out" />
               <div className="absolute inset-0 bg-wolf-red-hover transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out delay-75" />
@@ -139,13 +136,12 @@ export default function Hero() {
               href="#work"
               className="group px-10 py-5 border border-white/20 text-white font-heading tracking-[0.2em] uppercase hover:bg-white hover:text-wolf-black transition-all duration-500 flex items-center justify-center text-sm font-bold backdrop-blur-sm"
             >
-              View Work
+              {content.hero.secondaryCtaLabel}
             </a>
           </Magnetic>
         </motion.div>
       </motion.div>
 
-      {/* Rotating Badge */}
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -172,7 +168,7 @@ export default function Hero() {
               />
               <text className="text-[10px] font-heading tracking-[0.2em] uppercase font-bold">
                 <textPath href="#circlePath" startOffset="0%">
-                  • Premium Auto Restoration • Adelaide SA
+                  {content.hero.rotatingBadgeText}
                 </textPath>
               </text>
             </motion.svg>
@@ -183,7 +179,6 @@ export default function Hero() {
         </Magnetic>
       </motion.div>
 
-      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

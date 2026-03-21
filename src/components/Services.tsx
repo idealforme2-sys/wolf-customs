@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Wrench, Car, Paintbrush, ShieldAlert, Palette, SprayCan, ShieldCheck, Award, CheckCircle, MapPin } from 'lucide-react';
+import { useSiteContent } from './SiteContentProvider';
 
 import paintPanelImg from '../assets/images/services/paint_panel_repairs.png';
 import vehicleResImg from '../assets/images/services/vehicle_restorations.png';
@@ -8,54 +9,44 @@ import rustImg from '../assets/images/services/rust_repairs.png';
 import customPaintImg from '../assets/images/services/custom_paint_jobs.png';
 import sprayImg from '../assets/images/services/spray_painting.png';
 
-const features = [
-  { title: 'Insurance Work', desc: 'All Providers Accepted', icon: ShieldCheck },
-  { title: 'Dealership Approved', desc: 'Fleet & Trade Standards', icon: Award },
-  { title: 'Quality Guarantee', desc: 'Lifetime Workmanship', icon: CheckCircle },
-  { title: 'Locally Owned', desc: 'Salisbury South, SA', icon: MapPin },
-];
+const featureIcons = {
+  'shield-check': ShieldCheck,
+  award: Award,
+  'check-circle': CheckCircle,
+  'map-pin': MapPin,
+};
 
-const services = [
-  {
-    title: 'Paint & Panel Repairs',
-    description: 'Expert collision repair and dent removal to restore your vehicle to factory condition. We use advanced techniques to ensure a seamless finish.',
-    icon: Wrench,
-    image: paintPanelImg,
-  },
-  {
-    title: 'Vehicle Restorations',
-    description: 'Full nut-and-bolt restorations for classic and muscle cars. Bringing legends back to life with uncompromising attention to detail.',
-    icon: Car,
-    image: vehicleResImg,
-  },
-  {
-    title: 'Full Car Resprays',
-    description: 'Complete color changes or factory-matched resprays using premium automotive paints in our climate-controlled spray booths.',
-    icon: Paintbrush,
-    image: fullResprayImg,
-  },
-  {
-    title: 'Rust Repairs',
-    description: 'Professional rust cutting, custom metal fabrication, and anti-corrosion treatment to protect your investment for decades.',
-    icon: ShieldAlert,
-    image: rustImg,
-  },
-  {
-    title: 'Custom Paint Jobs',
-    description: 'Show-quality custom finishes, pearls, candies, flakes, and bespoke designs tailored to your exact vision.',
-    icon: Palette,
-    image: customPaintImg,
-  },
-  {
-    title: 'Spray Painting',
-    description: 'High-end spray painting services for parts, panels, motorcycles, and accessories with perfect color matching.',
-    icon: SprayCan,
-    image: sprayImg,
-  },
-];
+const serviceIcons = {
+  wrench: Wrench,
+  car: Car,
+  paintbrush: Paintbrush,
+  'shield-alert': ShieldAlert,
+  palette: Palette,
+  'spray-can': SprayCan,
+};
+
+const serviceImages = {
+  'paint-panel-repairs': paintPanelImg,
+  'vehicle-restorations': vehicleResImg,
+  'full-car-resprays': fullResprayImg,
+  'rust-repairs': rustImg,
+  'custom-paint-jobs': customPaintImg,
+  'spray-painting': sprayImg,
+};
 
 
 export default function Services() {
+  const { content } = useSiteContent();
+  const features = content.services.features.map((feature) => ({
+    ...feature,
+    icon: featureIcons[feature.iconKey as keyof typeof featureIcons] ?? ShieldCheck,
+  }));
+  const services = content.services.items.map((service) => ({
+    ...service,
+    icon: serviceIcons[service.iconKey as keyof typeof serviceIcons] ?? Wrench,
+    image: service.imageUrl || serviceImages[service.imageKey as keyof typeof serviceImages] || paintPanelImg,
+  }));
+
   return (
     <section id="services" className="py-32 bg-wolf-black relative">
       {/* Background Elements */}
@@ -98,14 +89,14 @@ export default function Services() {
                 <div className="flex items-center gap-4 mb-6">
                   <div className="h-[1px] w-8 bg-wolf-red" />
                   <span className="text-wolf-red font-heading tracking-[0.2em] uppercase text-sm font-bold">
-                    What We Do
+                    {content.services.eyebrow}
                   </span>
                 </div>
                 <h2 className="text-5xl md:text-7xl font-heading font-black uppercase tracking-tighter mb-6 leading-none">
-                  Our <br/><span className="text-wolf-red">Expertise</span>
+                  {content.services.title} <br/><span className="text-wolf-red">{content.services.highlight}</span>
                 </h2>
                 <p className="text-gray-400 text-lg mb-8 font-light leading-relaxed">
-                  We deliver uncompromising quality across all our automotive restoration and paint services. Every project is treated as a masterpiece.
+                  {content.services.description}
                 </p>
                 
                 <div className="hidden lg:block w-24 h-24 border border-wolf-gunmetal rounded-full relative overflow-hidden mt-12">

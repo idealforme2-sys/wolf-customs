@@ -1,6 +1,9 @@
-import { Instagram, Facebook, Youtube } from "lucide-react";
+import { Instagram, Facebook } from "lucide-react";
+import { useSiteContent } from "./SiteContentProvider";
 
 export default function Footer() {
+  const { content } = useSiteContent();
+
   return (
     <footer className="bg-wolf-black border-t border-wolf-gunmetal pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -14,13 +17,11 @@ export default function Footer() {
               <span>CUSTOMS</span>
             </a>
             <p className="text-gray-400 max-w-md leading-relaxed mb-8">
-              Adelaide's premier automotive restoration and custom paint studio.
-              We specialize in bringing legends back to life with uncompromising
-              quality and precision.
+              {content.business.footerBlurb}
             </p>
             <div className="flex gap-4">
               <a
-                href="https://www.instagram.com/wolfcustoms_adelaide/"
+                href={content.business.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-wolf-gunmetal flex items-center justify-center hover:bg-wolf-red hover:text-white transition-colors duration-300 text-gray-400"
@@ -28,7 +29,7 @@ export default function Footer() {
                 <Instagram className="w-5 h-5" />
               </a>
               <a
-                href="https://web.facebook.com/wolfcustomsadelaide?rdid=KcDxg51u4492qlPe&share_url=https%3A%2F%2Fweb.facebook.com%2Fshare%2F19LsBACZEz%2F%3Futm_source%3Dig%26utm_medium%3Dsocial%26utm_content%3Dlink_in_bio%26_rdc%3D1%26_rdr"
+                href={content.business.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 bg-wolf-gunmetal flex items-center justify-center hover:bg-wolf-red hover:text-white transition-colors duration-300 text-gray-400"
@@ -43,46 +44,16 @@ export default function Footer() {
               Services
             </h4>
             <ul className="space-y-4">
-              <li>
-                <a
-                  href="#services"
-                  className="text-gray-400 hover:text-wolf-red transition-colors"
-                >
-                  Paint & Panel Repairs
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#services"
-                  className="text-gray-400 hover:text-wolf-red transition-colors"
-                >
-                  Vehicle Restorations
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#services"
-                  className="text-gray-400 hover:text-wolf-red transition-colors"
-                >
-                  Full Car Resprays
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#services"
-                  className="text-gray-400 hover:text-wolf-red transition-colors"
-                >
-                  Rust Repairs
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#services"
-                  className="text-gray-400 hover:text-wolf-red transition-colors"
-                >
-                  Custom Paint Jobs
-                </a>
-              </li>
+              {content.services.items.slice(0, 5).map((service) => (
+                <li key={service.title}>
+                  <a
+                    href="#services"
+                    className="text-gray-400 hover:text-wolf-red transition-colors"
+                  >
+                    {service.title}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 

@@ -1,30 +1,26 @@
-import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";import beforeImg from "../before.jpg";
+import { useState, useRef, type MouseEvent, type TouchEvent } from "react";
+import { motion } from "framer-motion";
+import beforeImg from "../before.jpg";
 import afterImg from "../after.jpg";
+import { useSiteContent } from "./SiteContentProvider";
 
 export default function BeforeAfter() {
+  const { content } = useSiteContent();
   const [sliderPosition, setSliderPosition] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleMove = (event: React.MouseEvent | React.TouchEvent) => {
+  const handleMove = (event: MouseEvent | TouchEvent) => {
     if (!containerRef.current) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
-    let clientX;
-
-    if ("touches" in event) {
-      clientX = event.touches[0].clientX;
-    } else {
-      clientX = (event as React.MouseEvent).clientX;
-    }
-
+    const clientX = "touches" in event ? event.touches[0].clientX : event.clientX;
     const x = clientX - containerRect.left;
-    const percentage = Math.max(
-      0,
-      Math.min(100, (x / containerRect.width) * 100),
-    );
+    const percentage = Math.max(0, Math.min(100, (x / containerRect.width) * 100));
     setSliderPosition(percentage);
   };
+
+  const beforeImage = content.beforeAfter.beforeImageUrl || beforeImg;
+  const afterImage = content.beforeAfter.afterImageUrl || afterImg;
 
   return (
     <section className="py-24 bg-wolf-black relative">
@@ -36,7 +32,7 @@ export default function BeforeAfter() {
             viewport={{ once: true }}
             className="text-4xl md:text-6xl font-heading font-bold uppercase tracking-tight mb-4"
           >
-            The <span className="text-wolf-red">Transformation</span>
+            {content.beforeAfter.title} <span className="text-wolf-red">{content.beforeAfter.highlight}</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -45,8 +41,7 @@ export default function BeforeAfter() {
             transition={{ delay: 0.2 }}
             className="text-gray-400 max-w-2xl mx-auto text-lg"
           >
-            Slide to see the difference. From rusted shells to show-quality
-            finishes.
+            {content.beforeAfter.description}
           </motion.p>
         </div>
 
@@ -60,20 +55,18 @@ export default function BeforeAfter() {
           onMouseMove={handleMove}
           onTouchMove={handleMove}
         >
-          {/* After Image (Base) */}
           <div className="absolute inset-0">
             <img
-              src={afterImg}
-              alt="Restored Car"
+              src={afterImage}
+              alt={content.beforeAfter.afterLabel}
               className="w-full h-full object-cover"
               draggable="false"
             />
             <div className="absolute top-6 right-6 bg-wolf-black/80 backdrop-blur-sm px-4 py-2 font-heading uppercase tracking-widest text-sm border border-wolf-red/30">
-              After
+              {content.beforeAfter.afterLabel}
             </div>
           </div>
 
-          {/* Before Image (Clipped) */}
           <div
             className="absolute inset-0 border-r-2 border-wolf-red"
             style={{
@@ -81,17 +74,16 @@ export default function BeforeAfter() {
             }}
           >
             <img
-              src={beforeImg}
-              alt="Rusty Car"
+              src={beforeImage}
+              alt={content.beforeAfter.beforeLabel}
               className="w-full h-full object-cover grayscale opacity-80"
               draggable="false"
             />
             <div className="absolute top-6 left-6 bg-wolf-black/80 backdrop-blur-sm px-4 py-2 font-heading uppercase tracking-widest text-sm border border-wolf-silver/30">
-              Before
+              {content.beforeAfter.beforeLabel}
             </div>
           </div>
 
-          {/* Slider Handle */}
           <div
             className="absolute top-0 bottom-0 w-1 bg-wolf-red cursor-ew-resize flex items-center justify-center shadow-[0_0_15px_rgba(230,0,0,0.5)]"
             style={{ left: `calc(${sliderPosition}% - 2px)` }}

@@ -15,11 +15,13 @@ import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import Preloader from "./components/Preloader";
 import CustomCursor from "./components/CustomCursor";
+import { SiteContentProvider } from "./components/SiteContentProvider";
 import AdminLogin from "./admin/AdminLogin";
 import AdminLayout from "./admin/AdminLayout";
 import QuotesDashboard from "./admin/QuotesDashboard";
 import OverviewDashboard from "./admin/OverviewDashboard";
 import ProtectedRoute from "./admin/ProtectedRoute";
+import ContentDashboard from "./admin/ContentDashboard";
 
 function PublicSite() {
   const [loading, setLoading] = useState(true);
@@ -53,15 +55,18 @@ function PublicSite() {
 export default function App() {
   return (
     <BrowserRouter>
-      <CustomCursor />
-      <Routes>
-        <Route path="/" element={<PublicSite />} />
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
-          <Route path="/admin/quotes" element={<QuotesDashboard />} />
-          <Route path="/admin/dashboard" element={<OverviewDashboard />} />
-        </Route>
-      </Routes>
+      <SiteContentProvider>
+        <CustomCursor />
+        <Routes>
+          <Route path="/" element={<PublicSite />} />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+            <Route path="/admin/content" element={<ContentDashboard />} />
+            <Route path="/admin/quotes" element={<QuotesDashboard />} />
+            <Route path="/admin/dashboard" element={<OverviewDashboard />} />
+          </Route>
+        </Routes>
+      </SiteContentProvider>
     </BrowserRouter>
   );
 }

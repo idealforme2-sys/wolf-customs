@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { useEffect, useState, type FormEvent } from "react";
+import { onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { Loader2, Lock, Mail } from "lucide-react";
@@ -12,13 +12,23 @@ export default function AdminLogin() {
   const [resetMsg, setResetMsg] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/admin/dashboard", { replace: true });
+      }
+    });
+
+    return unsubscribe;
+  }, [navigate]);
+
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/admin/quotes");
+      navigate("/admin/dashboard");
     } catch {
       setError("Invalid email or password.");
     } finally {
