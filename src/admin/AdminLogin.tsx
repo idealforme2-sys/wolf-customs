@@ -48,16 +48,16 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-wolf-black flex items-center justify-center px-4">
+    <div className="min-h-screen bg-wolf-black flex items-center justify-center px-4 py-8 sm:py-10">
       <div className="w-full max-w-md">
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-heading font-bold uppercase tracking-widest text-white">
+          <h1 className="text-2xl font-heading font-bold uppercase tracking-widest text-white sm:text-3xl">
             Wolf <span className="text-wolf-red">Customs</span>
           </h1>
           <p className="text-gray-500 text-sm mt-2 tracking-wide">Owner Dashboard</p>
         </div>
 
-        <form onSubmit={handleLogin} className="bg-wolf-gray border border-wolf-gunmetal p-8 space-y-6 relative">
+        <form onSubmit={handleLogin} className="relative rounded-[28px] border border-wolf-gunmetal bg-wolf-gray p-6 shadow-[0_20px_60px_rgba(0,0,0,0.3)] space-y-5 sm:p-8 sm:space-y-6">
           <div className="absolute top-0 left-0 w-full h-1 bg-wolf-red" />
 
           <div>

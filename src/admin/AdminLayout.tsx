@@ -12,7 +12,7 @@ export default function AdminLayout() {
   };
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-3 px-4 py-3 text-sm font-heading uppercase tracking-widest transition-colors duration-200 ${
+    `flex items-center justify-center gap-2 rounded-2xl px-3 py-3 text-xs font-heading uppercase tracking-[0.18em] whitespace-nowrap transition-colors duration-200 md:justify-start md:gap-3 md:rounded-none md:px-4 md:text-sm md:tracking-widest ${
       isActive ? "bg-wolf-red text-white" : "text-gray-400 hover:text-white hover:bg-wolf-gunmetal"
     }`;
 
@@ -30,7 +30,7 @@ export default function AdminLayout() {
           </button>
         </div>
 
-        <nav className="flex-none md:flex-1 flex flex-row md:flex-col overflow-x-auto py-2 md:py-4 px-2 md:px-0 space-x-2 md:space-x-0 md:space-y-1">
+        <nav className="grid grid-cols-3 gap-2 p-3 md:flex md:flex-1 md:flex-col md:gap-1 md:px-0 md:py-4">
           <NavLink to="/admin/dashboard" className={linkClass}>
             <LayoutDashboard className="w-4 h-4" /> Overview
           </NavLink>
@@ -53,7 +53,7 @@ export default function AdminLayout() {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto">
+      <main className="min-w-0 flex-1">
         <Outlet />
       </main>
     </div>

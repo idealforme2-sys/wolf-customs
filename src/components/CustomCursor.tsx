@@ -1,22 +1,49 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export default function CustomCursor() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  const ringX = useSpring(cursorX, { stiffness: 520, damping: 34, mass: 0.18 });
+  const ringY = useSpring(cursorY, { stiffness: 520, damping: 34, mass: 0.18 });
+  const dotX = useSpring(cursorX, { stiffness: 900, damping: 42, mass: 0.08 });
+  const dotY = useSpring(cursorY, { stiffness: 900, damping: 42, mass: 0.08 });
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(false);
 
   useEffect(() => {
-    // Only show custom cursor on devices with a fine pointer (mouse)
-    if (window.matchMedia('(pointer: fine)').matches) {
-      setIsVisible(true);
-    }
+    const mediaQuery = window.matchMedia('(pointer: fine) and (min-width: 768px)');
+
+    const updateEnabledState = () => {
+      const nextEnabled = mediaQuery.matches;
+      setIsEnabled(nextEnabled);
+      document.body.classList.toggle('custom-cursor-enabled', nextEnabled);
+
+      if (!nextEnabled) {
+        setIsVisible(false);
+        setIsHovering(false);
+      }
+    };
+
+    updateEnabledState();
 
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      if (!mediaQuery.matches) {
+        return;
+      }
+
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
+      setIsVisible(true);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
+      if (!mediaQuery.matches) {
+        setIsHovering(false);
+        return;
+      }
+
       const target = e.target as HTMLElement;
       if (
         target.tagName.toLowerCase() === 'a' ||
@@ -31,35 +58,59 @@ export default function CustomCursor() {
       }
     };
 
+    const handleMouseLeaveWindow = (event: MouseEvent) => {
+      if (!(event.relatedTarget as Node | null)) {
+        setIsVisible(false);
+      }
+    };
+
+    const handleWindowBlur = () => {
+      setIsVisible(false);
+    };
+
+    const handleWindowFocus = () => {
+      if (mediaQuery.matches) {
+        setIsVisible(true);
+      }
+    };
+
+    mediaQuery.addEventListener('change', updateEnabledState);
     window.addEventListener('mousemove', updateMousePosition);
     window.addEventListener('mouseover', handleMouseOver);
+    window.addEventListener('mouseout', handleMouseLeaveWindow);
+    window.addEventListener('blur', handleWindowBlur);
+    window.addEventListener('focus', handleWindowFocus);
 
     return () => {
+      document.body.classList.remove('custom-cursor-enabled');
+      mediaQuery.removeEventListener('change', updateEnabledState);
       window.removeEventListener('mousemove', updateMousePosition);
       window.removeEventListener('mouseover', handleMouseOver);
+      window.removeEventListener('mouseout', handleMouseLeaveWindow);
+      window.removeEventListener('blur', handleWindowBlur);
+      window.removeEventListener('focus', handleWindowFocus);
     };
-  }, []);
+  }, [cursorX, cursorY]);
 
-  if (!isVisible) return null;
+  if (!isEnabled || !isVisible) return null;
 
   return (
     <>
       <motion.div
-        className="hidden md:block fixed top-0 left-0 w-3 h-3 bg-wolf-red rounded-full pointer-events-none z-[9999] mix-blend-difference"
+        className="pointer-events-none fixed left-0 top-0 z-[9999] hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-wolf-red shadow-[0_0_18px_rgba(230,0,0,0.85)] md:block"
+        style={{ x: dotX, y: dotY }}
         animate={{
-          x: mousePosition.x - 6,
-          y: mousePosition.y - 6,
           scale: isHovering ? 0 : 1,
+          opacity: isHovering ? 0 : 1,
         }}
         transition={{ type: 'tween', ease: 'backOut', duration: 0.1 }}
       />
       <motion.div
-        className="hidden md:flex fixed top-0 left-0 w-16 h-16 border border-wolf-red rounded-full pointer-events-none z-[9999] mix-blend-difference items-center justify-center"
+        className="pointer-events-none fixed left-0 top-0 z-[9999] hidden h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-wolf-red/60 bg-black/15 backdrop-blur-[2px] shadow-[0_0_30px_rgba(230,0,0,0.22)] md:flex"
+        style={{ x: ringX, y: ringY }}
         animate={{
-          x: mousePosition.x - 32,
-          y: mousePosition.y - 32,
           scale: isHovering ? 1.2 : 1,
-          backgroundColor: isHovering ? 'rgba(230,0,0,1)' : 'rgba(230,0,0,0)',
+          backgroundColor: isHovering ? 'rgba(230,0,0,0.88)' : 'rgba(0,0,0,0.08)',
         }}
         transition={{ type: 'tween', ease: 'backOut', duration: 0.2 }}
       >

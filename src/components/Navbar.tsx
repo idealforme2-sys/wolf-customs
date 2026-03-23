@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, Menu, Phone, Volume2, VolumeX, X } from "lucide-react";
 import { cn } from "../utils/cn";
 import { Link } from "react-router-dom";
 import { onAuthStateChanged, User } from "firebase/auth";
@@ -16,6 +16,7 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const navRef = useRef<HTMLElement>(null);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -62,6 +63,27 @@ export default function Navbar() {
 
   }, []);
 
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isMobileMenuOpen]);
+
   const toggleMute = () => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -78,12 +100,35 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Services", href: "#services" },
-    { name: "Work", href: "#work" },
+    { name: "Work", href: "#portfolio" },
     { name: "Process", href: "#process" },
     { name: "Contact", href: "#contact" },
   ];
   const ownerPortalLink = user ? "/admin/dashboard" : "/admin";
   const ownerPortalLabel = user ? "Owner Dashboard" : "Owner Login";
+
+  const navigateToSection = (href: string) => {
+    setIsMobileMenuOpen(false);
+
+    requestAnimationFrame(() => {
+      if (href === "#") {
+        window.history.replaceState(null, "", window.location.pathname);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
+      const target = document.querySelector(href);
+      if (!target) {
+        window.location.hash = href;
+        return;
+      }
+
+      const navHeight = navRef.current?.offsetHeight ?? 0;
+      const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 18;
+      window.history.replaceState(null, "", href);
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    });
+  };
 
   return (
     <>
@@ -98,139 +143,190 @@ export default function Navbar() {
         </a>
       </div>
       <nav
+        ref={navRef}
         className={cn(
           "fixed left-0 right-0 z-50 transition-all duration-500",
           "border-b",
           isScrolled
-            ? "top-0 bg-wolf-black/80 backdrop-blur-xl py-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-wolf-gunmetal/50"
-            : "top-8 md:top-9 bg-transparent py-8 border-transparent",
+            ? "top-0 bg-wolf-black/80 backdrop-blur-xl py-2 md:py-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-wolf-gunmetal/50"
+            : "top-8 md:top-9 bg-transparent py-2 md:py-8 border-transparent",
         )}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex justify-between items-center">
-          <div className="flex items-center gap-2 md:gap-6">
-            <Magnetic>
-              <a
-                href="#"
-                className="text-2xl md:text-3xl font-heading font-black tracking-[0.1em] md:tracking-widest flex items-center gap-2 md:gap-3 group"
-              >
-                <img 
-                  src={wolfLogoImg} 
-                  alt="Wolf Customs Logo" 
-                  className="w-10 h-10 md:w-12 md:h-12 object-cover object-center rounded-full group-hover:scale-110 transition-transform duration-500 border-2 border-wolf-gunmetal"
-                />
-                <span className="text-wolf-red group-hover:text-white transition-colors duration-500 ml-2">WOLF</span>
-                <span className="text-white group-hover:text-wolf-red transition-colors duration-500">CUSTOMS</span>
-              </a>
-            </Magnetic>
-
-            {/* Audio Toggle */}
-            <button 
-              onClick={toggleMute}
-              className="p-2 text-gray-400 hover:text-wolf-red transition-colors duration-300"
-              aria-label={isMuted ? "Unmute background music" : "Mute background music"}
-            >
-              {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
-            </button>
-          </div>
-
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-10">
-            {navLinks.map((link) => (
-              <Magnetic key={link.name}>
-                <a
-                  href={link.href}
-                  className="relative text-xs font-bold tracking-[0.2em] uppercase text-gray-300 hover:text-white transition-colors group py-2"
-                >
-                  {link.name}
-                  <span className="absolute bottom-0 left-0 w-full h-[2px] bg-wolf-red transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                </a>
-              </Magnetic>
-            ))}
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="hidden items-center justify-between md:flex">
             <div className="flex items-center gap-6">
               <Magnetic>
-                <Link
-                  to={ownerPortalLink}
-                  className={`text-[10px] font-heading font-bold tracking-widest uppercase transition-colors ${
-                    user ? "text-wolf-red hover:text-white" : "text-gray-500 hover:text-white"
-                  }`}
-                >
-                  {ownerPortalLabel}
-                </Link>
-              </Magnetic>
-              <Magnetic>
                 <a
-                  href="#contact"
-                  className="px-8 py-3 bg-transparent border border-wolf-red text-wolf-red hover:bg-wolf-red hover:text-white transition-all duration-500 font-heading tracking-[0.2em] text-xs font-bold uppercase relative overflow-hidden group"
+                  href="#"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigateToSection("#");
+                  }}
+                  className="text-2xl md:text-3xl font-heading font-black tracking-[0.1em] md:tracking-widest flex items-center gap-3 group"
                 >
-                  <span className="relative z-10">GET QUOTE</span>
-                  <div className="absolute inset-0 bg-wolf-red transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+                  <img
+                    src={wolfLogoImg}
+                    alt="Wolf Customs Logo"
+                    className="w-12 h-12 object-cover object-center rounded-full group-hover:scale-110 transition-transform duration-500 border-2 border-wolf-gunmetal"
+                  />
+                  <span className="text-wolf-red group-hover:text-white transition-colors duration-500 ml-2">WOLF</span>
+                  <span className="text-white group-hover:text-wolf-red transition-colors duration-500">CUSTOMS</span>
                 </a>
               </Magnetic>
+
+              <button
+                onClick={toggleMute}
+                className="p-2 text-gray-400 hover:text-wolf-red transition-colors duration-300"
+                aria-label={isMuted ? "Unmute background music" : "Mute background music"}
+              >
+                {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+              </button>
             </div>
-          </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            className="md:hidden text-white relative z-50 p-2"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
-          </button>
-        </div>
-
-        {/* Mobile Nav */}
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: "-100%" }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: "-100%" }}
-              transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-              className="fixed inset-0 bg-wolf-black z-40 md:hidden flex flex-col justify-center items-center"
-            >
-              <div className="flex flex-col items-center gap-8">
-                {navLinks.map((link, i) => (
-                  <motion.a
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 + i * 0.1 }}
-                    key={link.name}
+            <div className="flex items-center gap-10">
+              {navLinks.map((link) => (
+                <Magnetic key={link.name}>
+                  <a
                     href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-4xl font-heading font-black tracking-widest uppercase text-white hover:text-wolf-red transition-colors"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      navigateToSection(link.href);
+                    }}
+                    className="relative py-2 text-xs font-bold uppercase tracking-[0.2em] text-gray-300 transition-colors group hover:text-white"
                   >
                     {link.name}
-                  </motion.a>
-                ))}
-                <motion.a
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                  href="#contact"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="mt-8 px-12 py-4 bg-wolf-red text-white font-heading tracking-widest text-xl font-bold uppercase"
-                >
-                  GET QUOTE
-                </motion.a>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                >
+                    <span className="absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 transform bg-wolf-red transition-transform duration-300 group-hover:scale-x-100" />
+                  </a>
+                </Magnetic>
+              ))}
+              <div className="flex items-center gap-6">
+                <Magnetic>
                   <Link
                     to={ownerPortalLink}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`text-sm font-heading font-bold tracking-widest uppercase transition-colors ${
-                      user ? "text-wolf-red hover:text-white" : "text-gray-500 hover:text-wolf-red"
+                    className={`text-[10px] font-heading font-bold tracking-widest uppercase transition-colors ${
+                      user ? "text-wolf-red hover:text-white" : "text-gray-500 hover:text-white"
                     }`}
                   >
                     {ownerPortalLabel}
                   </Link>
-                </motion.div>
+                </Magnetic>
+                <Magnetic>
+                  <a
+                    href="#contact"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      navigateToSection("#contact");
+                    }}
+                    className="group relative overflow-hidden border border-wolf-red bg-transparent px-8 py-3 text-xs font-heading font-bold uppercase tracking-[0.2em] text-wolf-red transition-all duration-500 hover:bg-wolf-red hover:text-white"
+                  >
+                    <span className="relative z-10">GET QUOTE</span>
+                    <div className="absolute inset-0 origin-left scale-x-0 transform bg-wolf-red transition-transform duration-500 ease-out group-hover:scale-x-100" />
+                  </a>
+                </Magnetic>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            </div>
+          </div>
+
+          <div className="md:hidden">
+            <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(10,10,10,0.96),rgba(10,10,10,0.84))] px-3 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={() => navigateToSection("#")}
+                  className="flex min-w-0 items-center gap-3 text-left"
+                >
+                  <img
+                    src={wolfLogoImg}
+                    alt="Wolf Customs Logo"
+                    className="h-11 w-11 shrink-0 rounded-full border border-white/10 object-cover object-center"
+                  />
+                  <div className="min-w-0">
+                    <p className="truncate text-[10px] font-semibold uppercase tracking-[0.26em] text-gray-500">Wolf Customs</p>
+                    <p className="mt-1 truncate text-sm font-heading font-bold uppercase tracking-[0.18em] text-white">Quick Access</p>
+                  </div>
+                </button>
+
+                <div className="flex items-center gap-2">
+                  <a
+                    href={content.topBanner.phoneHref}
+                    className="inline-flex h-11 items-center gap-2 rounded-full border border-wolf-red/30 bg-wolf-red/10 px-4 text-xs font-heading font-bold uppercase tracking-[0.16em] text-white"
+                  >
+                    <Phone className="h-4 w-4 text-wolf-red" />
+                    Call
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileMenuOpen((current) => !current)}
+                    className="inline-flex h-11 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-heading font-bold uppercase tracking-[0.16em] text-white transition-colors hover:border-wolf-red/40"
+                    aria-expanded={isMobileMenuOpen}
+                    aria-controls="mobile-nav-panel"
+                  >
+                    {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                    Menu
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-3 grid grid-cols-4 gap-2">
+                {navLinks.map((link) => (
+                  <button
+                    key={link.name}
+                    type="button"
+                    onClick={() => navigateToSection(link.href)}
+                    className="rounded-[18px] border border-white/10 bg-black/25 px-2 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-200 transition-colors hover:border-wolf-red/40 hover:text-white"
+                  >
+                    {link.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <AnimatePresence>
+              {isMobileMenuOpen ? (
+                <motion.div
+                  id="mobile-nav-panel"
+                  initial={{ opacity: 0, y: -12, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: "auto" }}
+                  exit={{ opacity: 0, y: -12, height: 0 }}
+                  transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                  className="overflow-hidden"
+                >
+                  <div className="mt-3 rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(12,12,12,0.98),rgba(12,12,12,0.9))] p-3 shadow-[0_18px_40px_rgba(0,0,0,0.32)]">
+                    <div className="grid gap-2">
+                      <button
+                        type="button"
+                        onClick={() => navigateToSection("#contact")}
+                        className="inline-flex items-center justify-between rounded-[22px] bg-wolf-red px-4 py-4 text-sm font-heading font-bold uppercase tracking-[0.18em] text-white"
+                      >
+                        Get Quote
+                        <ArrowRight className="h-4 w-4" />
+                      </button>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <button
+                          type="button"
+                          onClick={toggleMute}
+                          className="inline-flex items-center justify-center gap-2 rounded-[20px] border border-white/10 bg-white/5 px-4 py-3 text-xs font-heading font-bold uppercase tracking-[0.16em] text-gray-200 transition-colors hover:border-wolf-red/40 hover:text-white"
+                        >
+                          {isMuted ? <VolumeX className="h-4 w-4 text-wolf-red" /> : <Volume2 className="h-4 w-4 text-wolf-red" />}
+                          {isMuted ? "Unmute" : "Mute"}
+                        </button>
+
+                        <Link
+                          to={ownerPortalLink}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="inline-flex items-center justify-center rounded-[20px] border border-white/10 bg-white/5 px-4 py-3 text-center text-xs font-heading font-bold uppercase tracking-[0.16em] text-gray-200 transition-colors hover:border-wolf-red/40 hover:text-white"
+                        >
+                          {ownerPortalLabel}
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          </div>
+        </div>
       </nav>
     </>
   );

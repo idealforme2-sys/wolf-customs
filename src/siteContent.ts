@@ -128,6 +128,11 @@ export interface SiteContent {
   business: BusinessContent;
 }
 
+export const PORTFOLIO_DEFAULT_DESCRIPTION =
+  "This first portfolio demonstration was done manually on my side by downloading the reels/images, placing them into the website, and linking each one to its original Instagram source. So when someone clicks on an item, it opens the related Instagram post or reel. If you want to be able to edit and update the portfolio yourself, this method would not be the best option moving forward.";
+
+export const LEGACY_TEST_EMBED_URL = "https://www.instagram.com/p/DWILQK6DLV7/";
+
 export const defaultSiteContent: SiteContent = {
   topBanner: {
     text: "Emergency accident? We handle your insurance paperwork. Call 24/7:",
@@ -233,8 +238,7 @@ export const defaultSiteContent: SiteContent = {
     eyebrow: "Portfolio",
     title: "Latest",
     highlight: "Work",
-    description:
-      "Take a closer look at our recent projects. From flawless custom paint jobs to complete vehicle restorations, our attention to detail shines through in every showcase.",
+    description: PORTFOLIO_DEFAULT_DESCRIPTION,
     items: [],
   },
   faq: {
@@ -310,6 +314,38 @@ const mergeArray = <T>(incoming: unknown, fallback: T[]): T[] => {
   })) as T[];
 };
 
+const mergeFaqItems = (incoming: unknown, fallback: FAQItem[]): FAQItem[] => {
+  if (!Array.isArray(incoming)) {
+    return fallback;
+  }
+
+  return incoming.map((item, index) => ({
+    question: "",
+    answer: "",
+    ...(fallback[index] ?? {}),
+    ...((item as Partial<FAQItem> | undefined) ?? {}),
+  }));
+};
+
+const normalizePortfolioLink = (value: unknown) => {
+  if (typeof value !== "string") {
+    return "";
+  }
+
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return "";
+  }
+
+  try {
+    const parsed = new URL(trimmed);
+    const cleanedPath = parsed.pathname.endsWith("/") ? parsed.pathname : `${parsed.pathname}/`;
+    return `${parsed.origin}${cleanedPath}`;
+  } catch {
+    return "";
+  }
+};
+
 export function mergeSiteContent(incoming?: Partial<SiteContent> | null): SiteContent {
   return {
     topBanner: {
@@ -339,18 +375,20 @@ export function mergeSiteContent(incoming?: Partial<SiteContent> | null): SiteCo
       ...defaultSiteContent.portfolio,
       ...(incoming?.portfolio ?? {}),
       items: Array.isArray(incoming?.portfolio?.items)
-        ? incoming!.portfolio!.items.map((item) => ({
-            label: item.label ?? "",
-            type: item.type === "reel" ? "reel" : "post",
-            media: Array.isArray(item.media) ? item.media.filter((mediaUrl): mediaUrl is string => typeof mediaUrl === "string") : [],
-            link: item.link ?? "",
-          }))
+        ? incoming!.portfolio!.items
+            .map((item): PortfolioItem => ({
+              label: item.label ?? "",
+              type: item.type === "reel" ? "reel" : "post",
+              media: Array.isArray(item.media) ? item.media.filter((mediaUrl): mediaUrl is string => typeof mediaUrl === "string") : [],
+              link: item.link ?? "",
+            }))
+            .filter((item) => !(normalizePortfolioLink(item.link) === LEGACY_TEST_EMBED_URL && item.media.every((mediaUrl) => !mediaUrl.trim())))
         : defaultSiteContent.portfolio.items,
     },
     faq: {
       ...defaultSiteContent.faq,
       ...(incoming?.faq ?? {}),
-      items: mergeArray(incoming?.faq?.items, defaultSiteContent.faq.items),
+      items: mergeFaqItems(incoming?.faq?.items, defaultSiteContent.faq.items),
     },
     cta: {
       ...defaultSiteContent.cta,

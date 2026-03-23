@@ -34,24 +34,20 @@ export default function Hero() {
       className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-wolf-black pt-32 pb-24"
     >
       {/* Dynamic Background Video */}
-      <motion.div style={{ y }} className="absolute inset-0 z-0">
+      <motion.div style={{ y }} className="absolute inset-0 z-0 transform-gpu will-change-transform">
         <video
           autoPlay
           muted
+          loop
+          preload="auto"
           playsInline
-          onTimeUpdate={(event) => {
-            const video = event.currentTarget;
-            if (video.duration && video.currentTime >= video.duration - 7) {
-              video.currentTime = 0;
-              video.play();
-            }
-          }}
-          className="absolute inset-0 w-full h-full object-cover object-center"
+          disablePictureInPicture
+          className="absolute inset-0 h-full w-full object-cover object-center [transform:translateZ(0)]"
         >
           <source src="/hero-background.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-b from-wolf-black/90 via-wolf-black/60 to-wolf-black z-10" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(230,0,0,0.15)_0%,transparent_70%)] z-10 mix-blend-screen" />
+        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(230,0,0,0.15)_0%,transparent_70%)] opacity-70" />
       </motion.div>
 
       <motion.div
@@ -133,7 +129,7 @@ export default function Hero() {
 
           <Magnetic>
             <a
-              href="#work"
+              href="#portfolio"
               className="group px-10 py-5 border border-white/20 text-white font-heading tracking-[0.2em] uppercase hover:bg-white hover:text-wolf-black transition-all duration-500 flex items-center justify-center text-sm font-bold backdrop-blur-sm"
             >
               {content.hero.secondaryCtaLabel}

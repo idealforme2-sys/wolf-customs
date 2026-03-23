@@ -64,7 +64,7 @@ export default function Footer() {
             <ul className="space-y-4">
               <li>
                 <a
-                  href="#work"
+                  href="#portfolio"
                   className="text-gray-400 hover:text-wolf-red transition-colors"
                 >
                   Our Work
@@ -106,13 +106,24 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-wolf-gunmetal pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-500 text-sm">
+        <div className="border-t border-wolf-gunmetal pt-8 flex flex-col items-center justify-center gap-3">
+          <p className="text-center text-sm text-gray-500">
             &copy; {new Date().getFullYear()} Wolf Customs. All rights reserved.
           </p>
-          <p className="text-gray-500 text-sm flex items-center gap-1">
-            Wolf Customs
-          </p>
+          <a
+            href="https://www.instagram.com/creative_webflow_co/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group text-[11px] uppercase tracking-[0.22em] text-gray-600 transition-colors hover:text-gray-300"
+          >
+            Site by{" "}
+            <span className="text-wolf-red transition-colors duration-500 group-hover:text-white">
+              Creative
+            </span>{" "}
+            <span className="text-white transition-colors duration-500 group-hover:text-wolf-red">
+              WebFlow Co.
+            </span>
+          </a>
         </div>
       </div>
     </footer>

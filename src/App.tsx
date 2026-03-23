@@ -7,6 +7,8 @@ import Services from "./components/Services";
 import BeforeAfter from "./components/BeforeAfter";
 import Gallery from "./components/Gallery";
 import Portfolio from "./components/Portfolio";
+import PortfolioV2Links from "./components/PortfolioV2Links";
+import PortfolioV3Embed from "./components/PortfolioV3Embed";
 import Process from "./components/Process";
 import Trust from "./components/Trust";
 import FAQ from "./components/FAQ";
@@ -41,6 +43,8 @@ function PublicSite() {
         <BeforeAfter />
         <Gallery />
         <Portfolio />
+        <PortfolioV2Links />
+        <PortfolioV3Embed />
         <Process />
         <Trust />
         <FAQ />

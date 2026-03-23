@@ -24,7 +24,12 @@ body {
 }
 
 @media (pointer: fine) {
-  body, a, button, input, select, textarea {
+  body.custom-cursor-enabled,
+  body.custom-cursor-enabled a,
+  body.custom-cursor-enabled button,
+  body.custom-cursor-enabled input,
+  body.custom-cursor-enabled select,
+  body.custom-cursor-enabled textarea {
     cursor: none !important;
   }
 }
