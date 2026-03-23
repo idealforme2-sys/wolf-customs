@@ -20,14 +20,29 @@ export default function AdminLayout() {
     <div className="min-h-screen bg-wolf-black text-white flex flex-col md:flex-row">
       {/* Sidebar */}
       <aside className="w-full md:w-64 bg-wolf-gray border-b md:border-b-0 md:border-r border-wolf-gunmetal flex flex-col shrink-0">
-        <div className="p-4 md:p-6 border-b border-wolf-gunmetal flex justify-between items-center md:block">
-          <h1 className="text-lg font-heading font-bold uppercase tracking-widest">
-            Wolf <span className="text-wolf-red">Admin</span>
-          </h1>
-          {/* Mobile quick logout */}
-          <button onClick={handleLogout} className="md:hidden text-gray-400 hover:text-white p-2">
-            <LogOut className="w-5 h-5" />
-          </button>
+        <div className="border-b border-wolf-gunmetal p-4 md:p-6">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="mb-1 text-[10px] font-heading font-bold uppercase tracking-[0.26em] text-gray-500">
+                Owner Panel
+              </p>
+              <h1 className="text-lg font-heading font-bold uppercase tracking-widest">
+                Wolf <span className="text-wolf-red">Admin</span>
+              </h1>
+            </div>
+
+            {/* Mobile quick logout */}
+            <button onClick={handleLogout} className="p-2 text-gray-400 transition-colors hover:text-white md:hidden">
+              <LogOut className="w-5 h-5" />
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="hidden items-center gap-2 rounded-full border border-wolf-gunmetal bg-black/30 px-3 py-2 text-[10px] font-heading font-bold uppercase tracking-[0.18em] text-gray-400 transition-colors duration-200 hover:border-wolf-red/40 hover:text-wolf-red md:inline-flex"
+            >
+              <LogOut className="h-3.5 w-3.5" /> Sign Out
+            </button>
+          </div>
         </div>
 
         <nav className="grid grid-cols-3 gap-2 p-3 md:flex md:flex-1 md:flex-col md:gap-1 md:px-0 md:py-4">
@@ -41,15 +56,6 @@ export default function AdminLayout() {
             <PenSquare className="w-4 h-4" /> Content
           </NavLink>
         </nav>
-
-        <div className="px-4 py-3 md:p-4 border-t border-wolf-gunmetal hidden md:block">
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-3 w-full px-4 py-3 text-sm font-heading uppercase tracking-widest text-gray-400 hover:text-wolf-red hover:bg-wolf-gunmetal transition-colors duration-200"
-          >
-            <LogOut className="w-4 h-4" /> Sign Out
-          </button>
-        </div>
       </aside>
 
       {/* Main Content */}
