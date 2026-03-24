@@ -1,29 +1,182 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 const WIDGET_PORTFOLIO_DESCRIPTION =
   'This version places the business\'s "entire Instagram feed" onto the website, so people can scroll through all posts and reels in one section instead of only showing selected content.';
 
-export default function PortfolioV3Embed() {
-  useEffect(() => {
-    const existingScript = document.querySelector<HTMLScriptElement>('script[src="https://widgets.sociablekit.com/instagram-feed/widget.js"]');
+const WIDGET_SCRIPT_SRC = "https://widgets.sociablekit.com/instagram-feed/widget.js";
+const WIDGET_EMBED_ID = "25665453";
 
-    if (existingScript) {
+let widgetScriptPromise: Promise<void> | null = null;
+
+const loadWidgetScript = (anchor: HTMLElement, forceReload = false) => {
+  if (forceReload) {
+    document
+      .querySelectorAll<HTMLScriptElement>(`script[src="${WIDGET_SCRIPT_SRC}"]`)
+      .forEach((script) => script.remove());
+    widgetScriptPromise = null;
+  }
+
+  const existingScript = document.querySelector<HTMLScriptElement>(`script[src="${WIDGET_SCRIPT_SRC}"]`);
+  if (existingScript) {
+    if (existingScript.dataset.loaded === "true") {
+      return Promise.resolve();
+    }
+
+    if (!widgetScriptPromise) {
+      widgetScriptPromise = new Promise<void>((resolve, reject) => {
+        let settled = false;
+
+        const handleLoad = () => {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          existingScript.dataset.loaded = "true";
+          resolve();
+        };
+        const handleError = () => {
+          if (settled) {
+            return;
+          }
+          settled = true;
+          widgetScriptPromise = null;
+          reject(new Error("Failed to load SociableKIT widget script."));
+        };
+
+        existingScript.addEventListener("load", handleLoad, { once: true });
+        existingScript.addEventListener("error", handleError, { once: true });
+        window.setTimeout(handleLoad, 1500);
+      });
+    }
+
+    return widgetScriptPromise;
+  }
+
+  widgetScriptPromise = new Promise<void>((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = WIDGET_SCRIPT_SRC;
+    script.async = true;
+    script.dataset.sociablekit = "instagram-feed";
+    script.addEventListener(
+      "load",
+      () => {
+        script.dataset.loaded = "true";
+        resolve();
+      },
+      { once: true },
+    );
+    script.addEventListener(
+      "error",
+      () => {
+        widgetScriptPromise = null;
+        reject(new Error("Failed to load SociableKIT widget script."));
+      },
+      { once: true },
+    );
+
+    anchor.parentNode?.insertBefore(script, anchor.nextSibling);
+  });
+
+  return widgetScriptPromise;
+};
+
+export default function PortfolioV3Embed() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const widgetRef = useRef<HTMLDivElement>(null);
+  const [shouldLoadWidget, setShouldLoadWidget] = useState(false);
+  const [isWidgetReady, setIsWidgetReady] = useState(false);
+  const [hasWidgetFailed, setHasWidgetFailed] = useState(false);
+  const [widgetAttempt, setWidgetAttempt] = useState(0);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) {
       return;
     }
 
-    const script = document.createElement("script");
-    script.src = "https://widgets.sociablekit.com/instagram-feed/widget.js";
-    script.defer = true;
-    document.body.appendChild(script);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShouldLoadWidget(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "400px 0px" },
+    );
 
-    return () => {
-      script.remove();
-    };
+    observer.observe(section);
+
+    return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (!shouldLoadWidget || !widgetRef.current) {
+      return;
+    }
+
+    const widget = widgetRef.current;
+    let cancelled = false;
+    let retryTimeoutId: number | null = null;
+
+    const hasIframe = () => !!widget.querySelector("iframe");
+    const markReady = () => {
+      if (!cancelled && hasIframe()) {
+        setIsWidgetReady(true);
+        setHasWidgetFailed(false);
+        return true;
+      }
+
+      return false;
+    };
+
+    setIsWidgetReady(false);
+    setHasWidgetFailed(false);
+
+    const observer = new MutationObserver(() => {
+      if (markReady()) {
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(widget, { childList: true, subtree: true });
+
+    void loadWidgetScript(widget, widgetAttempt > 0)
+      .then(() => {
+        if (cancelled || markReady()) {
+          return;
+        }
+
+        retryTimeoutId = window.setTimeout(() => {
+          if (cancelled || markReady()) {
+            return;
+          }
+
+          if (widgetAttempt === 0) {
+            setWidgetAttempt(1);
+            return;
+          }
+
+          setHasWidgetFailed(true);
+        }, 5000);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setHasWidgetFailed(true);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+      if (retryTimeoutId !== null) {
+        window.clearTimeout(retryTimeoutId);
+      }
+    };
+  }, [shouldLoadWidget, widgetAttempt]);
+
   return (
-    <section id="portfolio-v3" className="relative overflow-hidden bg-wolf-black py-28 text-white">
+    <section ref={sectionRef} id="portfolio-v3" className="relative overflow-hidden bg-wolf-black py-28 text-white">
       <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-wolf-red/30 to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(230,0,0,0.12),transparent_28%)]" />
       <motion.div
@@ -101,8 +254,38 @@ export default function PortfolioV3Embed() {
           />
           <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[radial-gradient(circle_at_top,rgba(230,0,0,0.12),transparent_40%)]" />
           <div className="pointer-events-none absolute inset-4 rounded-[28px] border border-white/8" />
-          <div className="min-h-[78vh] overflow-hidden rounded-[24px] bg-[radial-gradient(circle_at_top,rgba(230,0,0,0.08),transparent_34%),linear-gradient(180deg,#141414,#090909)]">
-            <div className="sk-instagram-feed h-full w-full" data-embed-id="25665453" />
+          <div className="relative min-h-[78vh] overflow-hidden rounded-[24px] bg-[radial-gradient(circle_at_top,rgba(230,0,0,0.08),transparent_34%),linear-gradient(180deg,#141414,#090909)]">
+            {!isWidgetReady && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[linear-gradient(180deg,rgba(9,9,9,0.78),rgba(9,9,9,0.92))] px-6 text-center">
+                <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/10 border-t-wolf-red" />
+                <p className="text-xs font-heading font-bold uppercase tracking-[0.24em] text-gray-300">
+                  Loading Instagram Feed
+                </p>
+                <p className="max-w-md text-sm text-gray-500">
+                  {hasWidgetFailed
+                    ? "The widget is taking longer than expected. It will usually recover on retry."
+                    : "Fetching the full Instagram widget for this section."}
+                </p>
+                {hasWidgetFailed ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setHasWidgetFailed(false);
+                      setWidgetAttempt((current) => current + 1);
+                    }}
+                    className="mt-2 inline-flex items-center rounded-full border border-wolf-red/40 px-4 py-2 text-[11px] font-heading font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-wolf-red"
+                  >
+                    Retry Widget
+                  </button>
+                ) : null}
+              </div>
+            )}
+            <div
+              key={widgetAttempt}
+              ref={widgetRef}
+              className="sk-instagram-feed h-full w-full"
+              data-embed-id={WIDGET_EMBED_ID}
+            />
           </div>
         </div>
       </div>
