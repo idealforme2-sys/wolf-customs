@@ -19,8 +19,22 @@ View your app in AI Studio: https://ai.studio/apps/eb2ce052-9925-4224-85d7-99b19
 3. Run the app:
    `npm run dev`
 
-## Latest Features
-- **UI/UX**: Modern split-screen Hero section, dynamic scrolling navbar, and custom interactive cursor.
-- **Dashboard**: Added 'Edit Website' shortcut and auth-aware login/logout toggles.
-- **Mobile**: Responsive card carousels and redesigned mobile menu.
-- **Visuals**: AI-generated gallery imagery and updated brand icons.
+## Latest Features & Improvements
+
+### 🎨 Premium UI/UX
+- **Dynamic Hero Section**: Split-screen design with Oswald/Montserrat typography and floating interactive elements.
+- **Before/After Slider**: Interactive restoration showcase component.
+- **Advanced Navigation**: Real-time scrolling transitions and authenticated dynamic toggles.
+- **Micro-interactions**: Custom magnetic cursor, noise grain overlays, and smooth Framer Motion transitions.
+
+### 🛠 Administrative Suite
+- **Quotes Dashboard**: Full-featured inquiry management system for customer requests.
+- **Content Engine**: Live-site editor for services, gallery, and brand assets.
+- **Overview Dashboard**: Real-time performance metrics and site status.
+
+### 📱 Performance & Mobile
+- **Responsive Layouts**: Re-engineered 'How It Works' carousel and mobile-first navigation menu.
+- **Asset Optimization**: Optimized loading for high-resolution AI-generated restoration imagery.
+
+### 🏗 Architecture
+- **SiteContentProvider**: Global unified state for seamless live-updating between admin and public views.
