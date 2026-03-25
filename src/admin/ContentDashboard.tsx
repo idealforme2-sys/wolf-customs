@@ -809,7 +809,7 @@ function SectionGroupIntro({
 
             <div className="flex items-center lg:justify-end">
               <span className="rounded-full border border-wolf-red/30 bg-wolf-red/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-white shadow-[0_0_24px_rgba(230,0,0,0.12)]">
-                {sections.length} sections
+                {sections.length} section{sections.length === 1 ? "" : "s"}
               </span>
             </div>
           </div>
@@ -848,7 +848,7 @@ export default function ContentDashboard() {
   const [saving, setSaving] = useState(false);
   const [uploadingField, setUploadingField] = useState("");
   const [status, setStatus] = useState("");
-  const [openSection, setOpenSection] = useState<SectionId | null>("hero");
+  const [openSection, setOpenSection] = useState<SectionId | null>(null);
   const [publishReviewOpen, setPublishReviewOpen] = useState(false);
   const [lastPublishedAt, setLastPublishedAt] = useState<Date | null>(null);
   const [lastPublishedBy, setLastPublishedBy] = useState("");
