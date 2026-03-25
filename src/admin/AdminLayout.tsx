@@ -12,7 +12,7 @@ export default function AdminLayout() {
   };
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center justify-center gap-2 rounded-2xl px-3 py-3 text-xs font-heading uppercase tracking-[0.18em] whitespace-nowrap transition-colors duration-200 md:justify-start md:gap-3 md:rounded-none md:px-4 md:text-sm md:tracking-widest ${
+    `flex items-center gap-3 px-4 py-3 text-sm font-heading uppercase tracking-widest transition-colors duration-200 ${
       isActive ? "bg-wolf-red text-white" : "text-gray-400 hover:text-white hover:bg-wolf-gunmetal"
     }`;
 
@@ -20,7 +20,7 @@ export default function AdminLayout() {
     <div className="min-h-screen bg-wolf-black text-white flex flex-col md:flex-row">
       {/* Sidebar */}
       <aside className="w-full md:w-64 bg-wolf-gray border-b md:border-b-0 md:border-r border-wolf-gunmetal flex flex-col shrink-0">
-        <div className="border-b border-wolf-gunmetal p-4 md:p-6">
+        <div className="p-4 md:p-6 border-b border-wolf-gunmetal">
           <div className="flex items-center justify-between gap-3 md:flex-col md:items-stretch md:gap-4">
             <div className="min-w-0">
               <p className="mb-1 text-[10px] font-heading font-bold uppercase tracking-[0.26em] text-gray-500">
@@ -71,7 +71,7 @@ export default function AdminLayout() {
           </div>
         </div>
 
-        <nav className="grid grid-cols-3 gap-2 p-3 md:flex md:flex-1 md:flex-col md:gap-1 md:px-0 md:py-4">
+        <nav className="flex-none md:flex-1 flex flex-row md:flex-col overflow-x-auto py-2 md:py-4 px-2 md:px-0 space-x-2 md:space-x-0 md:space-y-1">
           <NavLink to="/admin/dashboard" className={linkClass}>
             <LayoutDashboard className="w-4 h-4" /> Overview
           </NavLink>
@@ -82,10 +82,12 @@ export default function AdminLayout() {
             <PenSquare className="w-4 h-4" /> Content
           </NavLink>
         </nav>
+
+
       </aside>
 
       {/* Main Content */}
-      <main className="min-w-0 flex-1">
+      <main className="flex-1 overflow-y-auto">
         <Outlet />
       </main>
     </div>
