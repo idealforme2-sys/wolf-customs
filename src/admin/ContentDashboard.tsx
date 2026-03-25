@@ -525,21 +525,58 @@ function SectionStatusPill({ status }: { status: SectionStatus }) {
 
 function SummaryStatCard({ icon: Icon, label, value, hint }: { icon: LucideIcon; label: string; value: string; hint: string }) {
   return (
-    <div className="relative overflow-hidden group rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(0,0,0,0.2))] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-md transition-all duration-500 hover:border-wolf-red/40 hover:-translate-y-1 hover:shadow-[0_30px_60px_rgba(224,30,40,0.15)]">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent group-hover:via-wolf-red/50 transition-all duration-500" />
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0 flex flex-1 items-center gap-2 text-[11px] uppercase tracking-[0.22em] text-gray-400 group-hover:text-gray-300 transition-colors">
-          <div className="flex h-9 w-9 items-center justify-center rounded-2xl border border-white/10 bg-black/35 group-hover:border-wolf-red/30 transition-colors shadow-inner">
-            <Icon className="h-4 w-4 text-wolf-red transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" />
+    <div className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0.03))] p-[1px] shadow-[0_24px_60px_rgba(0,0,0,0.38)] transition-all duration-500 hover:-translate-y-1 hover:border-wolf-red/30 hover:shadow-[0_34px_80px_rgba(224,30,40,0.16)]">
+      <div className="relative overflow-hidden rounded-[29px] bg-[radial-gradient(circle_at_top_right,rgba(230,0,0,0.12),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.24))] p-4">
+        <div className="pointer-events-none absolute -right-10 top-0 h-28 w-28 rounded-full bg-wolf-red/12 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent transition-all duration-500 group-hover:via-wolf-red/25" />
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="min-w-0 flex flex-1 items-start gap-2.5 text-[11px] uppercase tracking-[0.22em] text-gray-400 transition-colors group-hover:text-gray-300">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-wolf-red/20 bg-black/35 shadow-[0_0_24px_rgba(230,0,0,0.12)] transition-transform duration-500 group-hover:scale-105">
+              <Icon className="h-4 w-4 text-wolf-red transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" />
+            </div>
+            <span className="min-w-0 whitespace-normal leading-snug">{label}</span>
           </div>
-          {label}
+          <span className="mt-0.5 shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-gray-500">
+            Overview
+          </span>
         </div>
-        <span className="shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-gray-500">
-          Overview
-        </span>
+        <p className="mt-4 text-xl font-heading font-bold text-white">{value}</p>
+        <p className="mt-1 text-sm leading-relaxed text-gray-400">{hint}</p>
       </div>
-      <p className="mt-3 text-xl font-heading font-bold text-white">{value}</p>
-      <p className="mt-1 text-sm text-gray-400">{hint}</p>
+    </div>
+  );
+}
+
+function ControlSurfaceCard({
+  icon: Icon,
+  eyebrow,
+  title,
+  description,
+  children,
+}: {
+  icon: LucideIcon;
+  eyebrow: string;
+  title: string;
+  description?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0.03))] p-[1px] shadow-[0_24px_70px_rgba(0,0,0,0.34)]">
+      <div className="relative overflow-hidden rounded-[29px] bg-[radial-gradient(circle_at_top_right,rgba(230,0,0,0.14),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.22))] p-5">
+        <div className="pointer-events-none absolute -right-10 top-0 h-32 w-32 rounded-full bg-wolf-red/12 blur-3xl" />
+        <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/28 to-transparent" />
+        <div className="flex items-start gap-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[18px] border border-wolf-red/20 bg-black/35 shadow-[0_0_24px_rgba(230,0,0,0.14)]">
+            <Icon className="h-5 w-5 text-wolf-red" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[11px] uppercase tracking-[0.24em] text-wolf-red">{eyebrow}</p>
+            <p className="mt-1.5 text-xl font-heading font-bold text-white">{title}</p>
+            {description ? <p className="mt-1.5 text-sm leading-relaxed text-gray-400">{description}</p> : null}
+          </div>
+        </div>
+        <div className="mt-4">{children}</div>
+      </div>
     </div>
   );
 }
@@ -1166,26 +1203,39 @@ export default function ContentDashboard() {
   return (
     <div className="min-h-full bg-[radial-gradient(circle_at_top,rgba(230,0,0,0.08),transparent_35%),linear-gradient(180deg,#080808,#030303)] pb-40 sm:pb-32 xl:pb-12">
       <div className="mx-auto max-w-[1700px] px-4 py-5 md:px-8 md:py-8">
-        <section className="overflow-hidden rounded-[34px] border border-white/10 bg-[linear-gradient(135deg,rgba(230,0,0,0.16),rgba(255,255,255,0.04))] shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
-          <div className="grid gap-5 px-4 py-6 sm:px-6 sm:py-7 xl:grid-cols-[1.35fr_1fr] xl:px-8 xl:py-10">
+        <section className="relative overflow-hidden rounded-[36px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.14),rgba(255,255,255,0.03))] p-[1px] shadow-[0_36px_100px_rgba(0,0,0,0.38)]">
+          <div className="relative overflow-hidden rounded-[35px] bg-[radial-gradient(circle_at_top_right,rgba(230,0,0,0.2),transparent_30%),linear-gradient(135deg,rgba(230,0,0,0.16),rgba(255,255,255,0.04))]">
+            <div className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full bg-wolf-red/18 blur-3xl" />
+            <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/60 to-transparent" />
+            <div className="grid gap-5 px-4 py-6 sm:px-6 sm:py-7 xl:grid-cols-[1.35fr_1fr] xl:px-8 xl:py-10">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.3em] text-wolf-red">Owner Website Control Center</p>
-              <h1 className="mt-3 text-3xl font-heading font-black uppercase tracking-[0.12em] text-white md:text-5xl">
-                Website Control Center
-              </h1>
+              <div className="inline-flex rounded-full border border-wolf-red/20 bg-black/25 px-3 py-1.5 text-[11px] uppercase tracking-[0.24em] text-wolf-red shadow-[0_0_24px_rgba(230,0,0,0.12)]">
+                Owner Website Control Center
+              </div>
+              <div className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-2">
+                <h1 className="text-3xl font-heading font-black uppercase tracking-[0.12em] text-wolf-red drop-shadow-[0_0_18px_rgba(230,0,0,0.18)] md:text-5xl">
+                  Website
+                </h1>
+                <h1 className="text-3xl font-heading font-black uppercase tracking-[0.12em] text-white md:text-5xl">
+                  Control Center
+                </h1>
+              </div>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-gray-300 md:text-base">
                 Update your website content, visuals, and Instagram showcase with confidence. Your live website stays untouched until you publish.
               </p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                <span className="rounded-full border border-white/10 bg-black/25 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-gray-300">
-                  Guided editing
-                </span>
-                <span className="rounded-full border border-white/10 bg-black/25 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-gray-300">
-                  Draft-safe changes
-                </span>
-                <span className="rounded-full border border-wolf-red/20 bg-wolf-red/10 px-3 py-1.5 text-[11px] uppercase tracking-[0.18em] text-wolf-red">
-                  Built for owners
-                </span>
+              <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-[22px] border border-white/10 bg-black/25 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Mode</p>
+                  <p className="mt-2 text-sm font-semibold text-white">Guided editing</p>
+                </div>
+                <div className="rounded-[22px] border border-white/10 bg-black/25 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Safety</p>
+                  <p className="mt-2 text-sm font-semibold text-white">Draft-safe changes</p>
+                </div>
+                <div className="rounded-[22px] border border-wolf-red/20 bg-wolf-red/10 px-4 py-3 shadow-[0_0_28px_rgba(230,0,0,0.12)]">
+                  <p className="text-[10px] uppercase tracking-[0.18em] text-wolf-red">Audience</p>
+                  <p className="mt-2 text-sm font-semibold text-white">Built for owners</p>
+                </div>
               </div>
             </div>
 
@@ -1211,17 +1261,17 @@ export default function ContentDashboard() {
               />
             </div>
           </div>
+          </div>
         </section>
 
         <section className="mt-8 grid gap-6 xl:grid-cols-[1.05fr_1fr_0.8fr]">
-          <div className="rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)]">
-            <p className="text-[11px] uppercase tracking-[0.26em] text-gray-500">Draft & Publish</p>
-            <p className="mt-3 text-xl font-heading font-bold text-white">
-              {isDirty ? `${changedSections.length} section${changedSections.length === 1 ? "" : "s"} ready` : "Everything is live"}
-            </p>
-            <p className="mt-3 text-sm leading-relaxed text-gray-400">{publishingLabel}</p>
-
-            <div className="mt-5 flex flex-wrap gap-3">
+          <ControlSurfaceCard
+            icon={Save}
+            eyebrow="Draft & Publish"
+            title={isDirty ? `${changedSections.length} section${changedSections.length === 1 ? "" : "s"} ready` : "Everything is live"}
+            description={publishingLabel}
+          >
+            <div className="flex flex-wrap gap-3">
               <Link
                 to="/"
                 className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-gray-200 transition-colors hover:border-wolf-red hover:text-white"
@@ -1248,12 +1298,16 @@ export default function ContentDashboard() {
                 Review & Publish
               </button>
             </div>
-          </div>
+          </ControlSurfaceCard>
 
-          <div className="rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)]">
-            <p className="text-[11px] uppercase tracking-[0.26em] text-gray-500">What will change</p>
+          <ControlSurfaceCard
+            icon={Sparkles}
+            eyebrow="What Will Change"
+            title={changedSections.length ? `${changedSections.length} section${changedSections.length === 1 ? "" : "s"} lined up` : "Nothing queued"}
+            description={changedSections.length ? "These unpublished edits are ready for review before they go live." : "No unpublished changes at the moment. Once you edit a section, it will appear here."}
+          >
             {changedSections.length ? (
-              <div className="mt-4 space-y-3">
+              <div className="space-y-3">
                 {changedSections.map((section) => (
                   <div key={section.id} className="rounded-[20px] border border-wolf-red/15 bg-wolf-red/8 px-4 py-3">
                     <p className="text-sm font-semibold text-white">{section.navLabel}</p>
@@ -1261,19 +1315,20 @@ export default function ContentDashboard() {
                   </div>
                 ))}
               </div>
-            ) : (
-              <p className="mt-4 text-sm leading-relaxed text-gray-400">
-                No unpublished changes at the moment. Once you edit a section, it will appear here.
-              </p>
-            )}
-          </div>
+            ) : null}
+          </ControlSurfaceCard>
 
-          <div className="rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)]">
-            <p className="text-[11px] uppercase tracking-[0.26em] text-gray-500">Helpful note</p>
-            <p className="mt-4 text-sm leading-relaxed text-gray-400">
-              Uploads and text edits stay inside this editor until you publish. If you leave the page before publishing, those draft changes will be lost.
-            </p>
-          </div>
+          <ControlSurfaceCard
+            icon={CheckCircle2}
+            eyebrow="Helpful Note"
+            title="Draft-safe workflow"
+            description="Uploads and text edits stay inside this editor until you publish. If you leave the page before publishing, those draft changes will be lost."
+          >
+            <div className="rounded-[22px] border border-white/10 bg-black/25 px-4 py-3.5">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Best practice</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-white">Review, then publish once you are happy with the draft preview and section changes.</p>
+            </div>
+          </ControlSurfaceCard>
         </section>
 
         <div className="mt-6 grid min-w-0 gap-6 xl:grid-cols-[320px_minmax(0,1fr)] 2xl:grid-cols-[320px_minmax(0,1fr)_320px]">
