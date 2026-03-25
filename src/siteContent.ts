@@ -136,8 +136,8 @@ export const LEGACY_TEST_EMBED_URL = "https://www.instagram.com/p/DWILQK6DLV7/";
 export const defaultSiteContent: SiteContent = {
   topBanner: {
     text: "Emergency accident? We handle your insurance paperwork. Call 24/7:",
-    phoneDisplay: "(08) 8123 4567",
-    phoneHref: "tel:0881234567",
+    phoneDisplay: "+61 423 358 302",
+    phoneHref: "tel:+61423358302",
   },
   hero: {
     eyebrow: "Adelaide's Premier Auto Studio",
@@ -289,8 +289,8 @@ export const defaultSiteContent: SiteContent = {
   },
   business: {
     address: "77A Rundle Road\nSalisbury South SA 5106",
-    phoneDisplay: "0412 345 678",
-    phoneHref: "tel:0412345678",
+    phoneDisplay: "+61 423 358 302",
+    phoneHref: "tel:+61423358302",
     email: "hello@wolfcustoms.com.au",
     hours: "Mon - Fri: 8:00 AM - 5:00 PM\nSaturday & Sunday: Closed",
     mapEmbedUrl:

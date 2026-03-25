@@ -30,7 +30,7 @@ export default function Preloader({ onComplete }: { onComplete: () => void; key?
         animate={{ y: isExiting ? '-100%' : 0 }}
         transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
       >
-        <div className="translate-y-[50%] text-6xl md:text-8xl font-heading font-black tracking-widest flex items-center gap-4">
+        <div className="translate-y-[50%] whitespace-nowrap px-4 text-[14vw] font-heading font-black tracking-[0.14em] flex items-center gap-2 leading-none sm:text-6xl sm:gap-3 sm:tracking-[0.18em] md:text-8xl md:gap-4 md:tracking-widest">
           <span className="text-wolf-red">WOLF</span>
           <span className="text-white">CUSTOMS</span>
         </div>
@@ -43,24 +43,24 @@ export default function Preloader({ onComplete }: { onComplete: () => void; key?
         animate={{ y: isExiting ? '100%' : 0 }}
         transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
       >
-        <div className="-translate-y-[50%] text-6xl md:text-8xl font-heading font-black tracking-widest flex items-center gap-4">
+        <div className="-translate-y-[50%] whitespace-nowrap px-4 text-[14vw] font-heading font-black tracking-[0.14em] flex items-center gap-2 leading-none sm:text-6xl sm:gap-3 sm:tracking-[0.18em] md:text-8xl md:gap-4 md:tracking-widest">
           <span className="text-wolf-red">WOLF</span>
           <span className="text-white">CUSTOMS</span>
         </div>
         
         {/* Progress Bar & Text */}
         <motion.div 
-          className="absolute bottom-12 flex flex-col items-center gap-4"
+          className="absolute bottom-10 flex flex-col items-center gap-3 px-4 sm:bottom-12 sm:gap-4"
           animate={{ opacity: isExiting ? 0 : 1 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="w-64 h-1 bg-wolf-gunmetal relative overflow-hidden">
+          <div className="h-1 w-48 bg-wolf-gunmetal relative overflow-hidden sm:w-64">
             <motion.div
               className="absolute top-0 left-0 h-full bg-wolf-red"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <div className="font-mono text-wolf-silver text-sm tracking-widest">
+          <div className="font-mono text-xs tracking-[0.24em] text-wolf-silver sm:text-sm sm:tracking-widest">
             {progress}%
           </div>
         </motion.div>

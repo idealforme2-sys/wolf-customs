@@ -11,7 +11,7 @@ import wolfLogoImg from "../wolf.jpg";
 import bgMusic from "../Morning-Routine-Lofi-Study-Music(chosic.com).mp3";
 
 export default function Navbar() {
-  const { content } = useSiteContent();
+  const { content, loading } = useSiteContent();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -137,10 +137,18 @@ export default function Navbar() {
 
       {/* Top Banner */}
       <div className="bg-wolf-red text-white text-[10px] md:text-xs font-heading tracking-[0.2em] uppercase py-2.5 px-4 text-center relative z-60 font-bold">
-        {content.topBanner.text}{" "}
-        <a href={content.topBanner.phoneHref} className="font-black hover:underline ml-1">
-          {content.topBanner.phoneDisplay}
-        </a>
+        {loading ? (
+          <span className="opacity-0">
+            {content.topBanner.text} {content.topBanner.phoneDisplay}
+          </span>
+        ) : (
+          <>
+            {content.topBanner.text}{" "}
+            <a href={content.topBanner.phoneHref} className="ml-1 font-black hover:underline">
+              {content.topBanner.phoneDisplay}
+            </a>
+          </>
+        )}
       </div>
       <nav
         ref={navRef}
@@ -229,40 +237,44 @@ export default function Navbar() {
 
           <div className="md:hidden">
             <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(10,10,10,0.96),rgba(10,10,10,0.84))] px-3 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl">
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center justify-between gap-2">
                 <button
                   type="button"
                   onClick={() => navigateToSection("#")}
-                  className="flex min-w-0 items-center gap-3 text-left"
+                  className="flex min-w-0 flex-1 items-center gap-2.5 pr-1 text-left"
                 >
                   <img
                     src={wolfLogoImg}
                     alt="Wolf Customs Logo"
-                    className="h-11 w-11 shrink-0 rounded-full border border-white/10 object-cover object-center"
+                    className="h-10 w-10 shrink-0 rounded-full border border-white/10 object-cover object-center"
                   />
-                  <div className="min-w-0">
-                    <p className="truncate text-[10px] font-semibold uppercase tracking-[0.26em] text-gray-500">Wolf Customs</p>
-                    <p className="mt-1 truncate text-sm font-heading font-bold uppercase tracking-[0.18em] text-white">Quick Access</p>
+                  <div className="min-w-0 flex-1">
+                    <p className="whitespace-nowrap text-[9px] font-semibold uppercase tracking-[0.18em] text-gray-500 sm:text-[10px] sm:tracking-[0.22em]">
+                      Wolf Customs
+                    </p>
+                    <p className="mt-1 hidden whitespace-nowrap text-[11px] font-heading font-bold uppercase tracking-[0.12em] text-white min-[380px]:block sm:text-sm sm:tracking-[0.18em]">
+                      Quick Access
+                    </p>
                   </div>
                 </button>
 
-                <div className="flex items-center gap-2">
+                <div className="flex shrink-0 items-center gap-1.5">
                   <a
                     href={content.topBanner.phoneHref}
-                    className="inline-flex h-11 items-center gap-2 rounded-full border border-wolf-red/30 bg-wolf-red/10 px-4 text-xs font-heading font-bold uppercase tracking-[0.16em] text-white"
+                    className="inline-flex h-10 items-center gap-1.5 rounded-full border border-wolf-red/30 bg-wolf-red/10 px-3 text-[10px] font-heading font-bold uppercase tracking-[0.12em] text-white sm:h-11 sm:gap-2 sm:px-4 sm:text-xs sm:tracking-[0.16em]"
                   >
                     <Phone className="h-4 w-4 text-wolf-red" />
-                    Call
+                    <span className="hidden min-[380px]:inline">Call</span>
                   </a>
                   <button
                     type="button"
                     onClick={() => setIsMobileMenuOpen((current) => !current)}
-                    className="inline-flex h-11 items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 text-xs font-heading font-bold uppercase tracking-[0.16em] text-white transition-colors hover:border-wolf-red/40"
+                    className="inline-flex h-10 items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 text-[10px] font-heading font-bold uppercase tracking-[0.12em] text-white transition-colors hover:border-wolf-red/40 sm:h-11 sm:gap-2 sm:px-4 sm:text-xs sm:tracking-[0.16em]"
                     aria-expanded={isMobileMenuOpen}
                     aria-controls="mobile-nav-panel"
                   >
                     {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-                    Menu
+                    <span className="hidden min-[380px]:inline">Menu</span>
                   </button>
                 </div>
               </div>
