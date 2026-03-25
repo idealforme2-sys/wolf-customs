@@ -525,24 +525,22 @@ function SectionStatusPill({ status }: { status: SectionStatus }) {
 
 function SummaryStatCard({ icon: Icon, label, value, hint }: { icon: LucideIcon; label: string; value: string; hint: string }) {
   return (
-    <div className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0.03))] p-[1px] shadow-[0_24px_60px_rgba(0,0,0,0.38)] transition-all duration-500 hover:-translate-y-1 hover:border-wolf-red/30 hover:shadow-[0_34px_80px_rgba(224,30,40,0.16)]">
-      <div className="relative overflow-hidden rounded-[29px] bg-[radial-gradient(circle_at_top_right,rgba(230,0,0,0.12),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.24))] p-4">
-        <div className="pointer-events-none absolute -right-10 top-0 h-28 w-28 rounded-full bg-wolf-red/12 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
-        <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent transition-all duration-500 group-hover:via-wolf-red/25" />
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0 flex flex-1 items-start gap-2.5 text-[11px] uppercase tracking-[0.22em] text-gray-400 transition-colors group-hover:text-gray-300">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-wolf-red/20 bg-black/35 shadow-[0_0_24px_rgba(230,0,0,0.12)] transition-transform duration-500 group-hover:scale-105">
-              <Icon className="h-4 w-4 text-wolf-red transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" />
-            </div>
-            <span className="min-w-0 whitespace-normal leading-snug">{label}</span>
+    <div className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(230,0,0,0.12),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.24))] p-4 shadow-[0_24px_60px_rgba(0,0,0,0.38)] transition-all duration-500 hover:-translate-y-1 hover:border-wolf-red/30 hover:shadow-[0_34px_80px_rgba(224,30,40,0.16)]">
+      <div className="pointer-events-none absolute -right-10 top-0 h-28 w-28 rounded-full bg-wolf-red/12 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent transition-all duration-500 group-hover:via-wolf-red/25" />
+      <div className="relative flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0 flex flex-1 items-start gap-2.5 text-[11px] uppercase tracking-[0.22em] text-gray-400 transition-colors group-hover:text-gray-300">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-wolf-red/20 bg-black/35 shadow-[0_0_24px_rgba(230,0,0,0.12)] transition-transform duration-500 group-hover:scale-105">
+            <Icon className="h-4 w-4 text-wolf-red transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" />
           </div>
-          <span className="mt-0.5 shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-gray-500">
-            Overview
-          </span>
+          <span className="min-w-0 whitespace-normal leading-snug">{label}</span>
         </div>
-        <p className="mt-4 text-xl font-heading font-bold text-white">{value}</p>
-        <p className="mt-1 text-sm leading-relaxed text-gray-400">{hint}</p>
+        <span className="mt-0.5 shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-gray-500">
+          Overview
+        </span>
       </div>
+      <p className="relative mt-4 text-xl font-heading font-bold text-white">{value}</p>
+      <p className="relative mt-1 text-sm leading-relaxed text-gray-400">{hint}</p>
     </div>
   );
 }
@@ -561,22 +559,20 @@ function ControlSurfaceCard({
   children: ReactNode;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0.03))] p-[1px] shadow-[0_24px_70px_rgba(0,0,0,0.34)]">
-      <div className="relative overflow-hidden rounded-[29px] bg-[radial-gradient(circle_at_top_right,rgba(230,0,0,0.14),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.22))] p-5">
-        <div className="pointer-events-none absolute -right-10 top-0 h-32 w-32 rounded-full bg-wolf-red/12 blur-3xl" />
-        <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/28 to-transparent" />
-        <div className="flex items-start gap-4">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[18px] border border-wolf-red/20 bg-black/35 shadow-[0_0_24px_rgba(230,0,0,0.14)]">
-            <Icon className="h-5 w-5 text-wolf-red" />
-          </div>
-          <div className="min-w-0">
-            <p className="text-[11px] uppercase tracking-[0.24em] text-wolf-red">{eyebrow}</p>
-            <p className="mt-1.5 text-xl font-heading font-bold text-white">{title}</p>
-            {description ? <p className="mt-1.5 text-sm leading-relaxed text-gray-400">{description}</p> : null}
-          </div>
+    <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(230,0,0,0.14),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.22))] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.34)]">
+      <div className="pointer-events-none absolute -right-10 top-0 h-32 w-32 rounded-full bg-wolf-red/12 blur-3xl" />
+      <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/28 to-transparent" />
+      <div className="relative flex items-start gap-4">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[18px] border border-wolf-red/20 bg-black/35 shadow-[0_0_24px_rgba(230,0,0,0.14)]">
+          <Icon className="h-5 w-5 text-wolf-red" />
         </div>
-        <div className="mt-4">{children}</div>
+        <div className="min-w-0">
+          <p className="text-[11px] uppercase tracking-[0.24em] text-wolf-red">{eyebrow}</p>
+          <p className="mt-1.5 text-xl font-heading font-bold text-white">{title}</p>
+          {description ? <p className="mt-1.5 text-sm leading-relaxed text-gray-400">{description}</p> : null}
+        </div>
       </div>
+      <div className="relative mt-4">{children}</div>
     </div>
   );
 }
