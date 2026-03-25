@@ -13,6 +13,8 @@ export default function Contact() {
   const [files, setFiles] = useState<FileList | null>(null);
   const [fileName, setFileName] = useState("");
   const serviceOptions = [...new Set(content.services.items.map((item) => item.title).filter(Boolean).concat("Other"))];
+  const fieldClassName =
+    "w-full bg-wolf-black border border-wolf-gunmetal px-4 py-3 text-white transition-all duration-300 focus:outline-none focus:border-wolf-red focus:shadow-[0_0_0_1px_rgba(243,163,55,0.32),0_0_26px_rgba(243,163,55,0.18)] focus:bg-[linear-gradient(180deg,rgba(255,244,214,0.04),rgba(9,6,2,0.96))]";
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -209,7 +211,7 @@ export default function Contact() {
                     id="name"
                     name="name"
                     required
-                    className="w-full bg-wolf-black border border-wolf-gunmetal px-4 py-3 text-white focus:outline-none focus:border-wolf-red transition-colors"
+                    className={fieldClassName}
                     placeholder="John Doe"
                   />
                 </div>
@@ -225,7 +227,7 @@ export default function Contact() {
                     id="phone"
                     name="phone"
                     required
-                    className="w-full bg-wolf-black border border-wolf-gunmetal px-4 py-3 text-white focus:outline-none focus:border-wolf-red transition-colors"
+                    className={fieldClassName}
                     placeholder="0400 000 000"
                   />
                 </div>
@@ -242,7 +244,7 @@ export default function Contact() {
                   <select
                     id="service"
                     name="service"
-                    className="w-full bg-wolf-black border border-wolf-gunmetal px-4 py-3 text-white focus:outline-none focus:border-wolf-red transition-colors appearance-none cursor-pointer"
+                    className={`${fieldClassName} appearance-none cursor-pointer pr-12`}
                   >
                     {serviceOptions.map((option) => (
                       <option key={option}>{option}</option>
@@ -275,7 +277,7 @@ export default function Contact() {
                   />
                   <label
                     htmlFor="images"
-                    className="w-full bg-wolf-black border border-wolf-gunmetal border-dashed px-4 py-6 flex flex-col items-center justify-center text-gray-400 hover:border-wolf-red hover:text-wolf-red transition-all duration-300 cursor-pointer group"
+                    className="w-full bg-wolf-black border border-wolf-gunmetal border-dashed px-4 py-6 flex flex-col items-center justify-center text-gray-400 hover:border-wolf-red hover:text-wolf-red hover:shadow-[0_0_0_1px_rgba(243,163,55,0.28),0_0_26px_rgba(243,163,55,0.16)] transition-all duration-300 cursor-pointer group"
                   >
                     <UploadCloud className="w-8 h-8 mb-3 text-wolf-gunmetal group-hover:text-wolf-red transition-colors duration-300 group-hover:scale-110 transform" />
                     <span className="text-xs font-heading tracking-widest uppercase text-center">
@@ -297,7 +299,7 @@ export default function Contact() {
                   name="message"
                   rows={4}
                   required
-                  className="w-full bg-wolf-black border border-wolf-gunmetal px-4 py-3 text-white focus:outline-none focus:border-wolf-red transition-colors resize-none"
+                  className={`${fieldClassName} resize-none`}
                   placeholder="Tell us about your vehicle and what you need done..."
                 ></textarea>
               </div>

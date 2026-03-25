@@ -3,6 +3,8 @@ import { useSiteContent } from "./SiteContentProvider";
 
 export default function Footer() {
   const { content } = useSiteContent();
+  const footerLinkClassName =
+    "text-gray-400 transition-all duration-300 hover:text-wolf-red hover:[text-shadow:0_0_18px_rgba(243,163,55,0.24)]";
 
   return (
     <footer className="bg-wolf-black border-t border-wolf-gunmetal pt-16 pb-8">
@@ -48,7 +50,7 @@ export default function Footer() {
                 <li key={service.title}>
                   <a
                     href="#services"
-                    className="text-gray-400 hover:text-wolf-red transition-colors"
+                    className={footerLinkClassName}
                   >
                     {service.title}
                   </a>
@@ -65,7 +67,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#portfolio"
-                  className="text-gray-400 hover:text-wolf-red transition-colors"
+                  className={footerLinkClassName}
                 >
                   Our Work
                 </a>
@@ -73,7 +75,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#process"
-                  className="text-gray-400 hover:text-wolf-red transition-colors"
+                  className={footerLinkClassName}
                 >
                   The Process
                 </a>
@@ -81,7 +83,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#contact"
-                  className="text-gray-400 hover:text-wolf-red transition-colors"
+                  className={footerLinkClassName}
                 >
                   Contact Us
                 </a>
@@ -89,7 +91,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-wolf-red transition-colors"
+                  className={footerLinkClassName}
                 >
                   Privacy Policy
                 </a>
@@ -97,7 +99,7 @@ export default function Footer() {
               <li>
                 <a
                   href="#"
-                  className="text-gray-400 hover:text-wolf-red transition-colors"
+                  className={footerLinkClassName}
                 >
                   Terms of Service
                 </a>

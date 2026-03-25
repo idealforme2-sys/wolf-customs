@@ -1,10 +1,30 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import Magnetic from "./Magnetic";
 import { useSiteContent } from "./SiteContentProvider";
 
 export default function Hero() {
   const { content } = useSiteContent();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoReady, setVideoReady] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        video.pause();
+        return;
+      }
+
+      video.play().catch(() => {});
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
 
   const textVariants = {
     hidden: { opacity: 0, y: 100 },
@@ -23,14 +43,17 @@ export default function Hero() {
     <section className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-wolf-black pt-32 pb-24">
       {/* Dynamic Background Video */}
       <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,218,134,0.14),transparent_30%),linear-gradient(180deg,#110b05_0%,#060301_100%)]" />
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop
-          preload="auto"
+          preload="metadata"
           playsInline
           disablePictureInPicture
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          onLoadedData={() => setVideoReady(true)}
+          className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
         >
           <source src="/hero-background.mp4" type="video/mp4" />
         </video>
@@ -56,7 +79,7 @@ export default function Hero() {
 
         <div className="overflow-visible relative mb-6">
           <h1 className="text-[14vw] md:text-[9vw] lg:text-[8rem] font-heading font-black tracking-normal leading-[0.85] uppercase flex flex-col items-center">
-            <div className="flex overflow-visible">
+            <div className="flex overflow-visible [filter:drop-shadow(0_0_18px_rgba(255,255,255,0.16))]">
               {["W", "O", "L", "F"].map((char, i) => (
                 <motion.span
                   key={i}
@@ -64,13 +87,13 @@ export default function Hero() {
                   variants={textVariants}
                   initial="hidden"
                   animate="visible"
-                  className="bg-[linear-gradient(180deg,#ffffff_0%,#fffdf8_22%,#f3eee4_58%,#cfc6b7_100%)] bg-clip-text text-transparent [filter:drop-shadow(0_0_18px_rgba(255,255,255,0.2))_drop-shadow(0_0_34px_rgba(255,241,204,0.08))] [-webkit-text-stroke:0.35px_rgba(255,255,255,0.2)] p-[0.2em] -m-[0.2em]"
+                  className="bg-[linear-gradient(180deg,#ffffff_0%,#fffdf8_22%,#f3eee4_58%,#cfc6b7_100%)] bg-clip-text text-transparent [-webkit-text-stroke:0.35px_rgba(255,255,255,0.2)] p-[0.2em] -m-[0.2em]"
                 >
                   {char}
                 </motion.span>
               ))}
             </div>
-            <div className="flex overflow-visible mt-2">
+            <div className="mt-2 flex overflow-visible [filter:drop-shadow(0_0_18px_rgba(255,212,122,0.16))]">
               {["C", "U", "S", "T", "O", "M", "S"].map((char, i) => (
                 <motion.span
                   key={i}
@@ -78,7 +101,7 @@ export default function Hero() {
                   variants={textVariants}
                   initial="hidden"
                   animate="visible"
-                  className="bg-[linear-gradient(180deg,#fff8dc_0%,#ffe199_18%,#ffc45d_42%,#f39a32_64%,#cf6c0a_84%,#7f3000_100%)] bg-clip-text text-transparent [filter:drop-shadow(0_0_22px_rgba(255,212,122,0.22))_drop-shadow(0_0_40px_rgba(243,163,55,0.18))] [-webkit-text-stroke:0.35px_rgba(255,242,214,0.14)] p-[0.2em] -m-[0.2em]"
+                  className="bg-[linear-gradient(180deg,#fff8dc_0%,#ffe199_18%,#ffc45d_42%,#f39a32_64%,#cf6c0a_84%,#7f3000_100%)] bg-clip-text text-transparent [-webkit-text-stroke:0.35px_rgba(255,242,214,0.14)] p-[0.2em] -m-[0.2em]"
                 >
                   {char}
                 </motion.span>
@@ -117,9 +140,11 @@ export default function Hero() {
           <Magnetic>
             <a
               href="#portfolio"
-              className="group px-10 py-5 border border-white/20 text-white font-heading tracking-[0.2em] uppercase hover:bg-wolf-silver hover:text-wolf-black transition-all duration-500 flex items-center justify-center text-sm font-bold backdrop-blur-sm"
+              className="group relative overflow-hidden px-10 py-5 border border-white/20 text-white font-heading tracking-[0.2em] uppercase hover:bg-wolf-silver transition-all duration-500 flex items-center justify-center text-sm font-bold backdrop-blur-sm"
             >
-              {content.hero.secondaryCtaLabel}
+              <span className="relative z-10 transition-colors duration-500 group-hover:text-wolf-black">
+                {content.hero.secondaryCtaLabel}
+              </span>
             </a>
           </Magnetic>
         </motion.div>
