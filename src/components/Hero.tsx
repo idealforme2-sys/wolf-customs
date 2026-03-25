@@ -42,12 +42,12 @@ export default function Hero() {
           preload="auto"
           playsInline
           disablePictureInPicture
-          className="absolute inset-0 h-full w-full object-cover object-center [transform:translateZ(0)]"
+          className="absolute inset-0 h-full w-full object-cover object-center contrast-[1.06] saturate-[1.08] [transform:translateZ(0)]"
         >
           <source src="/hero-background.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-wolf-black/90 via-wolf-black/60 to-wolf-black z-10" />
-        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(230,0,0,0.15)_0%,transparent_70%)] opacity-70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-wolf-black/62 via-wolf-black/24 to-wolf-black/68 z-10" />
+        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(230,0,0,0.09)_0%,transparent_72%)] opacity-45" />
       </motion.div>
 
       <motion.div
