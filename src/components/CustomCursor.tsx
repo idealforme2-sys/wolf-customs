@@ -97,7 +97,7 @@ export default function CustomCursor() {
   return (
     <>
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[9999] hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-wolf-red shadow-[0_0_18px_rgba(230,0,0,0.85)] md:block"
+        className="pointer-events-none fixed left-0 top-0 z-[9999] hidden h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-wolf-red shadow-[0_0_18px_rgba(199,161,74,0.8)] md:block"
         style={{ x: dotX, y: dotY }}
         animate={{
           scale: isHovering ? 0 : 1,
@@ -106,16 +106,16 @@ export default function CustomCursor() {
         transition={{ type: 'tween', ease: 'backOut', duration: 0.1 }}
       />
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[9999] hidden h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-wolf-red/60 bg-black/15 backdrop-blur-[2px] shadow-[0_0_30px_rgba(230,0,0,0.22)] md:flex"
+        className="pointer-events-none fixed left-0 top-0 z-[9999] hidden h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-wolf-red/60 bg-black/15 backdrop-blur-[2px] shadow-[0_0_30px_rgba(199,161,74,0.2)] md:flex"
         style={{ x: ringX, y: ringY }}
         animate={{
           scale: isHovering ? 1.2 : 1,
-          backgroundColor: isHovering ? 'rgba(230,0,0,0.88)' : 'rgba(0,0,0,0.08)',
+          backgroundColor: isHovering ? 'rgba(199,161,74,0.9)' : 'rgba(0,0,0,0.08)',
         }}
         transition={{ type: 'tween', ease: 'backOut', duration: 0.2 }}
       >
         {isHovering && (
-          <span className="text-[8px] font-heading font-bold text-white tracking-widest uppercase">
+          <span className="text-[8px] font-heading font-bold text-wolf-black tracking-widest uppercase">
             Click
           </span>
         )}

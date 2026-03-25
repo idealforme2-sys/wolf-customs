@@ -60,7 +60,7 @@ export default function Trust() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-heading font-bold uppercase tracking-tight mb-4"
           >
-            Client <span className="text-wolf-red">Reviews</span>
+            Client <span className="molten-highlight">Reviews</span>
           </motion.h2>
         </div>
 

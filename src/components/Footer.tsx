@@ -24,7 +24,7 @@ export default function Footer() {
                 href={content.business.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-wolf-gunmetal flex items-center justify-center hover:bg-wolf-red hover:text-white transition-colors duration-300 text-gray-400"
+                className="w-10 h-10 bg-wolf-gunmetal flex items-center justify-center hover:bg-wolf-red hover:text-wolf-black transition-colors duration-300 text-gray-400"
               >
                 <Instagram className="w-5 h-5" />
               </a>
@@ -32,7 +32,7 @@ export default function Footer() {
                 href={content.business.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-wolf-gunmetal flex items-center justify-center hover:bg-wolf-red hover:text-white transition-colors duration-300 text-gray-400"
+                className="w-10 h-10 bg-wolf-gunmetal flex items-center justify-center hover:bg-wolf-red hover:text-wolf-black transition-colors duration-300 text-gray-400"
               >
                 <Facebook className="w-5 h-5" />
               </a>
@@ -117,10 +117,10 @@ export default function Footer() {
             className="group text-[11px] uppercase tracking-[0.22em] text-gray-600 transition-colors hover:text-gray-300"
           >
             Site by{" "}
-            <span className="text-wolf-red transition-colors duration-500 group-hover:text-white">
+            <span className="molten-swap-primary">
               Creative
             </span>{" "}
-            <span className="text-white transition-colors duration-500 group-hover:text-wolf-red">
+            <span className="molten-swap-secondary">
               WebFlow Co.
             </span>
           </a>

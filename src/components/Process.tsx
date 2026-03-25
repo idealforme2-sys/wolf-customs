@@ -60,7 +60,7 @@ export default function Process() {
             viewport={{ once: true }}
             className="text-5xl md:text-7xl font-heading font-black uppercase tracking-tighter mb-6 leading-none"
           >
-            The <span className="text-wolf-red">Process</span>
+            The <span className="molten-highlight">Process</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -80,7 +80,7 @@ export default function Process() {
           {/* Animated Vertical Progress Line */}
           <motion.div 
             style={{ height }} 
-            className="absolute left-6 md:left-1/2 top-0 w-[2px] bg-wolf-red -translate-x-1/2 origin-top shadow-[0_0_15px_rgba(230,0,0,0.8)] z-10" 
+            className="absolute left-6 md:left-1/2 top-0 w-[2px] bg-wolf-red -translate-x-1/2 origin-top shadow-[0_0_15px_rgba(199,161,74,0.8)] z-10" 
           />
 
           <div className="flex flex-col gap-24 relative z-20">
@@ -94,7 +94,7 @@ export default function Process() {
                 
                 {/* Node */}
                 <div className="absolute left-6 md:left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-wolf-black border-2 border-wolf-gunmetal flex items-center justify-center z-20 group hover:border-wolf-red transition-colors duration-500">
-                  <div className="w-4 h-4 rounded-full bg-wolf-gunmetal group-hover:bg-wolf-red transition-colors duration-500 shadow-[0_0_10px_rgba(230,0,0,0.5)]" />
+                  <div className="w-4 h-4 rounded-full bg-wolf-gunmetal group-hover:bg-wolf-red transition-colors duration-500 shadow-[0_0_10px_rgba(199,161,74,0.5)]" />
                 </div>
 
                 {/* Content Card */}

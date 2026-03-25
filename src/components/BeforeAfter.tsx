@@ -32,7 +32,7 @@ export default function BeforeAfter() {
             viewport={{ once: true }}
             className="text-4xl md:text-6xl font-heading font-bold uppercase tracking-tight mb-4"
           >
-            {content.beforeAfter.title} <span className="text-wolf-red">{content.beforeAfter.highlight}</span>
+            {content.beforeAfter.title} <span className="molten-highlight">{content.beforeAfter.highlight}</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -85,13 +85,13 @@ export default function BeforeAfter() {
           </div>
 
           <div
-            className="absolute top-0 bottom-0 w-1 bg-wolf-red cursor-ew-resize flex items-center justify-center shadow-[0_0_15px_rgba(230,0,0,0.5)]"
+            className="absolute top-0 bottom-0 w-1 bg-wolf-red cursor-ew-resize flex items-center justify-center shadow-[0_0_15px_rgba(199,161,74,0.55)]"
             style={{ left: `calc(${sliderPosition}% - 2px)` }}
           >
             <div className="w-8 h-8 bg-wolf-red rounded-full flex items-center justify-center shadow-lg">
               <div className="flex gap-1">
-                <div className="w-0.5 h-3 bg-white rounded-full" />
-                <div className="w-0.5 h-3 bg-white rounded-full" />
+                <div className="w-0.5 h-3 bg-wolf-black rounded-full" />
+                <div className="w-0.5 h-3 bg-wolf-black rounded-full" />
               </div>
             </div>
           </div>

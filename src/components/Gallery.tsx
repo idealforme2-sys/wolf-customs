@@ -47,7 +47,7 @@ export default function Gallery() {
             </span>
           </motion.div>
           <h2 className="text-6xl md:text-8xl lg:text-9xl font-heading font-black uppercase tracking-tighter text-white mix-blend-difference drop-shadow-2xl">
-            {content.gallery.title} <span className="text-wolf-red">{content.gallery.highlight}</span>
+            {content.gallery.title} <span className="molten-highlight">{content.gallery.highlight}</span>
           </h2>
         </div>
 
@@ -87,7 +87,7 @@ export default function Gallery() {
             </h3>
             <a
               href="#contact"
-              className="px-8 py-4 bg-wolf-red text-white font-heading tracking-widest uppercase hover:bg-white hover:text-wolf-black transition-colors duration-300 font-bold"
+              className="px-8 py-4 bg-wolf-red text-wolf-black font-heading tracking-widest uppercase hover:bg-wolf-silver hover:text-wolf-black transition-colors duration-300 font-bold"
             >
               {content.gallery.ctaButtonLabel}
             </a>

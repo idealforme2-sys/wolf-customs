@@ -72,7 +72,7 @@ export default function Contact() {
               viewport={{ once: true }}
               className="text-4xl md:text-6xl font-heading font-bold uppercase tracking-tight mb-8"
             >
-              {content.contact.title} <span className="text-wolf-red">{content.contact.highlight}</span>
+              {content.contact.title} <span className="molten-highlight">{content.contact.highlight}</span>
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -305,7 +305,7 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-wolf-red text-white font-heading tracking-widest uppercase py-4 hover:bg-wolf-red-hover transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-wolf-red text-wolf-black font-heading tracking-widest uppercase py-4 hover:bg-wolf-red-hover transition-colors duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? (
                   <>

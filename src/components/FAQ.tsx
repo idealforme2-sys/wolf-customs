@@ -19,7 +19,7 @@ export default function FAQ() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-heading font-bold uppercase tracking-tight"
           >
-            {content.faq.title} <span className="text-wolf-red">{content.faq.highlight}</span>
+            {content.faq.title} <span className="molten-highlight">{content.faq.highlight}</span>
           </motion.h2>
         </div>
 

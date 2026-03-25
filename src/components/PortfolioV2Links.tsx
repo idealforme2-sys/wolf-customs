@@ -98,7 +98,7 @@ function EmbedCard({ item }: { item: EmbedItem }) {
 
   return (
     <div className="break-inside-avoid overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] shadow-[0_20px_60px_rgba(0,0,0,0.28)]">
-      <div className="bg-[radial-gradient(circle_at_top,rgba(230,0,0,0.08),transparent_32%),linear-gradient(180deg,#141414,#090909)] p-2">
+      <div className="bg-[radial-gradient(circle_at_top,rgba(199,161,74,0.12),transparent_32%),linear-gradient(180deg,#161109,#090603)] p-2">
         <div className={`overflow-hidden rounded-[24px] border border-white/8 bg-black ${crop.frame}`}>
           <iframe
             title={item.id}
@@ -137,7 +137,7 @@ export default function PortfolioV2Links() {
   }, [content.portfolio.items]);
 
   return (
-    <section id="portfolio-v2" className="relative bg-[linear-gradient(180deg,#070707,#020202)] py-28 text-white">
+    <section id="portfolio-v2" className="relative bg-[linear-gradient(180deg,#0b0804,#050301)] py-28 text-white">
       <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-wolf-red/40 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -155,7 +155,7 @@ export default function PortfolioV2Links() {
               </span>
             </div>
             <h2 className="mb-6 text-5xl font-heading font-black uppercase leading-none tracking-tighter text-white md:text-7xl">
-              Latest <span className="text-wolf-red">Work</span>
+              Latest <span className="molten-highlight">Work</span>
             </h2>
             <p className="max-w-2xl text-lg font-light leading-relaxed text-gray-400">
               {EMBED_PORTFOLIO_DESCRIPTION}

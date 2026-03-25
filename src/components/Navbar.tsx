@@ -11,7 +11,7 @@ import wolfLogoImg from "../wolf.jpg";
 import bgMusic from "../Morning-Routine-Lofi-Study-Music(chosic.com).mp3";
 
 export default function Navbar() {
-  const { content, loading } = useSiteContent();
+  const { content } = useSiteContent();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -136,19 +136,14 @@ export default function Navbar() {
       <audio ref={audioRef} src={bgMusic} loop muted={isMuted} className="hidden" />
 
       {/* Top Banner */}
-      <div className="bg-wolf-red text-white text-[10px] md:text-xs font-heading tracking-[0.2em] uppercase py-2.5 px-4 text-center relative z-60 font-bold">
-        {loading ? (
-          <span className="opacity-0">
-            {content.topBanner.text} {content.topBanner.phoneDisplay}
-          </span>
-        ) : (
-          <>
-            {content.topBanner.text}{" "}
-            <a href={content.topBanner.phoneHref} className="ml-1 font-black hover:underline">
-              {content.topBanner.phoneDisplay}
-            </a>
-          </>
-        )}
+      <div className="relative z-[60] overflow-hidden bg-[linear-gradient(90deg,#f6ba58_0%,#ee972e_42%,#c36100_100%)] px-4 py-2.5 text-center text-[10px] font-heading font-bold uppercase tracking-[0.2em] text-[#1b0d02] shadow-[0_10px_30px_rgba(195,97,0,0.18)] md:text-xs">
+        <div className="absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(255,247,214,0.7)] to-transparent" />
+        <span className="relative">
+          {content.topBanner.text}{" "}
+          <a href={content.topBanner.phoneHref} className="ml-1 font-black text-[#140901] transition-colors hover:text-[#2f1400] hover:underline">
+            {content.topBanner.phoneDisplay}
+          </a>
+        </span>
       </div>
       <nav
         ref={navRef}
@@ -177,8 +172,12 @@ export default function Navbar() {
                     alt="Wolf Customs Logo"
                     className="w-12 h-12 object-cover object-center rounded-full group-hover:scale-110 transition-transform duration-500 border-2 border-wolf-gunmetal"
                   />
-                  <span className="text-wolf-red group-hover:text-white transition-colors duration-500 ml-2">WOLF</span>
-                  <span className="text-white group-hover:text-wolf-red transition-colors duration-500">CUSTOMS</span>
+                  <span className="ml-2 molten-swap-primary">
+                    WOLF
+                  </span>
+                  <span className="molten-swap-secondary">
+                    CUSTOMS
+                  </span>
                 </a>
               </Magnetic>
 
@@ -211,8 +210,10 @@ export default function Navbar() {
                 <Magnetic>
                   <Link
                     to={ownerPortalLink}
-                    className={`text-[10px] font-heading font-bold tracking-widest uppercase transition-colors ${
-                      user ? "text-wolf-red hover:text-white" : "text-gray-500 hover:text-white"
+                    className={`text-[10px] font-heading font-bold tracking-widest uppercase transition-all duration-500 ${
+                      user
+                        ? "molten-link"
+                        : "text-gray-500 hover:text-white"
                     }`}
                   >
                     {ownerPortalLabel}
@@ -225,10 +226,13 @@ export default function Navbar() {
                       event.preventDefault();
                       navigateToSection("#contact");
                     }}
-                    className="group relative overflow-hidden border border-wolf-red bg-transparent px-8 py-3 text-xs font-heading font-bold uppercase tracking-[0.2em] text-wolf-red transition-all duration-500 hover:bg-wolf-red hover:text-white"
+                    className="group relative inline-flex items-center justify-center overflow-hidden bg-wolf-red px-8 py-3 text-xs font-heading font-bold uppercase tracking-[0.2em] text-wolf-black shadow-[0_0_28px_rgba(243,163,55,0.22)] transition-shadow duration-500 hover:shadow-[0_0_44px_rgba(243,163,55,0.34)]"
                   >
-                    <span className="relative z-10">GET QUOTE</span>
-                    <div className="absolute inset-0 origin-left scale-x-0 transform bg-wolf-red transition-transform duration-500 ease-out group-hover:scale-x-100" />
+                    <span className="relative z-10">
+                      GET QUOTE
+                    </span>
+                    <div className="absolute inset-0 bg-[linear-gradient(135deg,#fff7d6_0%,#ffe39f_50%,#ffbe57_100%)] origin-left scale-x-0 transform transition-transform duration-500 ease-out group-hover:scale-x-100" />
+                    <div className="absolute inset-0 bg-wolf-red-hover origin-left scale-x-0 transform transition-transform duration-500 ease-out delay-75 group-hover:scale-x-100" />
                   </a>
                 </Magnetic>
               </div>
@@ -249,7 +253,7 @@ export default function Navbar() {
                     className="h-10 w-10 shrink-0 rounded-full border border-white/10 object-cover object-center"
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="whitespace-nowrap text-[9px] font-semibold uppercase tracking-[0.18em] text-gray-500 sm:text-[10px] sm:tracking-[0.22em]">
+                    <p className="whitespace-nowrap bg-[linear-gradient(180deg,#fff5d4_0%,#ffd676_30%,#f3a337_60%,#b84f00_100%)] bg-clip-text text-[9px] font-semibold uppercase tracking-[0.18em] text-transparent sm:text-[10px] sm:tracking-[0.22em]">
                       Wolf Customs
                     </p>
                     <p className="mt-1 hidden whitespace-nowrap text-[11px] font-heading font-bold uppercase tracking-[0.12em] text-white min-[380px]:block sm:text-sm sm:tracking-[0.18em]">
@@ -306,13 +310,13 @@ export default function Navbar() {
                   <div className="mt-3 rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(12,12,12,0.98),rgba(12,12,12,0.9))] p-3 shadow-[0_18px_40px_rgba(0,0,0,0.32)]">
                     <div className="grid gap-2">
                       <button
-                        type="button"
-                        onClick={() => navigateToSection("#contact")}
-                        className="inline-flex items-center justify-between rounded-[22px] bg-wolf-red px-4 py-4 text-sm font-heading font-bold uppercase tracking-[0.18em] text-white"
-                      >
-                        Get Quote
-                        <ArrowRight className="h-4 w-4" />
-                      </button>
+                    type="button"
+                    onClick={() => navigateToSection("#contact")}
+                    className="inline-flex items-center justify-between rounded-[22px] bg-[linear-gradient(135deg,#fff2c8_0%,#ffc55f_34%,#eb8f1f_68%,#a94a00_100%)] px-4 py-4 text-sm font-heading font-bold uppercase tracking-[0.18em] text-[#1a0b02]"
+                  >
+                    Get Quote
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
 
                       <div className="grid grid-cols-2 gap-2">
                         <button

@@ -54,7 +54,7 @@ type SectionDefinition = {
 };
 
 const fieldClassName =
-  "w-full rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.18))] px-4 py-3.5 text-sm text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] placeholder:text-gray-600 transition-colors focus:border-wolf-red focus:outline-none focus:ring-2 focus:ring-wolf-red/20";
+  "w-full rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.06),rgba(10,7,3,0.58))] px-4 py-3.5 text-sm text-white shadow-[inset_0_1px_0_rgba(221,228,236,0.05),0_14px_30px_rgba(0,0,0,0.16)] placeholder:text-gray-600 transition-colors focus:border-wolf-red focus:outline-none focus:ring-2 focus:ring-wolf-red/20";
 
 const recommendedSectionOrder: SectionId[] = ["hero", "services", "portfolio", "contact"];
 
@@ -218,9 +218,9 @@ function ProgressRing({ completed, total }: { completed: number; total: number }
   return (
     <div
       className="relative h-16 w-16 rounded-full"
-      style={{ background: `conic-gradient(#e60000 ${degrees}deg, rgba(255,255,255,0.08) ${degrees}deg)` }}
+      style={{ background: `conic-gradient(#d6b163 ${degrees}deg, rgba(252,242,220,0.08) ${degrees}deg)` }}
     >
-      <div className="absolute inset-[6px] flex items-center justify-center rounded-full border border-white/8 bg-[#090909] text-center">
+      <div className="absolute inset-[6px] flex items-center justify-center rounded-full border border-white/8 bg-[#0b0703] text-center shadow-[inset_0_1px_0_rgba(255,250,237,0.06)]">
         <div>
           <p className="text-sm font-heading font-bold text-white">{completed}</p>
           <p className="text-[9px] uppercase tracking-[0.18em] text-gray-500">of {total}</p>
@@ -273,7 +273,7 @@ function CompactSectionPreview({ sectionId, content }: { sectionId: SectionId; c
         <div className="grid grid-cols-3 gap-2">
           {content.services.items.slice(0, 3).map((item, index) => (
             <div key={index} className="rounded-[18px] border border-white/10 bg-black/35 p-2">
-              <div className="h-12 rounded-[12px] bg-[linear-gradient(135deg,rgba(230,0,0,0.3),rgba(255,255,255,0.05))]" />
+              <div className="h-12 rounded-[12px] bg-[linear-gradient(135deg,rgba(250,231,178,0.38),rgba(214,177,99,0.16),rgba(255,255,255,0.04))]" />
               <p className="mt-2 truncate text-[10px] font-semibold text-white">{item.title || `Service ${index + 1}`}</p>
             </div>
           ))}
@@ -285,7 +285,7 @@ function CompactSectionPreview({ sectionId, content }: { sectionId: SectionId; c
           <div className="rounded-[18px] border border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(0,0,0,0.25))] p-3">
             <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">{content.beforeAfter.beforeLabel || "Before"}</p>
           </div>
-          <div className="rounded-[18px] border border-wolf-red/20 bg-[linear-gradient(135deg,rgba(230,0,0,0.18),rgba(0,0,0,0.2))] p-3">
+          <div className="rounded-[18px] border border-wolf-red/20 bg-[linear-gradient(135deg,rgba(250,231,178,0.22),rgba(214,177,99,0.12),rgba(0,0,0,0.2))] p-3">
             <p className="text-[10px] uppercase tracking-[0.18em] text-white">{content.beforeAfter.afterLabel || "After"}</p>
           </div>
         </div>
@@ -295,7 +295,7 @@ function CompactSectionPreview({ sectionId, content }: { sectionId: SectionId; c
         <div className="grid grid-cols-3 gap-2">
           {content.gallery.items.slice(0, 3).map((item, index) => (
             <div key={index} className="rounded-[18px] border border-white/10 bg-black/35 p-2">
-              <div className="h-14 rounded-[12px] bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(230,0,0,0.16))]" />
+              <div className="h-14 rounded-[12px] bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(214,177,99,0.18))]" />
               <p className="mt-2 truncate text-[10px] text-white">{item.title || `Work ${index + 1}`}</p>
             </div>
           ))}
@@ -307,20 +307,20 @@ function CompactSectionPreview({ sectionId, content }: { sectionId: SectionId; c
           {content.portfolio.items.length ? (
             content.portfolio.items.slice(0, 3).map((item, index) => (
               <div key={index} className="rounded-[18px] border border-white/10 bg-black/35 p-2">
-                <div className={`rounded-[12px] ${item.type === "reel" ? "aspect-[9/14]" : "aspect-[4/5]"} bg-[linear-gradient(135deg,rgba(230,0,0,0.2),rgba(255,255,255,0.06))]`} />
+                <div className={`rounded-[12px] ${item.type === "reel" ? "aspect-[9/14]" : "aspect-[4/5]"} bg-[linear-gradient(135deg,rgba(250,231,178,0.24),rgba(214,177,99,0.18),rgba(255,255,255,0.06))]`} />
                 <p className="mt-2 truncate text-[10px] text-white">{item.label || `${item.type === "reel" ? "Reel" : "Post"} ${index + 1}`}</p>
               </div>
             ))
           ) : (
             <>
               <div className="rounded-[18px] border border-white/10 bg-black/35 p-2">
-                <div className="aspect-[4/5] rounded-[12px] bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(230,0,0,0.08))]" />
+                <div className="aspect-[4/5] rounded-[12px] bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(214,177,99,0.12))]" />
               </div>
               <div className="rounded-[18px] border border-white/10 bg-black/35 p-2">
-                <div className="aspect-[9/14] rounded-[12px] bg-[linear-gradient(135deg,rgba(230,0,0,0.18),rgba(255,255,255,0.06))]" />
+                <div className="aspect-[9/14] rounded-[12px] bg-[linear-gradient(135deg,rgba(250,231,178,0.22),rgba(214,177,99,0.15),rgba(255,255,255,0.06))]" />
               </div>
               <div className="rounded-[18px] border border-white/10 bg-black/35 p-2">
-                <div className="aspect-[4/5] rounded-[12px] bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(230,0,0,0.08))]" />
+                <div className="aspect-[4/5] rounded-[12px] bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(214,177,99,0.12))]" />
               </div>
             </>
           )}
@@ -387,31 +387,31 @@ function PublishReviewModal({
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
-      <div className="relative w-full max-w-3xl overflow-hidden rounded-[34px] border border-white/10 bg-[linear-gradient(180deg,#111,#070707)] shadow-[0_40px_120px_rgba(0,0,0,0.55)]">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/50 to-transparent" />
+      <div className="relative w-full max-w-3xl overflow-hidden rounded-[34px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,250,239,0.08),rgba(10,7,3,0.92))] shadow-[0_40px_120px_rgba(0,0,0,0.55)]">
+        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(250,231,178,0.62)] to-transparent" />
         <div className="px-6 py-6 md:px-8">
           <p className="text-[11px] uppercase tracking-[0.28em] text-wolf-red">Review & Publish</p>
-          <h2 className="mt-3 text-3xl font-heading font-black uppercase tracking-[0.12em] text-white">Ready to update the website?</h2>
+          <h2 className="mt-3 text-3xl font-luxury font-black uppercase tracking-[0.12em] text-white">Ready to update the website?</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-400">
             Take one last look before publishing. Nothing changes on the live website until you confirm.
           </p>
 
           <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <div className="rounded-[24px] border border-white/10 bg-black/35 p-4">
+            <div className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,250,237,0.05),rgba(10,7,3,0.56))] p-4">
               <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Sections updated</p>
               <p className="mt-2 text-2xl font-heading font-bold text-white">{changedSections.length}</p>
             </div>
-            <div className="rounded-[24px] border border-white/10 bg-black/35 p-4">
+            <div className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,250,237,0.05),rgba(10,7,3,0.56))] p-4">
               <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Media changes</p>
               <p className="mt-2 text-2xl font-heading font-bold text-white">{mediaChangeCount}</p>
             </div>
-            <div className="rounded-[24px] border border-white/10 bg-black/35 p-4">
+            <div className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,250,237,0.05),rgba(10,7,3,0.56))] p-4">
               <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Instagram items</p>
               <p className="mt-2 text-2xl font-heading font-bold text-white">{portfolioPreparedCount}</p>
             </div>
           </div>
 
-          <div className="mt-6 rounded-[26px] border border-white/10 bg-black/30 p-5">
+          <div className="mt-6 rounded-[26px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,250,237,0.05),rgba(10,7,3,0.58))] p-5">
             <p className="text-sm font-semibold text-white">What will go live</p>
             {changedSections.length ? (
               <div className="mt-4 grid gap-3 md:grid-cols-2">
@@ -525,17 +525,17 @@ function SectionStatusPill({ status }: { status: SectionStatus }) {
 
 function SummaryStatCard({ icon: Icon, label, value, hint }: { icon: LucideIcon; label: string; value: string; hint: string }) {
   return (
-    <div className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(230,0,0,0.12),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.24))] p-4 shadow-[0_24px_60px_rgba(0,0,0,0.38)] transition-all duration-500 hover:-translate-y-1 hover:border-wolf-red/30 hover:shadow-[0_34px_80px_rgba(224,30,40,0.16)]">
-      <div className="pointer-events-none absolute -right-10 top-0 h-28 w-28 rounded-full bg-wolf-red/12 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
-      <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent transition-all duration-500 group-hover:via-wolf-red/25" />
+    <div className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(243,163,55,0.16),transparent_26%),linear-gradient(180deg,rgba(206,214,225,0.05),rgba(23,12,3,0.84))] p-4 shadow-[0_30px_74px_rgba(0,0,0,0.46),0_0_0_1px_rgba(255,222,150,0.04),inset_0_1px_0_rgba(221,228,236,0.05)] transition-all duration-500 hover:-translate-y-1 hover:border-wolf-red/35 hover:shadow-[0_36px_100px_rgba(243,163,55,0.18)]">
+      <div className="pointer-events-none absolute -right-10 top-0 h-28 w-28 rounded-full bg-[rgba(255,198,102,0.24)] blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(214,177,99,0.42)] to-transparent transition-all duration-500 group-hover:via-wolf-red/40" />
       <div className="relative flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex flex-1 items-start gap-2.5 text-[11px] uppercase tracking-[0.22em] text-gray-400 transition-colors group-hover:text-gray-300">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-wolf-red/20 bg-black/35 shadow-[0_0_24px_rgba(230,0,0,0.12)] transition-transform duration-500 group-hover:scale-105">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-wolf-red/20 bg-[linear-gradient(180deg,rgba(207,215,226,0.08),rgba(27,13,2,0.74))] shadow-[0_0_28px_rgba(243,163,55,0.14)] transition-transform duration-500 group-hover:scale-105">
             <Icon className="h-4 w-4 text-wolf-red transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" />
           </div>
           <span className="min-w-0 whitespace-normal leading-snug">{label}</span>
         </div>
-        <span className="mt-0.5 shrink-0 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-gray-500">
+        <span className="mt-0.5 shrink-0 rounded-full border border-white/10 bg-[rgba(205,214,225,0.05)] px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-gray-500 shadow-[inset_0_1px_0_rgba(221,228,236,0.04)]">
           Overview
         </span>
       </div>
@@ -559,11 +559,11 @@ function ControlSurfaceCard({
   children: ReactNode;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(230,0,0,0.14),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.22))] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.34)]">
-      <div className="pointer-events-none absolute -right-10 top-0 h-32 w-32 rounded-full bg-wolf-red/12 blur-3xl" />
-      <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/28 to-transparent" />
+    <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(243,163,55,0.16),transparent_30%),linear-gradient(180deg,rgba(206,214,225,0.05),rgba(22,12,3,0.82))] p-5 shadow-[0_30px_84px_rgba(0,0,0,0.44),0_0_0_1px_rgba(255,222,150,0.04),inset_0_1px_0_rgba(221,228,236,0.05)]">
+      <div className="pointer-events-none absolute -right-10 top-0 h-32 w-32 rounded-full bg-[rgba(255,196,101,0.24)] blur-3xl" />
+      <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(214,177,99,0.46)] to-transparent" />
       <div className="relative flex items-start gap-4">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[18px] border border-wolf-red/20 bg-black/35 shadow-[0_0_24px_rgba(230,0,0,0.14)]">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[18px] border border-wolf-red/20 bg-[linear-gradient(180deg,rgba(207,215,226,0.08),rgba(28,13,2,0.74))] shadow-[0_0_30px_rgba(243,163,55,0.16)]">
           <Icon className="h-5 w-5 text-wolf-red" />
         </div>
         <div className="min-w-0">
@@ -579,7 +579,7 @@ function ControlSurfaceCard({
 
 function PreviewTile({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="rounded-[26px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(0,0,0,0.16))] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.18)]">
+    <div className="rounded-[26px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.06),rgba(10,7,3,0.64))] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.24),inset_0_1px_0_rgba(221,228,236,0.04)]">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">{label}</p>
         <div className="flex gap-2 text-[10px] uppercase tracking-[0.14em] text-gray-500">
@@ -594,7 +594,7 @@ function PreviewTile({ label, children }: { label: string; children: ReactNode }
 
 function EmptyStateCard({ title, description, action }: { title: string; description: string; action?: ReactNode }) {
   return (
-    <div className="rounded-[28px] border border-dashed border-white/10 bg-black/25 p-8">
+    <div className="rounded-[28px] border border-dashed border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.035),rgba(10,7,3,0.64))] p-8">
       <p className="text-lg font-heading font-bold text-white">{title}</p>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-gray-400">{description}</p>
       {action ? <div className="mt-5">{action}</div> : null}
@@ -631,7 +631,7 @@ function MediaReplaceCard({
   };
 
   return (
-    <div className="rounded-[26px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-5">
+    <div className="rounded-[26px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.05),rgba(10,7,3,0.62))] p-5 shadow-[0_18px_44px_rgba(0,0,0,0.22)]">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
           <p className="text-base font-heading font-bold text-white">{label}</p>
@@ -643,13 +643,13 @@ function MediaReplaceCard({
       </div>
 
       <div className="mt-5 grid gap-4 lg:grid-cols-2">
-        <div className="rounded-[22px] border border-white/8 bg-black/35 p-3">
+        <div className="rounded-[22px] border border-white/8 bg-[linear-gradient(180deg,rgba(206,214,225,0.04),rgba(10,7,3,0.56))] p-3">
           <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Live now</p>
           <div className="mt-3 h-40 overflow-hidden rounded-[18px] border border-white/10 bg-black/40">
             {renderPreview(liveValue, "This section is using the current website image.")}
           </div>
         </div>
-        <div className="rounded-[22px] border border-white/8 bg-black/35 p-3">
+        <div className="rounded-[22px] border border-white/8 bg-[linear-gradient(180deg,rgba(206,214,225,0.04),rgba(10,7,3,0.56))] p-3">
           <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Draft preview</p>
           <div className="mt-3 h-40 overflow-hidden rounded-[18px] border border-white/10 bg-black/40">
             {hasDraftChange ? renderPreview(draftValue, "This draft will switch back to the current website image.") : renderPreview(undefined, "No new image selected yet.")}
@@ -713,18 +713,18 @@ function EditableSectionCard({
   return (
     <section
       id={id}
-      className={`relative min-w-0 overflow-hidden rounded-[30px] border shadow-[0_20px_60px_rgba(0,0,0,0.28)] scroll-mt-32 ${
+      className={`relative min-w-0 overflow-hidden rounded-[30px] border shadow-[0_24px_64px_rgba(0,0,0,0.34)] scroll-mt-32 ${
         isOpen
-          ? "border-wolf-red/25 bg-[linear-gradient(180deg,rgba(230,0,0,0.08),rgba(255,255,255,0.03))]"
-          : "border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))]"
+          ? "border-wolf-red/25 bg-[linear-gradient(180deg,rgba(206,214,225,0.05),rgba(214,177,99,0.06),rgba(10,7,3,0.76))]"
+          : "border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.045),rgba(10,7,3,0.64))]"
       }`}
     >
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/50 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(214,177,99,0.46)] to-transparent" />
       <button type="button" onClick={onOpen} className="group w-full px-4 py-4 text-left outline-none md:px-7 md:py-5">
         <div className="flex flex-col sm:flex-row gap-4 xl:items-start xl:justify-between">
           <div className="min-w-0 flex-1">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-white/10 bg-black/30 group-hover:border-wolf-red/30 transition-colors">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.05),rgba(10,7,3,0.58))] group-hover:border-wolf-red/30 transition-colors">
                 <Icon className="h-5 w-5 text-wolf-red" />
               </div>
               <div className="min-w-0 flex-1">
@@ -742,7 +742,7 @@ function EditableSectionCard({
           </div>
 
           <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto mt-2 sm:mt-0 gap-3 xl:max-w-[420px] pt-4 sm:pt-0 border-t border-white/5 sm:border-0">
-            <div className="hidden min-w-[260px] rounded-[24px] border border-white/10 bg-black/25 p-4 text-left lg:block">
+            <div className="hidden min-w-[260px] rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.04),rgba(10,7,3,0.6))] p-4 text-left lg:block">
               <div className="flex items-center justify-between gap-3">
                 <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Section preview</p>
                 <SectionStatusPill status={status} />
@@ -753,7 +753,7 @@ function EditableSectionCard({
             <div className="flex flex-col items-end gap-3 lg:hidden">
               <SectionStatusPill status={status} />
             </div>
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-black/30">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.04),rgba(10,7,3,0.58))]">
               <ChevronDown className={`h-4 w-4 text-gray-300 transition-transform ${isOpen ? "rotate-180" : ""}`} />
             </div>
           </div>
@@ -782,23 +782,23 @@ function SectionGroupIntro({
 
   return (
     <div className="relative px-1">
-      <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.12),rgba(255,255,255,0.03))] p-[1px] shadow-[0_30px_90px_rgba(0,0,0,0.32)]">
-        <div className="relative overflow-hidden rounded-[31px] bg-[radial-gradient(circle_at_top_right,rgba(230,0,0,0.14),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] px-5 py-5 md:px-6 md:py-6">
-          <div className="pointer-events-none absolute -right-10 top-0 h-40 w-40 rounded-full bg-wolf-red/14 blur-3xl" />
-          <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/60 to-transparent" />
+      <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.08),rgba(23,12,3,0.46))] p-[1px] shadow-[0_34px_96px_rgba(0,0,0,0.4)]">
+        <div className="relative overflow-hidden rounded-[31px] bg-[radial-gradient(circle_at_top_right,rgba(255,195,103,0.18),transparent_30%),linear-gradient(180deg,rgba(206,214,225,0.045),rgba(22,12,3,0.76))] px-5 py-5 md:px-6 md:py-6">
+          <div className="pointer-events-none absolute -right-10 top-0 h-40 w-40 rounded-full bg-[rgba(255,198,102,0.26)] blur-3xl" />
+          <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(255,208,124,0.7)] to-transparent" />
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-wolf-red/20 bg-black/35 shadow-[0_0_28px_rgba(230,0,0,0.18)]">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-wolf-red/20 bg-[linear-gradient(180deg,rgba(207,215,226,0.08),rgba(28,13,2,0.76))] shadow-[0_0_32px_rgba(243,163,55,0.16)]">
                 <Icon className="h-5 w-5 text-wolf-red" />
               </div>
               <div className="min-w-0">
                 <p className="text-[11px] uppercase tracking-[0.24em] text-wolf-red">Section Group</p>
                 <div className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <h2 className="text-2xl font-heading font-black uppercase tracking-[0.18em] text-wolf-red drop-shadow-[0_0_18px_rgba(230,0,0,0.18)]">
+                  <h2 className="text-2xl font-luxury font-black uppercase tracking-[0.16em] text-wolf-red drop-shadow-[0_0_18px_rgba(243,163,55,0.2)]">
                     {titleLead}
                   </h2>
                   {titleTail ? (
-                    <h2 className="text-2xl font-heading font-black uppercase tracking-[0.18em] text-white">
+                    <h2 className="text-2xl font-luxury font-black uppercase tracking-[0.16em] text-white">
                       {titleTail}
                     </h2>
                   ) : null}
@@ -808,13 +808,13 @@ function SectionGroupIntro({
             </div>
 
             <div className="flex items-center lg:justify-end">
-              <span className="rounded-full border border-wolf-red/30 bg-wolf-red/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-white shadow-[0_0_24px_rgba(230,0,0,0.12)]">
+              <span className="rounded-full border border-wolf-red/30 bg-wolf-red/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-white shadow-[0_0_24px_rgba(214,177,99,0.16)]">
                 {sections.length} section{sections.length === 1 ? "" : "s"}
               </span>
             </div>
           </div>
 
-          <div className="mt-5 rounded-[24px] border border-white/10 bg-black/25 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+          <div className="mt-5 rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.04),rgba(10,7,3,0.58))] p-4 shadow-[inset_0_1px_0_rgba(221,228,236,0.035)]">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Includes</p>
               <p className="text-xs text-gray-500">These sections are grouped under this area.</p>
@@ -826,7 +826,7 @@ function SectionGroupIntro({
                   key={section.id}
                   className={`rounded-full border px-3 py-1 text-[11px] uppercase tracking-[0.18em] ${
                     section.id === activeSectionId
-                      ? "border-wolf-red/30 bg-wolf-red/10 text-white shadow-[0_0_20px_rgba(230,0,0,0.12)]"
+                      ? "border-wolf-red/30 bg-wolf-red/10 text-white shadow-[0_0_20px_rgba(214,177,99,0.16)]"
                       : "border-wolf-red/20 bg-wolf-red/8 text-gray-200"
                   }`}
                 >
@@ -1190,29 +1190,29 @@ export default function ContentDashboard() {
 
   if (loading) {
     return (
-      <div className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_top,rgba(230,0,0,0.08),transparent_35%),linear-gradient(180deg,#080808,#030303)]">
+      <div className="content-dashboard flex h-full items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-wolf-red" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-full bg-[radial-gradient(circle_at_top,rgba(230,0,0,0.08),transparent_35%),linear-gradient(180deg,#080808,#030303)] pb-40 sm:pb-32 xl:pb-12">
+    <div className="content-dashboard min-h-full pb-40 sm:pb-32 xl:pb-12">
       <div className="mx-auto max-w-[1700px] px-4 py-5 md:px-8 md:py-8">
-        <section className="relative overflow-hidden rounded-[36px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.14),rgba(255,255,255,0.03))] p-[1px] shadow-[0_36px_100px_rgba(0,0,0,0.38)]">
-          <div className="relative overflow-hidden rounded-[35px] bg-[radial-gradient(circle_at_top_right,rgba(230,0,0,0.2),transparent_30%),linear-gradient(135deg,rgba(230,0,0,0.16),rgba(255,255,255,0.04))]">
+        <section className="relative overflow-hidden rounded-[36px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.1),rgba(23,12,3,0.44))] p-[1px] shadow-[0_42px_116px_rgba(0,0,0,0.46)]">
+          <div className="relative overflow-hidden rounded-[35px] bg-[radial-gradient(circle_at_top_right,rgba(255,196,101,0.24),transparent_30%),linear-gradient(135deg,rgba(206,214,225,0.08),rgba(243,163,55,0.1),rgba(255,255,255,0.03))]">
             <div className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full bg-wolf-red/18 blur-3xl" />
-            <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/60 to-transparent" />
+            <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(255,208,124,0.76)] to-transparent" />
             <div className="grid gap-5 px-4 py-6 sm:px-6 sm:py-7 xl:grid-cols-[1.35fr_1fr] xl:px-8 xl:py-10">
             <div>
-              <div className="inline-flex rounded-full border border-wolf-red/20 bg-black/25 px-3 py-1.5 text-[11px] uppercase tracking-[0.24em] text-wolf-red shadow-[0_0_24px_rgba(230,0,0,0.12)]">
+              <div className="inline-flex rounded-full border border-wolf-red/20 bg-black/25 px-3 py-1.5 text-[11px] uppercase tracking-[0.24em] text-wolf-red shadow-[0_0_24px_rgba(214,177,99,0.16)]">
                 Owner Website Control Center
               </div>
               <div className="mt-4 flex flex-wrap items-baseline gap-x-4 gap-y-2">
-                <h1 className="text-3xl font-heading font-black uppercase tracking-[0.12em] text-wolf-red drop-shadow-[0_0_18px_rgba(230,0,0,0.18)] md:text-5xl">
+                <h1 className="text-3xl font-luxury font-black uppercase tracking-[0.12em] text-wolf-red drop-shadow-[0_0_20px_rgba(243,163,55,0.24)] md:text-5xl">
                   Website
                 </h1>
-                <h1 className="text-3xl font-heading font-black uppercase tracking-[0.12em] text-white md:text-5xl">
+                <h1 className="text-3xl font-luxury font-black uppercase tracking-[0.12em] text-white md:text-5xl">
                   Control Center
                 </h1>
               </div>
@@ -1220,15 +1220,15 @@ export default function ContentDashboard() {
                 Update your website content, visuals, and Instagram showcase with confidence. Your live website stays untouched until you publish.
               </p>
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-[22px] border border-white/10 bg-black/25 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <div className="rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.05),rgba(10,7,3,0.5))] px-4 py-3 shadow-[inset_0_1px_0_rgba(221,228,236,0.03)]">
                   <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Mode</p>
                   <p className="mt-2 text-sm font-semibold text-white">Guided editing</p>
                 </div>
-                <div className="rounded-[22px] border border-white/10 bg-black/25 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+                <div className="rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.05),rgba(10,7,3,0.5))] px-4 py-3 shadow-[inset_0_1px_0_rgba(221,228,236,0.03)]">
                   <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Safety</p>
                   <p className="mt-2 text-sm font-semibold text-white">Draft-safe changes</p>
                 </div>
-                <div className="rounded-[22px] border border-wolf-red/20 bg-wolf-red/10 px-4 py-3 shadow-[0_0_28px_rgba(230,0,0,0.12)]">
+                <div className="rounded-[22px] border border-wolf-red/20 bg-wolf-red/10 px-4 py-3 shadow-[0_0_28px_rgba(214,177,99,0.16)]">
                   <p className="text-[10px] uppercase tracking-[0.18em] text-wolf-red">Audience</p>
                   <p className="mt-2 text-sm font-semibold text-white">Built for owners</p>
                 </div>
@@ -1288,7 +1288,7 @@ export default function ContentDashboard() {
                 type="button"
                 onClick={requestPublish}
                 disabled={saving || !isDirty}
-                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-wolf-red px-4 py-3 text-sm font-heading uppercase tracking-[0.18em] text-white transition-colors hover:bg-wolf-red-hover disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-wolf-red px-4 py-3 text-sm font-heading uppercase tracking-[0.18em] text-white shadow-[0_0_24px_rgba(214,177,99,0.18)] transition-colors hover:bg-wolf-red-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 Review & Publish
@@ -1332,7 +1332,7 @@ export default function ContentDashboard() {
         <div className="mt-6 grid min-w-0 gap-6 xl:grid-cols-[320px_minmax(0,1fr)] 2xl:grid-cols-[320px_minmax(0,1fr)_320px]">
           <aside className="hidden xl:block">
             <div className="sticky top-6 space-y-4">
-              <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.2)]">
+              <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.08),rgba(10,7,3,0.58))] p-5 shadow-[0_22px_54px_rgba(0,0,0,0.24)]">
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-[11px] uppercase tracking-[0.26em] text-gray-500">Editor Progress</p>
@@ -1345,11 +1345,11 @@ export default function ContentDashboard() {
                 </div>
               </div>
 
-              <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_50px_rgba(0,0,0,0.2)]">
+              <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.08),rgba(10,7,3,0.58))] p-5 shadow-[0_22px_54px_rgba(0,0,0,0.24)]">
                 <p className="text-[11px] uppercase tracking-[0.26em] text-gray-500">Suggested editing path</p>
                 <div className="mt-4 space-y-2">
                   {recommendedSectionOrder.map((sectionId, index) => (
-                    <div key={sectionId} className="flex items-center gap-3 rounded-[18px] border border-white/8 bg-black/25 px-3 py-2">
+                    <div key={sectionId} className="flex items-center gap-3 rounded-[18px] border border-white/8 bg-[linear-gradient(180deg,rgba(255,249,236,0.04),rgba(10,7,3,0.48))] px-3 py-2">
                       <span className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 text-[11px] font-semibold text-white">
                         {index + 1}
                       </span>
@@ -1363,7 +1363,7 @@ export default function ContentDashboard() {
               </div>
 
               {sectionGroups.map((group) => (
-                <div key={group.title} className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-4 shadow-[0_20px_50px_rgba(0,0,0,0.2)]">
+                <div key={group.title} className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.08),rgba(10,7,3,0.58))] p-4 shadow-[0_22px_54px_rgba(0,0,0,0.24)]">
                   <p className="px-2 text-[11px] uppercase tracking-[0.22em] text-gray-500">{group.title}</p>
                   <div className="mt-3 space-y-2">
                     {group.sections.map((section) => {
@@ -1381,7 +1381,7 @@ export default function ContentDashboard() {
                         >
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex min-w-0 items-start gap-3">
-                              <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-black/30">
+                              <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.05),rgba(10,7,3,0.52))]">
                                 <Icon className="h-4 w-4 text-wolf-red" />
                               </div>
                               <div className="min-w-0">
@@ -1414,7 +1414,7 @@ export default function ContentDashboard() {
 
           <main className="min-w-0 space-y-6 overflow-x-hidden">
             <div className="sticky top-3 z-20 min-w-0 xl:hidden">
-              <div className="rounded-[24px] border border-white/10 bg-[#090909]/90 p-4 backdrop-blur-xl">
+              <div className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,250,239,0.12),rgba(10,7,3,0.78))] p-4 backdrop-blur-xl shadow-[0_18px_36px_rgba(0,0,0,0.24)]">
                 <p className="text-[11px] uppercase tracking-[0.26em] text-gray-500">Quick navigation</p>
                 <div className="mt-3 flex w-full gap-2 overflow-x-auto pb-1 snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   {sectionDefinitions.map((section) => (
@@ -1481,7 +1481,7 @@ export default function ContentDashboard() {
                 </div>
 
                 <PreviewTile label="Live preview">
-                  <div className="rounded-[24px] border border-wolf-red/15 bg-[linear-gradient(135deg,rgba(230,0,0,0.14),rgba(255,255,255,0.03))] p-4">
+                  <div className="rounded-[24px] border border-wolf-red/15 bg-[linear-gradient(135deg,rgba(250,231,178,0.18),rgba(214,177,99,0.12),rgba(255,255,255,0.03))] p-4">
                     <p className="text-sm leading-relaxed text-white">{content.topBanner.text || "Your notice text will appear here."}</p>
                     <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/30 px-3 py-2 text-sm text-gray-200">
                       <Phone className="h-4 w-4 text-wolf-red" />
@@ -2353,12 +2353,12 @@ export default function ContentDashboard() {
 
           <aside className="hidden 2xl:block">
             <div className="sticky top-6 space-y-4">
-              <div className="rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)]">
+              <div className="rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.08),rgba(10,7,3,0.58))] p-5 shadow-[0_22px_64px_rgba(0,0,0,0.28)]">
                 <p className="text-[11px] uppercase tracking-[0.26em] text-gray-500">Current focus</p>
                 {activeSection ? (
                   <>
                     <div className="mt-4 flex items-center gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-[18px] border border-white/10 bg-black/30">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-[18px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.05),rgba(10,7,3,0.52))]">
                         <ActiveSectionIcon className="h-5 w-5 text-wolf-red" />
                       </div>
                       <div>
@@ -2372,9 +2372,9 @@ export default function ContentDashboard() {
                     <p className="mt-4 text-sm leading-relaxed text-gray-400">{activeSection.description}</p>
                   </>
                 ) : (
-                  <div className="mt-4 rounded-[22px] border border-white/10 bg-black/25 p-4">
+                  <div className="mt-4 rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.05),rgba(10,7,3,0.54))] p-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-[18px] border border-white/10 bg-black/30">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-[18px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.05),rgba(10,7,3,0.52))]">
                         <ActiveSectionIcon className="h-5 w-5 text-wolf-red" />
                       </div>
                       <div>
@@ -2386,18 +2386,18 @@ export default function ContentDashboard() {
                 )}
               </div>
 
-              <div className="rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 shadow-[0_20px_60px_rgba(0,0,0,0.28)]">
+              <div className="rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.08),rgba(10,7,3,0.58))] p-5 shadow-[0_22px_64px_rgba(0,0,0,0.28)]">
                 <p className="text-[11px] uppercase tracking-[0.26em] text-gray-500">Draft at a glance</p>
                 <div className="mt-4 grid gap-3">
-                  <div className="rounded-[20px] border border-white/10 bg-black/30 px-4 py-3">
+                  <div className="rounded-[20px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.05),rgba(10,7,3,0.5))] px-4 py-3">
                     <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">Sections waiting</p>
                     <p className="mt-1 text-lg font-heading font-bold text-white">{changedSections.length}</p>
                   </div>
-                  <div className="rounded-[20px] border border-white/10 bg-black/30 px-4 py-3">
+                  <div className="rounded-[20px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.05),rgba(10,7,3,0.5))] px-4 py-3">
                     <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">Media updates</p>
                     <p className="mt-1 text-lg font-heading font-bold text-white">{mediaChangeCount}</p>
                   </div>
-                  <div className="rounded-[20px] border border-white/10 bg-black/30 px-4 py-3">
+                  <div className="rounded-[20px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.05),rgba(10,7,3,0.5))] px-4 py-3">
                     <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">Instagram items</p>
                     <p className="mt-1 text-lg font-heading font-bold text-white">{portfolioPreparedCount}</p>
                   </div>
@@ -2408,7 +2408,7 @@ export default function ContentDashboard() {
         </div>
       </div>
 
-      <div className={`fixed inset-x-4 bottom-4 z-30 rounded-[24px] border border-white/10 bg-black/80 p-4 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl xl:hidden ${isDirty || saving ? "" : "hidden"}`}>
+      <div className={`fixed inset-x-4 bottom-4 z-30 rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(20,14,7,0.94),rgba(9,6,3,0.86))] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl xl:hidden ${isDirty || saving ? "" : "hidden"}`}>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Draft & Publish</p>
@@ -2437,7 +2437,7 @@ export default function ContentDashboard() {
         </div>
       </div>
 
-      <div className={`fixed bottom-5 left-1/2 z-30 hidden w-[min(960px,calc(100%-48px))] -translate-x-1/2 items-center justify-between gap-6 rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(8,8,8,0.92),rgba(8,8,8,0.82))] px-5 py-4 shadow-[0_20px_60px_rgba(0,0,0,0.38)] backdrop-blur-xl xl:flex ${isDirty || saving ? "" : "pointer-events-none opacity-0"}`}>
+      <div className={`fixed bottom-5 left-1/2 z-30 hidden w-[min(960px,calc(100%-48px))] -translate-x-1/2 items-center justify-between gap-6 rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(20,14,7,0.94),rgba(9,6,3,0.86))] px-5 py-4 shadow-[0_20px_60px_rgba(0,0,0,0.38)] backdrop-blur-xl xl:flex ${isDirty || saving ? "" : "pointer-events-none opacity-0"}`}>
         <div className="flex items-center gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-[18px] border border-wolf-red/20 bg-wolf-red/10">
             <Save className="h-5 w-5 text-wolf-red" />

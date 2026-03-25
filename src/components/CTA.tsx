@@ -10,7 +10,8 @@ export default function CTA() {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-wolf-black/90 z-10" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(230,0,0,0.1)_0%,transparent_50%)] z-10 mix-blend-screen" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,188,79,0.16)_0%,transparent_54%)] z-10" />
+        <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent_18%,rgba(255,232,170,0.08)_36%,transparent_54%,rgba(243,163,55,0.08)_72%,transparent_88%)] z-10" />
         <img
           src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=2000&auto=format&fit=crop"
           alt="Workshop"
@@ -40,7 +41,7 @@ export default function CTA() {
           className="text-6xl md:text-8xl lg:text-9xl font-heading font-black uppercase tracking-tighter mb-8 text-white leading-[0.9]"
         >
           {content.cta.title} <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-b from-wolf-red to-red-900 drop-shadow-2xl">{content.cta.highlight}</span>
+          <span className="text-transparent bg-clip-text bg-[linear-gradient(180deg,#fff0ba_0%,#ffbf58_34%,#ef8a22_66%,#9f4700_100%)] [filter:drop-shadow(0_0_18px_rgba(243,163,55,0.22))]">{content.cta.highlight}</span>
         </motion.h2>
 
         <motion.p
@@ -63,11 +64,11 @@ export default function CTA() {
           <Magnetic>
             <a
               href="#contact"
-              className="inline-flex group relative px-12 py-6 bg-wolf-red text-white font-heading text-xl tracking-[0.2em] uppercase overflow-hidden items-center justify-center gap-4 font-bold shadow-[0_0_40px_rgba(230,0,0,0.4)] hover:shadow-[0_0_60px_rgba(230,0,0,0.6)] transition-shadow duration-500"
+              className="inline-flex group relative px-12 py-6 bg-wolf-red text-wolf-black font-heading text-xl tracking-[0.2em] uppercase overflow-hidden items-center justify-center gap-4 font-bold shadow-[0_0_42px_rgba(243,163,55,0.32)] hover:shadow-[0_0_64px_rgba(243,163,55,0.48)] transition-shadow duration-500"
             >
               <span className="relative z-10">{content.cta.buttonLabel}</span>
               <ChevronRight className="relative z-10 w-6 h-6 group-hover:translate-x-2 transition-transform" />
-              <div className="absolute inset-0 bg-white transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+              <div className="absolute inset-0 bg-[linear-gradient(135deg,#fff7d6_0%,#ffe39f_50%,#ffbe57_100%)] transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out" />
               <div className="absolute inset-0 bg-wolf-red-hover transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out delay-75" />
             </a>
           </Magnetic>

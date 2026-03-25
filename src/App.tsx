@@ -29,7 +29,7 @@ function PublicSite() {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div className="min-h-screen bg-wolf-black text-white selection:bg-wolf-red selection:text-white relative">
+    <div className="site-theme relative min-h-screen bg-wolf-black text-wolf-silver selection:bg-wolf-red selection:text-wolf-black">
       <div className="noise-bg" />
       
       <AnimatePresence mode="wait">

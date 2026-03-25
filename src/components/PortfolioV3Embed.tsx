@@ -178,7 +178,7 @@ export default function PortfolioV3Embed() {
   return (
     <section ref={sectionRef} id="portfolio-v3" className="relative overflow-hidden bg-wolf-black py-28 text-white">
       <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-wolf-red/30 to-transparent" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(230,0,0,0.12),transparent_28%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(199,161,74,0.16),transparent_28%)]" />
       <motion.div
         aria-hidden="true"
         className="pointer-events-none absolute -left-20 top-16 h-72 w-72 rounded-full bg-wolf-red/20 blur-[110px]"
@@ -209,7 +209,7 @@ export default function PortfolioV3Embed() {
           min-height: 78vh !important;
           border: 0 !important;
           display: block !important;
-          background: #050505 !important;
+          background: #090603 !important;
           color-scheme: dark !important;
         }
 
@@ -235,7 +235,7 @@ export default function PortfolioV3Embed() {
               </span>
             </div>
             <h2 className="mb-6 text-5xl font-heading font-black uppercase leading-none tracking-tighter text-white md:text-7xl">
-              Latest <span className="text-wolf-red">Work</span>
+              Latest <span className="molten-highlight">Work</span>
             </h2>
             <p className="max-w-2xl text-lg font-light leading-relaxed text-gray-400">
               {WIDGET_PORTFOLIO_DESCRIPTION}
@@ -252,9 +252,9 @@ export default function PortfolioV3Embed() {
             animate={{ opacity: [0.18, 0.7, 0.18] }}
             transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
           />
-          <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[radial-gradient(circle_at_top,rgba(230,0,0,0.12),transparent_40%)]" />
+          <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[radial-gradient(circle_at_top,rgba(199,161,74,0.16),transparent_40%)]" />
           <div className="pointer-events-none absolute inset-4 rounded-[28px] border border-white/8" />
-          <div className="relative min-h-[78vh] overflow-hidden rounded-[24px] bg-[radial-gradient(circle_at_top,rgba(230,0,0,0.08),transparent_34%),linear-gradient(180deg,#141414,#090909)]">
+          <div className="relative min-h-[78vh] overflow-hidden rounded-[24px] bg-[radial-gradient(circle_at_top,rgba(199,161,74,0.12),transparent_34%),linear-gradient(180deg,#161109,#090603)]">
             {!isWidgetReady && (
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[linear-gradient(180deg,rgba(9,9,9,0.78),rgba(9,9,9,0.92))] px-6 text-center">
                 <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/10 border-t-wolf-red" />
@@ -273,7 +273,7 @@ export default function PortfolioV3Embed() {
                       setHasWidgetFailed(false);
                       setWidgetAttempt((current) => current + 1);
                     }}
-                    className="mt-2 inline-flex items-center rounded-full border border-wolf-red/40 px-4 py-2 text-[11px] font-heading font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-wolf-red"
+                    className="mt-2 inline-flex items-center rounded-full border border-wolf-red/40 px-4 py-2 text-[11px] font-heading font-bold uppercase tracking-[0.2em] text-white transition-colors hover:bg-wolf-red hover:text-wolf-black"
                   >
                     Retry Widget
                   </button>

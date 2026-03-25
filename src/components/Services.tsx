@@ -64,11 +64,13 @@ export default function Services() {
               transition={{ delay: i * 0.1, duration: 0.6 }}
               className="flex items-start space-x-4 group"
             >
-              <div className="w-10 h-10 rounded-full bg-wolf-black flex items-center justify-center shrink-0 border border-wolf-red/20 group-hover:border-wolf-red transition-colors duration-500">
-                <feat.icon className="w-5 h-5 text-wolf-red group-hover:scale-110 transition-transform duration-500" />
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-wolf-red/25 bg-[linear-gradient(180deg,rgba(255,245,215,0.12),rgba(37,18,4,0.92))] shadow-[0_0_22px_rgba(243,163,55,0.12)] transition-all duration-500 group-hover:border-wolf-red/45 group-hover:bg-[linear-gradient(180deg,rgba(255,243,205,0.22),rgba(168,74,0,0.62))] group-hover:shadow-[0_0_34px_rgba(243,163,55,0.18)]">
+                <feat.icon className="h-5 w-5 text-[#fff4ce] transition-all duration-500 group-hover:scale-110 group-hover:text-white group-hover:[filter:drop-shadow(0_0_10px_rgba(255,226,162,0.35))]" />
               </div>
               <div>
-                <h4 className="font-heading uppercase text-sm md:text-base tracking-widest text-white group-hover:text-wolf-red transition-colors duration-300">{feat.title}</h4>
+                <h4 className="hover-molten-text font-heading uppercase text-sm md:text-base tracking-widest">
+                  {feat.title}
+                </h4>
                 <p className="text-sm text-gray-400">{feat.desc}</p>
               </div>
             </motion.div>
@@ -93,7 +95,7 @@ export default function Services() {
                   </span>
                 </div>
                 <h2 className="text-5xl md:text-7xl font-heading font-black uppercase tracking-tighter mb-6 leading-none">
-                  {content.services.title} <br/><span className="text-wolf-red">{content.services.highlight}</span>
+                  {content.services.title} <br/><span className="molten-highlight">{content.services.highlight}</span>
                 </h2>
                 <p className="text-gray-400 text-lg mb-8 font-light leading-relaxed">
                   {content.services.description}
@@ -103,10 +105,10 @@ export default function Services() {
                   <motion.div 
                     animate={{ rotate: 360 }}
                     transition={{ repeat: Infinity, duration: 8, ease: "linear" }}
-                    className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0_340deg,rgba(230,0,0,1)_360deg)]"
+                    className="absolute inset-0 bg-[conic-gradient(from_0deg,transparent_0_326deg,rgba(255,241,196,0.95)_344deg,rgba(243,163,55,1)_360deg)]"
                   />
                   <div className="absolute inset-[2px] bg-wolf-black rounded-full flex items-center justify-center">
-                    <Wrench className="w-6 h-6 text-wolf-silver" />
+                    <Wrench className="w-6 h-6 text-[#fff4cf]" />
                   </div>
                 </div>
               </motion.div>
@@ -139,12 +141,12 @@ export default function Services() {
                 <div className="absolute inset-0 bg-gradient-to-br from-wolf-red/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0" />
                 
                 <div className="relative z-10 flex flex-col md:flex-row gap-8 items-start">
-                  <div className="w-16 h-16 shrink-0 bg-wolf-black/50 backdrop-blur-sm border border-wolf-gunmetal flex items-center justify-center group-hover:bg-wolf-red group-hover:border-wolf-red transition-all duration-500 rounded shadow-lg">
-                    <service.icon className="w-8 h-8 text-wolf-silver group-hover:text-white transition-colors duration-500" />
+                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded border border-wolf-red/25 bg-[linear-gradient(180deg,rgba(255,245,216,0.14),rgba(24,13,4,0.8))] shadow-[0_0_26px_rgba(243,163,55,0.12)] transition-all duration-500 group-hover:border-wolf-red/45 group-hover:bg-[linear-gradient(180deg,rgba(255,243,206,0.24),rgba(186,82,0,0.72))] group-hover:shadow-[0_0_44px_rgba(243,163,55,0.2)]">
+                    <service.icon className="h-8 w-8 text-[#fff5d2] transition-all duration-500 group-hover:scale-110 group-hover:text-white group-hover:[filter:drop-shadow(0_0_12px_rgba(255,229,170,0.42))]" />
                   </div>
                   
                   <div>
-                    <h3 className="text-3xl font-heading font-bold uppercase tracking-wide mb-4 text-white group-hover:text-wolf-red transition-colors duration-300 drop-shadow-md">
+                    <h3 className="hover-molten-text mb-4 text-3xl font-heading font-bold uppercase tracking-wide drop-shadow-md">
                       {service.title}
                     </h3>
                     <p className="text-gray-300 leading-relaxed font-light text-lg drop-shadow-sm">

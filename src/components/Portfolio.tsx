@@ -117,13 +117,13 @@ const PostCard = ({ item }: { item: MediaItem }) => {
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-4 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity hover:bg-wolf-red group-hover:opacity-100"
+            className="absolute left-4 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity hover:bg-wolf-red hover:text-wolf-black group-hover:opacity-100"
           >
             <ChevronLeft size={18} />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute right-4 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity hover:bg-wolf-red group-hover:opacity-100"
+            className="absolute right-4 top-1/2 z-20 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity hover:bg-wolf-red hover:text-wolf-black group-hover:opacity-100"
           >
             <ChevronRight size={18} />
           </button>
@@ -136,7 +136,7 @@ const PostCard = ({ item }: { item: MediaItem }) => {
       ) : null}
 
       <div className="absolute top-4 right-4 z-20 scale-75 opacity-0 transition-opacity duration-300 group-hover:scale-100 group-hover:opacity-100">
-        <div className="flex h-10 w-10 items-center justify-center rounded border border-white/20 bg-wolf-red text-white shadow-lg">
+        <div className="flex h-10 w-10 items-center justify-center rounded border border-white/20 bg-wolf-red text-wolf-black shadow-lg">
           <ExternalLink size={18} />
         </div>
       </div>
@@ -202,7 +202,7 @@ const ReelCard = ({ item }: { item: MediaItem }) => {
 
       <button
         onClick={toggleMute}
-        className="absolute bottom-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity hover:bg-wolf-red group-hover:opacity-100"
+        className="absolute bottom-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white opacity-0 transition-opacity hover:bg-wolf-red hover:text-wolf-black group-hover:opacity-100"
       >
         {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
       </button>
@@ -213,7 +213,7 @@ const ReelCard = ({ item }: { item: MediaItem }) => {
           event.stopPropagation();
           handleOpenLink();
         }}
-        className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded border border-white/20 bg-wolf-red text-white shadow-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded border border-white/20 bg-wolf-red text-wolf-black shadow-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100"
       >
         <ExternalLink size={18} />
       </button>
@@ -241,7 +241,7 @@ export default function Portfolio() {
               </span>
             </div>
             <h2 className="mb-6 text-5xl font-heading font-black uppercase leading-none tracking-tighter text-white md:text-7xl">
-              Latest <span className="text-wolf-red">Work</span>
+              Latest <span className="molten-highlight">Work</span>
             </h2>
             <p className="max-w-2xl text-lg font-light leading-relaxed text-gray-400">
               {LOCAL_PORTFOLIO_DESCRIPTION}
