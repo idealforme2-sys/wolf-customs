@@ -1,7 +1,7 @@
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import { LayoutDashboard, FileText, LogOut, PenSquare } from "lucide-react";
+import { LayoutDashboard, FileText, LogOut, PenSquare, Globe } from "lucide-react";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export default function AdminLayout() {
       {/* Sidebar */}
       <aside className="w-full md:w-64 bg-wolf-gray border-b md:border-b-0 md:border-r border-wolf-gunmetal flex flex-col shrink-0">
         <div className="border-b border-wolf-gunmetal p-4 md:p-6">
-          <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center justify-between gap-3 md:flex-col md:items-stretch md:gap-4">
             <div className="min-w-0">
               <p className="mb-1 text-[10px] font-heading font-bold uppercase tracking-[0.26em] text-gray-500">
                 Owner Panel
@@ -31,17 +31,43 @@ export default function AdminLayout() {
               </h1>
             </div>
 
-            {/* Mobile quick logout */}
-            <button onClick={handleLogout} className="p-2 text-gray-400 transition-colors hover:text-white md:hidden">
-              <LogOut className="w-5 h-5" />
-            </button>
+            {/* Mobile quick actions */}
+            <div className="flex items-center gap-1 md:hidden">
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-gray-400 transition-colors hover:text-white"
+                title="View Live Site"
+              >
+                <Globe className="w-5 h-5" />
+              </a>
+              <button
+                onClick={handleLogout}
+                className="p-2 text-gray-400 transition-colors hover:text-white"
+                title="Sign Out"
+              >
+                <LogOut className="w-5 h-5" />
+              </button>
+            </div>
 
-            <button
-              onClick={handleLogout}
-              className="hidden items-center gap-2 rounded-full border border-wolf-gunmetal bg-black/30 px-3 py-2 text-[10px] font-heading font-bold uppercase tracking-[0.18em] text-gray-400 transition-colors duration-200 hover:border-wolf-red/40 hover:text-wolf-red md:inline-flex"
-            >
-              <LogOut className="h-3.5 w-3.5" /> Sign Out
-            </button>
+            {/* Desktop quick actions */}
+            <div className="hidden grid-cols-2 gap-2 md:grid">
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 rounded-2xl border border-wolf-gunmetal bg-black/30 px-3 py-2.5 text-[10px] font-heading font-bold uppercase tracking-[0.18em] text-gray-400 transition-colors duration-200 hover:border-white hover:text-white"
+              >
+                <Globe className="h-3.5 w-3.5" /> Live Site
+              </a>
+              <button
+                onClick={handleLogout}
+                className="flex items-center justify-center gap-2 rounded-2xl border border-wolf-gunmetal bg-black/30 px-3 py-2.5 text-[10px] font-heading font-bold uppercase tracking-[0.18em] text-gray-400 transition-colors duration-200 hover:border-wolf-red/40 hover:text-wolf-red"
+              >
+                <LogOut className="h-3.5 w-3.5" /> Sign Out
+              </button>
+            </div>
           </div>
         </div>
 
