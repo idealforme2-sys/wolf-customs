@@ -55,16 +55,18 @@ export default function Gallery() {
           {projects.map((project) => (
             <div
               key={project.id}
-              className="relative w-[85vw] md:w-[50vw] lg:w-[40vw] h-[60vh] md:h-[70vh] shrink-0 group overflow-hidden cursor-hover"
+              className="group relative h-[60vh] w-[85vw] shrink-0 cursor-hover overflow-hidden rounded-[28px] border border-wolf-gunmetal/70 bg-[#050301] shadow-[0_24px_60px_rgba(0,0,0,0.38)] transition-all duration-700 hover:border-wolf-red/45 hover:shadow-[0_34px_90px_rgba(243,163,55,0.12)] md:h-[70vh] md:w-[50vw] lg:w-[40vw]"
             >
               <div className="absolute inset-0 bg-wolf-black/40 group-hover:bg-transparent transition-colors duration-700 z-10" />
               <img
                 src={project.image}
                 alt={project.title}
-                className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-[1.5s] ease-out grayscale group-hover:grayscale-0"
+                className="h-full w-full bg-[#050301] object-cover grayscale transition-transform duration-[1.5s] ease-out will-change-transform group-hover:scale-110 group-hover:grayscale-0"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-wolf-black via-wolf-black/20 to-transparent opacity-90 z-20" />
+              <div className="absolute inset-0 z-20 bg-gradient-to-t from-[#040201] via-[#040201]/20 to-transparent opacity-95" />
+              <div className="absolute inset-0 z-20 bg-[radial-gradient(circle_at_center,transparent_46%,rgba(4,2,1,0.32)_100%)]" />
+              <div className="absolute inset-[1px] z-20 rounded-[27px] border border-[rgba(255,216,132,0.08)]" />
 
               <div className="absolute bottom-0 left-0 p-8 md:p-12 z-30 w-full transform translate-y-8 group-hover:translate-y-0 transition-transform duration-500">
                 <p className="text-wolf-red font-heading tracking-[0.2em] uppercase text-sm font-bold mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">

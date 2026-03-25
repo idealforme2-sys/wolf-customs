@@ -13,17 +13,47 @@ export default function Hero() {
     const video = videoRef.current;
     if (!video) return;
 
+    let replayTimeout: number | null = null;
+
+    const clearReplayTimeout = () => {
+      if (replayTimeout !== null) {
+        window.clearTimeout(replayTimeout);
+        replayTimeout = null;
+      }
+    };
+
+    const requestPlayback = () => {
+      if (document.hidden) return;
+      clearReplayTimeout();
+      replayTimeout = window.setTimeout(() => {
+        video.play().catch(() => {});
+      }, 80);
+    };
+
     const handleVisibilityChange = () => {
       if (document.hidden) {
+        clearReplayTimeout();
         video.pause();
         return;
       }
 
-      video.play().catch(() => {});
+      requestPlayback();
     };
 
+    video.addEventListener("canplay", requestPlayback);
+    video.addEventListener("playing", clearReplayTimeout);
+    video.addEventListener("waiting", requestPlayback);
+    video.addEventListener("stalled", requestPlayback);
     document.addEventListener("visibilitychange", handleVisibilityChange);
-    return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      clearReplayTimeout();
+      video.removeEventListener("canplay", requestPlayback);
+      video.removeEventListener("playing", clearReplayTimeout);
+      video.removeEventListener("waiting", requestPlayback);
+      video.removeEventListener("stalled", requestPlayback);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, []);
 
   const textVariants = {
@@ -42,25 +72,25 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-wolf-black pt-32 pb-24">
       {/* Dynamic Background Video */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 isolate [contain:paint]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,218,134,0.14),transparent_30%),linear-gradient(180deg,#110b05_0%,#060301_100%)]" />
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          preload="metadata"
-          playsInline
-          disablePictureInPicture
-          onLoadedData={() => setVideoReady(true)}
-          className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
-        >
-          <source src="/hero-background.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(8,5,2,0.82)_0%,rgba(8,5,2,0.34)_34%,rgba(8,5,2,0.54)_68%,rgba(8,5,2,0.88)_100%)]" />
-        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_center,rgba(255,204,110,0.12)_0%,transparent_60%)] opacity-70" />
-        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_top,rgba(255,241,192,0.1)_0%,transparent_28%),radial-gradient(circle_at_bottom,rgba(0,0,0,0.24)_0%,transparent_38%)] opacity-80" />
-        <div className="absolute inset-0 z-10 bg-[linear-gradient(105deg,rgba(0,0,0,0.22)_0%,transparent_24%,rgba(255,224,149,0.07)_42%,transparent_58%,rgba(0,0,0,0.16)_100%)] opacity-90" />
+        <div className="absolute inset-0 overflow-hidden [backface-visibility:hidden] [contain:paint] [transform:translateZ(0)]">
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            preload="auto"
+            playsInline
+            disablePictureInPicture
+            onLoadedData={() => setVideoReady(true)}
+            className={`absolute inset-0 h-full w-full object-cover object-center [backface-visibility:hidden] [transform:translateZ(0)] [will-change:transform,opacity] transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
+          >
+            <source src="/hero-background.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(8,5,2,0.84)_0%,rgba(8,5,2,0.36)_36%,rgba(8,5,2,0.58)_70%,rgba(8,5,2,0.9)_100%),radial-gradient(circle_at_center,rgba(255,204,110,0.1)_0%,transparent_58%)]" />
+        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_top,rgba(255,241,192,0.08)_0%,transparent_28%),linear-gradient(105deg,rgba(0,0,0,0.18)_0%,transparent_24%,rgba(255,224,149,0.05)_46%,transparent_62%,rgba(0,0,0,0.14)_100%)] opacity-90" />
       </div>
 
       <div className="relative z-30 max-w-7xl mx-auto px-6 lg:px-8 w-full flex flex-col items-center text-center">

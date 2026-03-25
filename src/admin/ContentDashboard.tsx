@@ -525,17 +525,25 @@ function SectionStatusPill({ status }: { status: SectionStatus }) {
 
 function SummaryStatCard({ icon: Icon, label, value, hint }: { icon: LucideIcon; label: string; value: string; hint: string }) {
   return (
-    <div className="group relative overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(243,163,55,0.16),transparent_26%),linear-gradient(180deg,rgba(206,214,225,0.05),rgba(23,12,3,0.84))] p-4 shadow-[0_30px_74px_rgba(0,0,0,0.46),0_0_0_1px_rgba(255,222,150,0.04),inset_0_1px_0_rgba(221,228,236,0.05)] transition-all duration-500 hover:-translate-y-1 hover:border-wolf-red/35 hover:shadow-[0_36px_100px_rgba(243,163,55,0.18)]">
-      <div className="pointer-events-none absolute -right-10 top-0 h-28 w-28 rounded-full bg-[rgba(255,198,102,0.24)] blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
-      <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(214,177,99,0.42)] to-transparent transition-all duration-500 group-hover:via-wolf-red/40" />
+    <div className="group relative overflow-hidden rounded-[30px] border border-[rgba(255,225,171,0.08)] bg-[radial-gradient(circle_at_top_right,rgba(243,163,55,0.1),transparent_24%),linear-gradient(180deg,rgba(76,48,14,0.16),rgba(14,9,4,0.94))] p-4 shadow-[0_24px_64px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,224,168,0.03)] transition-all duration-500 hover:-translate-y-1 hover:border-wolf-red/30 hover:shadow-[0_32px_84px_rgba(243,163,55,0.12)]">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.08]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,208,124,0.09) 1px, transparent 1px), linear-gradient(90deg, rgba(255,208,124,0.07) 1px, transparent 1px)",
+          backgroundSize: "22px 22px",
+        }}
+      />
+      <div className="pointer-events-none absolute -right-12 top-0 h-28 w-28 rounded-full bg-[rgba(243,163,55,0.16)] blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
+      <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(214,177,99,0.26)] to-transparent transition-all duration-500 group-hover:via-[rgba(243,163,55,0.4)]" />
       <div className="relative flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0 flex flex-1 items-start gap-2.5 text-[11px] uppercase tracking-[0.22em] text-gray-400 transition-colors group-hover:text-gray-300">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-wolf-red/20 bg-[linear-gradient(180deg,rgba(207,215,226,0.08),rgba(27,13,2,0.74))] shadow-[0_0_28px_rgba(243,163,55,0.14)] transition-transform duration-500 group-hover:scale-105">
+          <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-wolf-red/15 bg-[linear-gradient(180deg,rgba(255,224,168,0.04),rgba(22,12,3,0.84))] shadow-[0_0_20px_rgba(243,163,55,0.08)] transition-transform duration-500 group-hover:scale-105">
             <Icon className="h-4 w-4 text-wolf-red transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6" />
           </div>
           <span className="min-w-0 whitespace-normal leading-snug">{label}</span>
         </div>
-        <span className="mt-0.5 shrink-0 rounded-full border border-white/10 bg-[rgba(205,214,225,0.05)] px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-gray-500 shadow-[inset_0_1px_0_rgba(221,228,236,0.04)]">
+        <span className="mt-0.5 shrink-0 rounded-full border border-[rgba(255,225,171,0.08)] bg-[rgba(14,9,4,0.74)] px-2.5 py-1 text-[10px] uppercase tracking-[0.16em] text-gray-500 shadow-[inset_0_1px_0_rgba(255,224,168,0.03)]">
           Overview
         </span>
       </div>
@@ -559,11 +567,19 @@ function ControlSurfaceCard({
   children: ReactNode;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(243,163,55,0.16),transparent_30%),linear-gradient(180deg,rgba(206,214,225,0.05),rgba(22,12,3,0.82))] p-5 shadow-[0_30px_84px_rgba(0,0,0,0.44),0_0_0_1px_rgba(255,222,150,0.04),inset_0_1px_0_rgba(221,228,236,0.05)]">
-      <div className="pointer-events-none absolute -right-10 top-0 h-32 w-32 rounded-full bg-[rgba(255,196,101,0.24)] blur-3xl" />
-      <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(214,177,99,0.46)] to-transparent" />
+    <div className="relative overflow-hidden rounded-[30px] border border-[rgba(255,225,171,0.08)] bg-[radial-gradient(circle_at_top_right,rgba(243,163,55,0.12),transparent_28%),linear-gradient(180deg,rgba(76,48,14,0.16),rgba(14,9,4,0.94))] p-5 shadow-[0_24px_72px_rgba(0,0,0,0.42),inset_0_1px_0_rgba(255,224,168,0.03)]">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.08]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,208,124,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,208,124,0.06) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
+      <div className="pointer-events-none absolute -right-10 top-0 h-32 w-32 rounded-full bg-[rgba(243,163,55,0.16)] blur-3xl" />
+      <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(214,177,99,0.28)] to-transparent" />
       <div className="relative flex items-start gap-4">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[18px] border border-wolf-red/20 bg-[linear-gradient(180deg,rgba(207,215,226,0.08),rgba(28,13,2,0.74))] shadow-[0_0_30px_rgba(243,163,55,0.16)]">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[18px] border border-wolf-red/15 bg-[linear-gradient(180deg,rgba(255,224,168,0.04),rgba(24,13,3,0.84))] shadow-[0_0_22px_rgba(243,163,55,0.08)]">
           <Icon className="h-5 w-5 text-wolf-red" />
         </div>
         <div className="min-w-0">
@@ -782,13 +798,24 @@ function SectionGroupIntro({
 
   return (
     <div className="relative px-1">
-      <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.08),rgba(23,12,3,0.46))] p-[1px] shadow-[0_34px_96px_rgba(0,0,0,0.4)]">
-        <div className="relative overflow-hidden rounded-[31px] bg-[radial-gradient(circle_at_top_right,rgba(255,195,103,0.18),transparent_30%),linear-gradient(180deg,rgba(206,214,225,0.045),rgba(22,12,3,0.76))] px-5 py-5 md:px-6 md:py-6">
-          <div className="pointer-events-none absolute -right-10 top-0 h-40 w-40 rounded-full bg-[rgba(255,198,102,0.26)] blur-3xl" />
-          <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(255,208,124,0.7)] to-transparent" />
+      <div className="relative overflow-hidden rounded-[32px] border border-[rgba(255,225,171,0.08)] bg-[linear-gradient(180deg,rgba(255,217,142,0.08),rgba(16,10,4,0.9))] p-[1px] shadow-[0_34px_96px_rgba(0,0,0,0.4)]">
+        <div className="relative overflow-hidden rounded-[31px] bg-[radial-gradient(circle_at_top_right,rgba(255,190,90,0.14),transparent_28%),linear-gradient(180deg,rgba(76,48,14,0.16),rgba(15,10,4,0.94))] px-5 py-5 md:px-6 md:py-6">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.08]"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,208,124,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,208,124,0.07) 1px, transparent 1px)",
+              backgroundSize: "24px 24px",
+            }}
+          />
+          <div className="pointer-events-none absolute -right-10 top-0 h-40 w-40 rounded-full bg-[rgba(255,198,102,0.18)] blur-3xl" />
+          <div className="pointer-events-none absolute left-6 top-6 h-16 w-16 rounded-[22px] border border-wolf-red/10 opacity-40" />
+          <div className="pointer-events-none absolute bottom-5 right-6 h-20 w-20 rounded-[26px] border border-wolf-red/10 opacity-30" />
+          <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(255,208,124,0.44)] to-transparent" />
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div className="flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-wolf-red/20 bg-[linear-gradient(180deg,rgba(207,215,226,0.08),rgba(28,13,2,0.76))] shadow-[0_0_32px_rgba(243,163,55,0.16)]">
+              <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-[18px] border border-wolf-red/18 bg-[linear-gradient(180deg,rgba(255,224,168,0.04),rgba(24,13,3,0.86))] shadow-[0_0_24px_rgba(243,163,55,0.08)]">
+                <div className="absolute inset-[4px] rounded-[14px] border border-wolf-red/10" />
                 <Icon className="h-5 w-5 text-wolf-red" />
               </div>
               <div className="min-w-0">
@@ -814,13 +841,21 @@ function SectionGroupIntro({
             </div>
           </div>
 
-          <div className="mt-5 rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.04),rgba(10,7,3,0.58))] p-4 shadow-[inset_0_1px_0_rgba(221,228,236,0.035)]">
+          <div className="relative mt-5 overflow-hidden rounded-[24px] border border-[rgba(255,225,171,0.08)] bg-[linear-gradient(180deg,rgba(255,224,168,0.03),rgba(12,8,3,0.84))] p-4 shadow-[inset_0_1px_0_rgba(255,224,168,0.03)]">
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.08]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(135deg, rgba(255,208,124,0.12) 0, rgba(255,208,124,0.12) 1px, transparent 1px, transparent 12px)",
+                backgroundSize: "18px 18px",
+              }}
+            />
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Includes</p>
               <p className="text-xs text-gray-500">These sections are grouped under this area.</p>
             </div>
 
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="relative mt-3 flex flex-wrap gap-2">
               {sections.map((section) => (
                 <span
                   key={section.id}
@@ -1199,10 +1234,18 @@ export default function ContentDashboard() {
   return (
     <div className="content-dashboard min-h-full pb-40 sm:pb-32 xl:pb-12">
       <div className="mx-auto max-w-[1700px] px-4 py-5 md:px-8 md:py-8">
-        <section className="relative overflow-hidden rounded-[36px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.1),rgba(23,12,3,0.44))] p-[1px] shadow-[0_42px_116px_rgba(0,0,0,0.46)]">
-          <div className="relative overflow-hidden rounded-[35px] bg-[radial-gradient(circle_at_top_right,rgba(255,196,101,0.24),transparent_30%),linear-gradient(135deg,rgba(206,214,225,0.08),rgba(243,163,55,0.1),rgba(255,255,255,0.03))]">
-            <div className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full bg-wolf-red/18 blur-3xl" />
-            <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(255,208,124,0.76)] to-transparent" />
+        <section className="relative overflow-hidden rounded-[36px] border border-[rgba(255,225,171,0.08)] bg-[linear-gradient(180deg,rgba(255,218,144,0.08),rgba(18,11,4,0.9))] p-[1px] shadow-[0_42px_116px_rgba(0,0,0,0.46)]">
+          <div className="relative overflow-hidden rounded-[35px] bg-[radial-gradient(circle_at_top_right,rgba(255,186,82,0.2),transparent_30%),linear-gradient(135deg,rgba(76,48,14,0.18),rgba(243,163,55,0.06),rgba(10,7,3,0.94))]">
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.08]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(255,208,124,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,208,124,0.06) 1px, transparent 1px)",
+                backgroundSize: "28px 28px",
+              }}
+            />
+            <div className="pointer-events-none absolute -right-16 top-0 h-56 w-56 rounded-full bg-wolf-red/14 blur-3xl" />
+            <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(255,208,124,0.42)] to-transparent" />
             <div className="grid gap-5 px-4 py-6 sm:px-6 sm:py-7 xl:grid-cols-[1.35fr_1fr] xl:px-8 xl:py-10">
             <div>
               <div className="inline-flex rounded-full border border-wolf-red/20 bg-black/25 px-3 py-1.5 text-[11px] uppercase tracking-[0.24em] text-wolf-red shadow-[0_0_24px_rgba(214,177,99,0.16)]">
@@ -1220,15 +1263,15 @@ export default function ContentDashboard() {
                 Update your website content, visuals, and Instagram showcase with confidence. Your live website stays untouched until you publish.
               </p>
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.05),rgba(10,7,3,0.5))] px-4 py-3 shadow-[inset_0_1px_0_rgba(221,228,236,0.03)]">
+                <div className="rounded-[22px] border border-[rgba(255,225,171,0.08)] bg-[linear-gradient(180deg,rgba(255,224,168,0.03),rgba(12,8,3,0.82))] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,224,168,0.03)]">
                   <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Mode</p>
                   <p className="mt-2 text-sm font-semibold text-white">Guided editing</p>
                 </div>
-                <div className="rounded-[22px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.05),rgba(10,7,3,0.5))] px-4 py-3 shadow-[inset_0_1px_0_rgba(221,228,236,0.03)]">
+                <div className="rounded-[22px] border border-[rgba(255,225,171,0.08)] bg-[linear-gradient(180deg,rgba(255,224,168,0.03),rgba(12,8,3,0.82))] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,224,168,0.03)]">
                   <p className="text-[10px] uppercase tracking-[0.18em] text-gray-500">Safety</p>
                   <p className="mt-2 text-sm font-semibold text-white">Draft-safe changes</p>
                 </div>
-                <div className="rounded-[22px] border border-wolf-red/20 bg-wolf-red/10 px-4 py-3 shadow-[0_0_28px_rgba(214,177,99,0.16)]">
+                <div className="rounded-[22px] border border-wolf-red/18 bg-[linear-gradient(180deg,rgba(255,226,171,0.06),rgba(39,19,3,0.82))] px-4 py-3 shadow-[0_0_20px_rgba(214,177,99,0.1)]">
                   <p className="text-[10px] uppercase tracking-[0.18em] text-wolf-red">Audience</p>
                   <p className="mt-2 text-sm font-semibold text-white">Built for owners</p>
                 </div>

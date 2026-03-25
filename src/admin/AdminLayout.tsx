@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import { LayoutDashboard, FileText, LogOut, PenSquare, Globe } from "lucide-react";
+import { LayoutDashboard, FileText, LogOut, PenSquare, Globe, ArrowUpRight } from "lucide-react";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
@@ -60,20 +60,40 @@ export default function AdminLayout() {
             </div>
 
             {/* Desktop quick actions */}
-            <div className="hidden grid-cols-2 gap-2 md:grid">
+            <div className="hidden gap-2 md:grid">
               <a
                 href="/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 rounded-2xl border border-wolf-gunmetal bg-[linear-gradient(180deg,rgba(255,244,214,0.08),rgba(17,10,3,0.9))] px-3 py-2.5 text-[10px] font-heading font-bold uppercase tracking-[0.18em] text-gray-200 transition-colors duration-200 hover:border-white hover:text-white"
+                className="group flex items-center justify-between rounded-[22px] border border-[rgba(255,222,150,0.12)] bg-[linear-gradient(180deg,rgba(255,224,168,0.08),rgba(17,10,3,0.94))] px-3 py-3 text-left shadow-[0_14px_34px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,246,216,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-wolf-red/30 hover:shadow-[0_18px_44px_rgba(243,163,55,0.12)]"
               >
-                <Globe className="h-3.5 w-3.5" /> Live Site
+                <span className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-2xl border border-wolf-red/15 bg-[linear-gradient(180deg,rgba(255,226,171,0.05),rgba(24,13,3,0.86))] shadow-[0_0_18px_rgba(243,163,55,0.08)]">
+                    <Globe className="h-4 w-4 text-wolf-red" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[9px] font-heading font-bold uppercase tracking-[0.18em] text-gray-500">Preview</span>
+                    <span className="mt-1 block text-[11px] font-heading font-bold uppercase tracking-[0.16em] text-white">Live Site</span>
+                  </span>
+                </span>
+                <ArrowUpRight className="h-4 w-4 text-gray-500 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-wolf-red" />
               </a>
               <button
                 onClick={handleLogout}
-                className="flex items-center justify-center gap-2 rounded-2xl border border-wolf-gunmetal bg-[linear-gradient(180deg,rgba(255,244,214,0.08),rgba(17,10,3,0.9))] px-3 py-2.5 text-[10px] font-heading font-bold uppercase tracking-[0.18em] text-gray-200 transition-colors duration-200 hover:border-wolf-red/40 hover:text-wolf-red"
+                className="group flex items-center justify-between rounded-[22px] border border-[rgba(255,222,150,0.1)] bg-[linear-gradient(180deg,rgba(255,236,200,0.04),rgba(16,9,3,0.96))] px-3 py-3 text-left shadow-[0_14px_34px_rgba(0,0,0,0.18),inset_0_1px_0_rgba(255,246,216,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-wolf-red/25 hover:bg-[linear-gradient(180deg,rgba(255,224,168,0.08),rgba(33,15,3,0.94))]"
               >
-                <LogOut className="h-3.5 w-3.5" /> Sign Out
+                <span className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-2xl border border-wolf-red/12 bg-[linear-gradient(180deg,rgba(255,226,171,0.03),rgba(20,11,3,0.88))] shadow-[0_0_14px_rgba(243,163,55,0.06)]">
+                    <LogOut className="h-4 w-4 text-wolf-red transition-colors duration-300 group-hover:text-white" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-[9px] font-heading font-bold uppercase tracking-[0.18em] text-gray-500">Secure</span>
+                    <span className="mt-1 block text-[11px] font-heading font-bold uppercase tracking-[0.16em] text-white">Sign Out</span>
+                  </span>
+                </span>
+                <span className="text-[10px] font-heading font-bold uppercase tracking-[0.18em] text-wolf-red transition-colors duration-300 group-hover:text-white">
+                  Exit
+                </span>
               </button>
             </div>
           </div>

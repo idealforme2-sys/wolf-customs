@@ -23,23 +23,58 @@ interface StatCardProps {
 
 function StatCard({ title, value, icon: Icon, color }: StatCardProps) {
   // Using explicit classes for Tailwind safely evaluating colors
-  const colorMap: Record<string, { text: string, border: string, bg: string, glow: string }> = {
-    "white": { text: "text-white", border: "group-hover:border-white/50", bg: "group-hover:bg-white/10", glow: "hover:shadow-[0_0_30px_rgba(255,255,255,0.05)]" },
-    "wolf-red": { text: "text-wolf-red", border: "group-hover:border-wolf-red/50", bg: "group-hover:bg-wolf-red/10", glow: "hover:shadow-[0_0_30px_rgba(224,30,40,0.15)]" },
-    "yellow-400": { text: "text-yellow-400", border: "group-hover:border-yellow-400/50", bg: "group-hover:bg-yellow-400/10", glow: "hover:shadow-[0_0_30px_rgba(250,204,21,0.1)]" },
-    "green-400": { text: "text-green-400", border: "group-hover:border-green-400/50", bg: "group-hover:bg-green-400/10", glow: "hover:shadow-[0_0_30px_rgba(74,222,128,0.1)]" },
+  const colorMap: Record<
+    string,
+    { text: string; border: string; bg: string; glow: string; orb: string; plateBorder: string; plateBg: string }
+  > = {
+    "white": {
+      text: "text-white",
+      border: "group-hover:border-white/50",
+      bg: "group-hover:bg-white/10",
+      glow: "hover:shadow-[0_0_30px_rgba(255,255,255,0.05)]",
+      orb: "bg-white/5",
+      plateBorder: "border-white/10 group-hover:border-white/30",
+      plateBg: "bg-white/5 group-hover:bg-white/10",
+    },
+    "wolf-red": {
+      text: "text-wolf-red",
+      border: "group-hover:border-wolf-red/50",
+      bg: "group-hover:bg-wolf-red/10",
+      glow: "hover:shadow-[0_0_30px_rgba(243,163,55,0.16)]",
+      orb: "bg-wolf-red/10",
+      plateBorder: "border-wolf-red/20 group-hover:border-wolf-red/40",
+      plateBg: "bg-wolf-red/10 group-hover:bg-wolf-red/15",
+    },
+    "sky-400": {
+      text: "text-sky-300",
+      border: "group-hover:border-sky-400/50",
+      bg: "group-hover:bg-sky-400/10",
+      glow: "hover:shadow-[0_0_30px_rgba(56,189,248,0.14)]",
+      orb: "bg-sky-400/10",
+      plateBorder: "border-sky-400/20 group-hover:border-sky-400/40",
+      plateBg: "bg-sky-400/10 group-hover:bg-sky-400/15",
+    },
+    "green-400": {
+      text: "text-green-400",
+      border: "group-hover:border-green-400/50",
+      bg: "group-hover:bg-green-400/10",
+      glow: "hover:shadow-[0_0_30px_rgba(74,222,128,0.1)]",
+      orb: "bg-green-400/10",
+      plateBorder: "border-green-400/20 group-hover:border-green-400/40",
+      plateBg: "bg-green-400/10 group-hover:bg-green-400/15",
+    },
   };
   const theme = colorMap[color] || colorMap["white"];
 
   return (
     <div className={`relative overflow-hidden group border border-wolf-gunmetal bg-wolf-black/40 backdrop-blur-sm p-5 transition-all duration-500 ${theme.border} hover:bg-wolf-gray ${theme.glow} sm:p-6`}>
-      <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl -mr-10 -mt-10 transition-transform duration-700 group-hover:scale-150"></div>
+      <div className={`absolute top-0 right-0 h-32 w-32 rounded-full blur-3xl -mr-10 -mt-10 transition-transform duration-700 group-hover:scale-150 ${theme.orb}`}></div>
       <div className="relative flex items-start justify-between gap-4 z-10">
         <div className="min-w-0">
           <p className="text-xs font-heading uppercase tracking-widest text-gray-500 mb-2 transition-colors group-hover:text-gray-300">{title}</p>
           <h3 className="text-2xl font-heading font-bold text-white sm:text-3xl tracking-tight">{value}</h3>
         </div>
-        <div className={`shrink-0 border border-wolf-gunmetal bg-wolf-black p-3 transition-all duration-500 ${theme.border} ${theme.bg} group-hover:scale-110 shadow-lg`}>
+        <div className={`shrink-0 border bg-wolf-black p-3 transition-all duration-500 ${theme.plateBorder} ${theme.plateBg} ${theme.bg} group-hover:scale-110 shadow-lg`}>
           <Icon className={`w-5 h-5 ${theme.text} transition-transform duration-500 group-hover:rotate-12`} />
         </div>
       </div>
@@ -112,7 +147,7 @@ export default function OverviewDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title="Total Requests" value={stats.total} icon={FileText} color="white" />
         <StatCard title="New Leads" value={stats.new} icon={Clock} color="wolf-red" />
-        <StatCard title="In Progress" value={stats.inProgress} icon={Activity} color="yellow-400" />
+        <StatCard title="In Progress" value={stats.inProgress} icon={Activity} color="sky-400" />
         <StatCard title="Completed" value={stats.completed} icon={CheckCircle2} color="green-400" />
       </div>
 
