@@ -1320,9 +1320,11 @@ export default function ContentDashboard() {
             title="Draft-safe workflow"
             description="Uploads and text edits stay inside this editor until you publish. If you leave the page before publishing, those draft changes will be lost."
           >
-            <div className="rounded-[22px] border border-white/10 bg-black/25 px-4 py-3.5">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500">Best practice</p>
-              <p className="mt-1.5 text-sm leading-relaxed text-white">Review, then publish once you are happy with the draft preview and section changes.</p>
+            <div className="mt-1 border-t border-white/8 pt-3">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-wolf-red">Before you publish</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-white">
+                Check your text, images, and section previews first. Publish once everything looks right on the page.
+              </p>
             </div>
           </ControlSurfaceCard>
         </section>
