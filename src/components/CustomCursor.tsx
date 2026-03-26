@@ -11,6 +11,7 @@ export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [isNativeCursorZone, setIsNativeCursorZone] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(pointer: fine) and (min-width: 768px)');
@@ -23,6 +24,7 @@ export default function CustomCursor() {
       if (!nextEnabled) {
         setIsVisible(false);
         setIsHovering(false);
+        setIsNativeCursorZone(false);
       }
     };
 
@@ -41,10 +43,25 @@ export default function CustomCursor() {
     const handleMouseOver = (e: MouseEvent) => {
       if (!mediaQuery.matches) {
         setIsHovering(false);
+        setIsNativeCursorZone(false);
         return;
       }
 
       const target = e.target as HTMLElement;
+      const usesNativeCursor =
+        target.closest('.eapps-instagram-feed-popup') !== null ||
+        target.closest('.eapps-instagram-feed-posts-item-link') !== null ||
+        target.closest('.eapps-instagram-feed-posts-slider-nav') !== null ||
+        target.closest('.eapps-instagram-feed-popup-close') !== null ||
+        target.closest('.eapps-instagram-feed-popup-item-media-carousel') !== null;
+
+      setIsNativeCursorZone(usesNativeCursor);
+
+      if (usesNativeCursor) {
+        setIsHovering(false);
+        return;
+      }
+
       if (
         target.tagName.toLowerCase() === 'a' ||
         target.tagName.toLowerCase() === 'button' ||
@@ -92,7 +109,7 @@ export default function CustomCursor() {
     };
   }, [cursorX, cursorY]);
 
-  if (!isEnabled || !isVisible) return null;
+  if (!isEnabled || !isVisible || isNativeCursorZone) return null;
 
   return (
     <>

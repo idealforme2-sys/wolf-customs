@@ -4,20 +4,20 @@ import { motion } from "framer-motion";
 const WIDGET_PORTFOLIO_DESCRIPTION =
   'This version places the business\'s "entire Instagram feed" onto the website, so people can scroll through all posts and reels in one section instead of only showing selected content.';
 
-const WIDGET_SCRIPT_SRC = "https://widgets.sociablekit.com/instagram-feed/widget.js";
-const WIDGET_EMBED_ID = "25665453";
+const ELFSIGHT_SCRIPT_SRC = "https://elfsightcdn.com/platform.js";
+const ELFSIGHT_APP_CLASS = "elfsight-app-b557c3af-43a3-4613-be1a-04d7db3679b2";
 
 let widgetScriptPromise: Promise<void> | null = null;
 
-const loadWidgetScript = (anchor: HTMLElement, forceReload = false) => {
+const loadWidgetScript = (forceReload = false) => {
   if (forceReload) {
     document
-      .querySelectorAll<HTMLScriptElement>(`script[src="${WIDGET_SCRIPT_SRC}"]`)
+      .querySelectorAll<HTMLScriptElement>(`script[src="${ELFSIGHT_SCRIPT_SRC}"]`)
       .forEach((script) => script.remove());
     widgetScriptPromise = null;
   }
 
-  const existingScript = document.querySelector<HTMLScriptElement>(`script[src="${WIDGET_SCRIPT_SRC}"]`);
+  const existingScript = document.querySelector<HTMLScriptElement>(`script[src="${ELFSIGHT_SCRIPT_SRC}"]`);
   if (existingScript) {
     if (existingScript.dataset.loaded === "true") {
       return Promise.resolve();
@@ -28,25 +28,22 @@ const loadWidgetScript = (anchor: HTMLElement, forceReload = false) => {
         let settled = false;
 
         const handleLoad = () => {
-          if (settled) {
-            return;
-          }
+          if (settled) return;
           settled = true;
           existingScript.dataset.loaded = "true";
           resolve();
         };
+
         const handleError = () => {
-          if (settled) {
-            return;
-          }
+          if (settled) return;
           settled = true;
           widgetScriptPromise = null;
-          reject(new Error("Failed to load SociableKIT widget script."));
+          reject(new Error("Failed to load Elfsight script."));
         };
 
         existingScript.addEventListener("load", handleLoad, { once: true });
         existingScript.addEventListener("error", handleError, { once: true });
-        window.setTimeout(handleLoad, 1500);
+        window.setTimeout(handleLoad, 1200);
       });
     }
 
@@ -55,9 +52,8 @@ const loadWidgetScript = (anchor: HTMLElement, forceReload = false) => {
 
   widgetScriptPromise = new Promise<void>((resolve, reject) => {
     const script = document.createElement("script");
-    script.src = WIDGET_SCRIPT_SRC;
+    script.src = ELFSIGHT_SCRIPT_SRC;
     script.async = true;
-    script.dataset.sociablekit = "instagram-feed";
     script.addEventListener(
       "load",
       () => {
@@ -70,58 +66,38 @@ const loadWidgetScript = (anchor: HTMLElement, forceReload = false) => {
       "error",
       () => {
         widgetScriptPromise = null;
-        reject(new Error("Failed to load SociableKIT widget script."));
+        reject(new Error("Failed to load Elfsight script."));
       },
       { once: true },
     );
 
-    anchor.parentNode?.insertBefore(script, anchor.nextSibling);
+    document.head.appendChild(script);
   });
 
   return widgetScriptPromise;
 };
 
 export default function PortfolioV3Embed() {
-  const sectionRef = useRef<HTMLElement>(null);
   const widgetRef = useRef<HTMLDivElement>(null);
-  const [shouldLoadWidget, setShouldLoadWidget] = useState(false);
   const [isWidgetReady, setIsWidgetReady] = useState(false);
   const [hasWidgetFailed, setHasWidgetFailed] = useState(false);
   const [widgetAttempt, setWidgetAttempt] = useState(0);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
-          setShouldLoadWidget(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "400px 0px" },
-    );
-
-    observer.observe(section);
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!shouldLoadWidget || !widgetRef.current) {
-      return;
-    }
-
     const widget = widgetRef.current;
-    let cancelled = false;
-    let retryTimeoutId: number | null = null;
+    if (!widget) {
+      return;
+    }
 
-    const hasIframe = () => !!widget.querySelector("iframe");
+    let cancelled = false;
+    let timeoutId: number | null = null;
+
     const markReady = () => {
-      if (!cancelled && hasIframe()) {
+      const hasContent = widget.querySelector(".eapps-instagram-feed-posts-item") !== null;
+      if (hasContent && !cancelled) {
+        window.requestAnimationFrame(() => {
+          widget.querySelectorAll('a[href*="elfsight.com"]').forEach((link) => link.remove());
+        });
         setIsWidgetReady(true);
         setHasWidgetFailed(false);
         return true;
@@ -132,6 +108,7 @@ export default function PortfolioV3Embed() {
 
     setIsWidgetReady(false);
     setHasWidgetFailed(false);
+    widget.innerHTML = "";
 
     const observer = new MutationObserver(() => {
       if (markReady()) {
@@ -141,24 +118,19 @@ export default function PortfolioV3Embed() {
 
     observer.observe(widget, { childList: true, subtree: true });
 
-    void loadWidgetScript(widget, widgetAttempt > 0)
+    void loadWidgetScript(widgetAttempt > 0)
       .then(() => {
         if (cancelled || markReady()) {
           return;
         }
 
-        retryTimeoutId = window.setTimeout(() => {
+        timeoutId = window.setTimeout(() => {
           if (cancelled || markReady()) {
             return;
           }
 
-          if (widgetAttempt === 0) {
-            setWidgetAttempt(1);
-            return;
-          }
-
           setHasWidgetFailed(true);
-        }, 5000);
+        }, 8000);
       })
       .catch(() => {
         if (!cancelled) {
@@ -169,14 +141,84 @@ export default function PortfolioV3Embed() {
     return () => {
       cancelled = true;
       observer.disconnect();
-      if (retryTimeoutId !== null) {
-        window.clearTimeout(retryTimeoutId);
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
       }
     };
-  }, [shouldLoadWidget, widgetAttempt]);
+  }, [widgetAttempt]);
+
+  useEffect(() => {
+    if (!isWidgetReady) {
+      return;
+    }
+
+    const handlePopupCarouselClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target) {
+        return;
+      }
+
+      const popup = target.closest(".eapps-instagram-feed-popup");
+      if (!popup) {
+        return;
+      }
+
+      if (
+        target.closest("a, button, video, iframe, .eapps-instagram-feed-popup-item-media-carousel-pagination") ||
+        target.closest(".eapps-instagram-feed-popup-item-media-carousel-arrow")
+      ) {
+        return;
+      }
+
+      const wrapper = target.closest(".eapps-instagram-feed-popup-item-media-carousel-wrapper") as HTMLElement | null;
+      if (!wrapper) {
+        return;
+      }
+
+      const carousel = wrapper.closest(".eapps-instagram-feed-popup-item-media-carousel");
+      if (!carousel) {
+        return;
+      }
+
+      const rect = wrapper.getBoundingClientRect();
+      if (rect.width === 0) {
+        return;
+      }
+
+      const previousControl = carousel.querySelector<HTMLElement>(
+        ".eapps-instagram-feed-popup-item-media-carousel-arrow-prev",
+      );
+      const nextControl = carousel.querySelector<HTMLElement>(
+        ".eapps-instagram-feed-popup-item-media-carousel-arrow-next",
+      );
+
+      const wantsNext = event.clientX - rect.left >= rect.width / 2;
+      const selectedControl = wantsNext ? nextControl : previousControl;
+
+      if (
+        !selectedControl ||
+        selectedControl.classList.contains("es-post-media-carousel-arrow-disabled") ||
+        selectedControl.classList.contains("eapps-instagram-feed-popup-item-media-carousel-arrow-disabled")
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      window.requestAnimationFrame(() => {
+        selectedControl.click();
+      });
+    };
+
+    document.addEventListener("click", handlePopupCarouselClick, true);
+
+    return () => {
+      document.removeEventListener("click", handlePopupCarouselClick, true);
+    };
+  }, [isWidgetReady]);
 
   return (
-    <section ref={sectionRef} id="portfolio-v3" className="relative overflow-hidden bg-wolf-black py-28 text-white">
+    <section id="portfolio-v3" className="relative overflow-hidden bg-wolf-black py-28 text-white">
       <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-wolf-red/30 to-transparent" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(199,161,74,0.16),transparent_28%)]" />
       <motion.div
@@ -198,25 +240,183 @@ export default function PortfolioV3Embed() {
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       />
       <style>{`
-        #portfolio-v3 .sk-instagram-feed,
-        #portfolio-v3 .sk-instagram-feed > div,
-        #portfolio-v3 .sk-instagram-feed iframe {
+        body.custom-cursor-enabled #portfolio-v3 .eapps-instagram-feed-posts-item-link,
+        body.custom-cursor-enabled #portfolio-v3 .eapps-instagram-feed-posts-slider-nav,
+        body.custom-cursor-enabled .eapps-instagram-feed-popup,
+        body.custom-cursor-enabled .eapps-instagram-feed-popup * {
+          cursor: auto !important;
+        }
+
+        body.custom-cursor-enabled #portfolio-v3 .eapps-instagram-feed-posts-item-link,
+        body.custom-cursor-enabled #portfolio-v3 .eapps-instagram-feed-posts-slider-nav,
+        body.custom-cursor-enabled .eapps-instagram-feed-popup a,
+        body.custom-cursor-enabled .eapps-instagram-feed-popup button,
+        body.custom-cursor-enabled .eapps-instagram-feed-popup-close {
+          cursor: pointer !important;
+        }
+
+        body.custom-cursor-enabled .eapps-instagram-feed-popup-item-media-carousel-wrapper {
+          cursor: ew-resize !important;
+        }
+
+        #portfolio-v3 .${ELFSIGHT_APP_CLASS} {
+          min-height: auto;
+          width: 100%;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-container,
+        #portfolio-v3 .eapps-instagram-feed-content,
+        #portfolio-v3 .eapps-instagram-feed-posts-container {
           width: 100% !important;
           max-width: none !important;
+          background: transparent !important;
         }
 
-        #portfolio-v3 .sk-instagram-feed iframe {
-          min-height: 78vh !important;
+        #portfolio-v3 .eapps-instagram-feed-title-container,
+        #portfolio-v3 .eapps-instagram-feed-data-status-container,
+        #portfolio-v3 .eapps-instagram-feed-error-container,
+        #portfolio-v3 .eapps-instagram-feed-content-loader,
+        #portfolio-v3 a[href*="elfsight.com"] {
+          display: none !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-header-container {
+          margin-bottom: 0 !important;
+          padding: 22px 22px 18px !important;
+          border-bottom: 1px solid rgba(255, 233, 193, 0.08) !important;
+          overflow: hidden !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-header-inner {
+          align-items: center !important;
+          gap: 18px !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-header-user {
+          gap: 14px !important;
+          flex: 0 1 auto !important;
+          min-width: 0 !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-header-user-picture-wrapper {
+          width: 56px !important;
+          height: 56px !important;
+          flex: 0 0 56px !important;
+          border-radius: 999px !important;
+          overflow: hidden !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-header-user-picture {
+          width: 100% !important;
+          height: 100% !important;
+          border-radius: 999px !important;
+          object-fit: cover !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-header-follow-button-wrapper {
+          width: auto !important;
+          flex: 0 0 auto !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-header-follow-button {
+          width: auto !important;
+          min-width: 140px !important;
+          height: 40px !important;
+          padding: 0 16px !important;
+          border-radius: 10px !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-container {
+          overflow: hidden !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-slider {
+          overflow: hidden !important;
+          background: transparent !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-slider-inner {
+          display: flex !important;
+          width: auto !important;
+          min-width: 100% !important;
+          height: auto !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-view {
+          display: flex !important;
+          flex: 0 0 100% !important;
+          flex-wrap: wrap !important;
+          width: 100% !important;
+          height: auto !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-item {
+          margin: 0 !important;
           border: 0 !important;
-          display: block !important;
-          background: #090603 !important;
-          color-scheme: dark !important;
+          box-shadow: none !important;
         }
 
-        @media (min-width: 1024px) {
-          #portfolio-v3 .sk-instagram-feed iframe {
-            min-height: 86vh !important;
-          }
+        #portfolio-v3 .eapps-instagram-feed-posts-item-link,
+        #portfolio-v3 .eapps-instagram-feed-posts-item-media,
+        #portfolio-v3 .eapps-instagram-feed-posts-item-image-wrapper {
+          width: 100% !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-item-image-wrapper {
+          background: #0e0904 !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-item-image {
+          object-fit: cover !important;
+          width: 100% !important;
+          height: 100% !important;
+          top: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          left: 0 !important;
+          transform: none !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-item-image-icon {
+          top: 14px !important;
+          right: 14px !important;
+          left: auto !important;
+          width: 34px !important;
+          height: 34px !important;
+          border-radius: 999px !important;
+          background: rgba(9, 6, 3, 0.68) !important;
+          backdrop-filter: blur(8px) !important;
+          border: 1px solid rgba(255, 228, 176, 0.16) !important;
+          color: #fff6de !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-popup-item-media-carousel-arrow {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 42px !important;
+          height: 42px !important;
+          border-radius: 999px !important;
+          background: rgba(9, 6, 3, 0.72) !important;
+          border: 1px solid rgba(255, 228, 176, 0.18) !important;
+          color: #fff6de !important;
+          opacity: 0.94 !important;
+          backdrop-filter: blur(10px) !important;
+          transition:
+            background-color 0.25s ease,
+            border-color 0.25s ease,
+            transform 0.25s ease,
+            opacity 0.25s ease !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-popup-item-media-carousel-arrow:hover {
+          transform: scale(1.04);
+          background: rgba(26, 15, 5, 0.88) !important;
+          border-color: rgba(255, 207, 112, 0.42) !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-popup-item-media-carousel-arrow-disabled {
+          opacity: 0.35 !important;
         }
       `}</style>
 
@@ -244,27 +444,21 @@ export default function PortfolioV3Embed() {
         </div>
       </div>
 
-      <div className="relative mx-auto max-w-[1600px] px-6 lg:px-8">
-        <div className="relative rounded-[32px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] p-3 shadow-[0_20px_60px_rgba(0,0,0,0.28)] md:p-5">
-          <motion.div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/70 to-transparent"
-            animate={{ opacity: [0.18, 0.7, 0.18] }}
-            transition={{ duration: 3.8, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <div className="pointer-events-none absolute inset-0 rounded-[32px] bg-[radial-gradient(circle_at_top,rgba(199,161,74,0.16),transparent_40%)]" />
-          <div className="pointer-events-none absolute inset-4 rounded-[28px] border border-white/8" />
-          <div className="relative min-h-[78vh] overflow-hidden rounded-[24px] bg-[radial-gradient(circle_at_top,rgba(199,161,74,0.12),transparent_34%),linear-gradient(180deg,#161109,#090603)]">
-            {!isWidgetReady && (
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[linear-gradient(180deg,rgba(9,9,9,0.78),rgba(9,9,9,0.92))] px-6 text-center">
+      <div className="relative mx-auto max-w-[1420px] px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-[24px] border border-white/10 bg-[#12100c]/95 shadow-[0_24px_80px_rgba(0,0,0,0.38)]">
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/50 to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(199,161,74,0.08),transparent_42%)]" />
+          <div className="relative">
+            {!isWidgetReady ? (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[linear-gradient(180deg,rgba(9,9,9,0.74),rgba(9,9,9,0.9))] px-6 text-center">
                 <div className="h-10 w-10 animate-spin rounded-full border-2 border-white/10 border-t-wolf-red" />
                 <p className="text-xs font-heading font-bold uppercase tracking-[0.24em] text-gray-300">
                   Loading Instagram Feed
                 </p>
                 <p className="max-w-md text-sm text-gray-500">
                   {hasWidgetFailed
-                    ? "The widget is taking longer than expected. It will usually recover on retry."
-                    : "Fetching the full Instagram widget for this section."}
+                    ? "The Elfsight embed is taking longer than expected. Try reloading it once."
+                    : "Loading the full Instagram feed for this section."}
                 </p>
                 {hasWidgetFailed ? (
                   <button
@@ -279,13 +473,16 @@ export default function PortfolioV3Embed() {
                   </button>
                 ) : null}
               </div>
-            )}
-            <div
-              key={widgetAttempt}
-              ref={widgetRef}
-              className="sk-instagram-feed h-full w-full"
-              data-embed-id={WIDGET_EMBED_ID}
-            />
+            ) : null}
+
+            <div className="relative p-0">
+              <div
+                key={widgetAttempt}
+                ref={widgetRef}
+                className={ELFSIGHT_APP_CLASS}
+                data-elfsight-app-lazy=""
+              />
+            </div>
           </div>
         </div>
       </div>
