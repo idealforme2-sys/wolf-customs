@@ -152,6 +152,37 @@ export default function PortfolioV3Embed() {
       return;
     }
 
+    const widget = widgetRef.current;
+    if (!widget) {
+      return;
+    }
+
+    const syncTileKinds = () => {
+      widget.querySelectorAll<HTMLElement>(".eapps-instagram-feed-posts-item").forEach((item) => {
+        const href =
+          item.querySelector<HTMLAnchorElement>(".eapps-instagram-feed-posts-item-link")?.href ?? "";
+        item.dataset.previewKind = href.includes("/reel/") ? "reel" : "post";
+      });
+    };
+
+    syncTileKinds();
+
+    const observer = new MutationObserver(() => {
+      syncTileKinds();
+    });
+
+    observer.observe(widget, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [isWidgetReady]);
+
+  useEffect(() => {
+    if (!isWidgetReady) {
+      return;
+    }
+
     const handlePopupCarouselClick = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null;
       if (!target) {
@@ -354,12 +385,18 @@ export default function PortfolioV3Embed() {
           margin: 0 !important;
           border: 0 !important;
           box-shadow: none !important;
+          overflow: hidden !important;
+          background: #0e0904 !important;
         }
 
         #portfolio-v3 .eapps-instagram-feed-posts-item-link,
         #portfolio-v3 .eapps-instagram-feed-posts-item-media,
         #portfolio-v3 .eapps-instagram-feed-posts-item-image-wrapper {
           width: 100% !important;
+          background: #0e0904 !important;
+          line-height: 0 !important;
+          font-size: 0 !important;
+          overflow: hidden !important;
         }
 
         #portfolio-v3 .eapps-instagram-feed-posts-item-image-wrapper {
@@ -367,6 +404,7 @@ export default function PortfolioV3Embed() {
         }
 
         #portfolio-v3 .eapps-instagram-feed-posts-item-image {
+          display: block !important;
           object-fit: cover !important;
           width: 100% !important;
           height: 100% !important;
@@ -375,19 +413,50 @@ export default function PortfolioV3Embed() {
           bottom: 0 !important;
           left: 0 !important;
           transform: none !important;
+          box-shadow: inset 0 0 0 1px #0e0904 !important;
         }
 
         #portfolio-v3 .eapps-instagram-feed-posts-item-image-icon {
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          padding: 0 !important;
           top: 14px !important;
           right: 14px !important;
           left: auto !important;
           width: 34px !important;
           height: 34px !important;
           border-radius: 999px !important;
+          overflow: hidden !important;
           background: rgba(9, 6, 3, 0.68) !important;
           backdrop-filter: blur(8px) !important;
           border: 1px solid rgba(255, 228, 176, 0.16) !important;
           color: #fff6de !important;
+          text-align: center !important;
+          line-height: 1 !important;
+          font-size: 14px !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-item-image-icon svg {
+          width: 16px !important;
+          height: 16px !important;
+          flex: 0 0 16px !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-item[data-preview-kind="reel"] .eapps-instagram-feed-posts-item-image-icon-video {
+          display: flex !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-item[data-preview-kind="reel"] .eapps-instagram-feed-posts-item-image-icon-carousel {
+          display: none !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-item[data-preview-kind="post"] .eapps-instagram-feed-posts-item-image-icon-video {
+          display: none !important;
+        }
+
+        #portfolio-v3 .eapps-instagram-feed-posts-item[data-preview-kind="post"] .eapps-instagram-feed-posts-item-image-icon-carousel {
+          display: flex !important;
         }
 
         #portfolio-v3 .eapps-instagram-feed-popup-item-media-carousel-arrow {
