@@ -451,12 +451,10 @@ export default function PortfolioV3Embed() {
           display: none !important;
         }
 
-        #portfolio-v3 .eapps-instagram-feed-posts-item[data-preview-kind="post"] .eapps-instagram-feed-posts-item-image-icon-video {
-          display: none !important;
-        }
-
+        #portfolio-v3 .eapps-instagram-feed-posts-item[data-preview-kind="post"] .eapps-instagram-feed-posts-item-image-icon,
+        #portfolio-v3 .eapps-instagram-feed-posts-item[data-preview-kind="post"] .eapps-instagram-feed-posts-item-image-icon-video,
         #portfolio-v3 .eapps-instagram-feed-posts-item[data-preview-kind="post"] .eapps-instagram-feed-posts-item-image-icon-carousel {
-          display: flex !important;
+          display: none !important;
         }
 
         #portfolio-v3 .eapps-instagram-feed-popup-item-media-carousel-arrow {
