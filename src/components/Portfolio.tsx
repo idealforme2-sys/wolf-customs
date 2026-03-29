@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, type MouseEvent } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Volume2, VolumeX, ExternalLink } from "lucide-react";
+import { useSiteContent } from "./SiteContentProvider";
 
 const urlsGlob = import.meta.glob<{ default: string }>("../assets/Instagram reels and posts/**/url.txt", {
   eager: true,
@@ -18,9 +19,6 @@ interface MediaItem {
   media: string[];
   link: string;
 }
-
-const LOCAL_PORTFOLIO_DESCRIPTION =
-  "This first portfolio demonstration was done manually on my side by downloading the reels/images, placing them into the website, and linking each one to its original Instagram source. So when someone clicks on an item, it opens the related Instagram post or reel. If you want to be able to edit and update the portfolio yourself, this method would not be the best option moving forward.";
 
 const getFolderName = (path: string) => {
   const parts = path.split("/");
@@ -222,6 +220,8 @@ const ReelCard = ({ item }: { item: MediaItem }) => {
 };
 
 export default function Portfolio() {
+  const { content } = useSiteContent();
+
   return (
     <section id="portfolio" className="relative bg-wolf-black py-32">
       <div className="absolute top-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-wolf-red/30 to-transparent" />
@@ -237,14 +237,14 @@ export default function Portfolio() {
             <div className="mb-6 flex items-center gap-4">
               <div className="h-[1px] w-8 bg-wolf-red" />
               <span className="text-sm font-heading font-bold uppercase tracking-[0.2em] text-wolf-red">
-                Portfolio Ver 1
+                {content.portfolio.eyebrow}
               </span>
             </div>
             <h2 className="mb-6 text-5xl font-heading font-black uppercase leading-none tracking-tighter text-white md:text-7xl">
-              Latest <span className="molten-highlight">Work</span>
+              {content.portfolio.title} <span className="molten-highlight">{content.portfolio.highlight}</span>
             </h2>
             <p className="max-w-2xl text-lg font-light leading-relaxed text-gray-400">
-              {LOCAL_PORTFOLIO_DESCRIPTION}
+              {content.portfolio.description}
             </p>
           </motion.div>
         </div>

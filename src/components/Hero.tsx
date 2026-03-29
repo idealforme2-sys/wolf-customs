@@ -3,15 +3,15 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import Magnetic from "./Magnetic";
 import { useSiteContent } from "./SiteContentProvider";
-import heroBackgroundVideo from "../Untitled design.mp4";
+import heroBackgroundVideo from "../FINAAAAAAAL.mp4";
 
 export default function Hero() {
   const { content } = useSiteContent();
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const videoShellRef = useRef<HTMLDivElement>(null);
   const [videoReady, setVideoReady] = useState(false);
 
+  /* ── video playback management ── */
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -22,19 +22,11 @@ export default function Hero() {
     };
 
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        video.pause();
-        return;
-      }
-
+      if (document.hidden) { video.pause(); return; }
       requestPlayback();
     };
 
-    const handlePause = () => {
-      if (!document.hidden) {
-        requestPlayback();
-      }
-    };
+    const handlePause = () => { if (!document.hidden) requestPlayback(); };
 
     video.addEventListener("canplay", requestPlayback);
     video.addEventListener("pause", handlePause);
@@ -47,112 +39,56 @@ export default function Hero() {
     };
   }, []);
 
+  /* ── intersection observer for play/pause ── */
   useEffect(() => {
     const section = sectionRef.current;
     const video = videoRef.current;
-    const shell = videoShellRef.current;
-    if (!section || !video || !shell) {
-      return;
-    }
-
-    let frameId = 0;
-    let refreshFlip = false;
-    let isHeroActive = true;
-
-    const forceRepaint = () => {
-      refreshFlip = !refreshFlip;
-      shell.style.transform = refreshFlip ? "translate3d(0,0,0.01px)" : "translate3d(0,0,0)";
-    };
-
-    const stop = () => {
-      if (frameId) {
-        window.cancelAnimationFrame(frameId);
-        frameId = 0;
-      }
-      shell.style.transform = "";
-    };
-
-    const tick = () => {
-      if (document.hidden || !isHeroActive) {
-        frameId = 0;
-        return;
-      }
-
-      forceRepaint();
-
-      if (video.paused) {
-        video.play().catch(() => {});
-      }
-
-      frameId = window.requestAnimationFrame(tick);
-    };
-
-    const start = () => {
-      if (frameId || document.hidden || !isHeroActive) {
-        return;
-      }
-
-      frameId = window.requestAnimationFrame(tick);
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
-        stop();
-        return;
-      }
-
-      start();
-    };
+    if (!section || !video) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        isHeroActive = entry.isIntersecting && entry.intersectionRatio > 0.45;
-
-        if (isHeroActive) {
-          start();
+        if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+          if (video.paused && !document.hidden) video.play().catch(() => {});
         } else {
-          stop();
+          video.pause();
         }
       },
-      {
-        threshold: [0, 0.45, 0.7],
-      },
+      { threshold: [0, 0.3] },
     );
-
     observer.observe(section);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
-    start();
-
-    return () => {
-      observer.disconnect();
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      stop();
-    };
+    return () => observer.disconnect();
   }, []);
 
-  const textVariants = {
-    hidden: { opacity: 0, y: 100 },
+
+  /* ── stagger variants ── */
+  const letterVariants = {
+    hidden: { opacity: 0, y: 80, rotateX: 45 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
+      rotateX: 0,
       transition: {
-        delay: 1.5 + i * 0.1,
-        duration: 1,
+        delay: 1.3 + i * 0.07,
+        duration: 0.9,
         ease: [0.16, 1, 0.3, 1],
       },
     }),
   };
 
+  const fadeUp = (delay: number) => ({
+    initial: { opacity: 0, y: 28 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] },
+  });
+
   return (
     <section
       ref={sectionRef}
-      data-native-cursor-zone="true"
       className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-wolf-black pt-32 pb-24"
     >
-      {/* Dynamic Background Video */}
+      {/* ── Background video + overlays ── */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,218,134,0.14),transparent_30%),linear-gradient(180deg,#110b05_0%,#060301_100%)]" />
-        <div ref={videoShellRef} className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden">
           <video
             ref={videoRef}
             autoPlay
@@ -162,113 +98,136 @@ export default function Hero() {
             playsInline
             disablePictureInPicture
             onLoadedData={() => setVideoReady(true)}
-            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-500 ${videoReady ? "opacity-100" : "opacity-0"}`}
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
           >
             <source src={heroBackgroundVideo} type="video/mp4" />
           </video>
         </div>
-        <div className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(8,5,2,0.84)_0%,rgba(8,5,2,0.34)_34%,rgba(8,5,2,0.56)_68%,rgba(8,5,2,0.9)_100%),radial-gradient(circle_at_50%_22%,rgba(255,214,126,0.11)_0%,transparent_32%),linear-gradient(108deg,rgba(0,0,0,0.15)_0%,transparent_24%,rgba(255,224,149,0.045)_46%,transparent_62%,rgba(0,0,0,0.12)_100%)]" />
+
+        {/* single combined overlay instead of multiple layers */}
+        <div className="absolute inset-0 z-10" style={{
+          background: `
+            linear-gradient(180deg, rgba(6,3,1,0.88) 0%, rgba(8,5,2,0.28) 28%, rgba(8,5,2,0.42) 58%, rgba(8,5,2,0.92) 100%),
+            radial-gradient(ellipse at 50% 30%, rgba(243,163,55,0.07) 0%, transparent 55%),
+            radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%)
+          `
+        }} />
       </div>
 
+
+      {/* ── Content ── */}
       <div className="relative z-30 max-w-7xl mx-auto px-6 lg:px-8 w-full flex flex-col items-center text-center">
+        {/* Eyebrow */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 1.2, ease: "easeOut" }}
-          className="flex items-center gap-4 mb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1.2, delay: 1 }}
+          className="flex items-center gap-4 mb-8"
         >
-          <div className="h-[1px] w-8 md:w-16 bg-wolf-red" />
-          <span className="text-wolf-red font-heading tracking-[0.4em] uppercase text-xs md:text-sm font-bold">
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.8, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="h-[1px] w-10 md:w-20 bg-gradient-to-r from-transparent to-wolf-red origin-right"
+          />
+          <span className="text-wolf-red font-heading tracking-[0.45em] uppercase text-[10px] md:text-xs font-bold">
             {content.hero.eyebrow}
           </span>
-          <div className="h-[1px] w-8 md:w-16 bg-wolf-red" />
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.8, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="h-[1px] w-10 md:w-20 bg-gradient-to-l from-transparent to-wolf-red origin-left"
+          />
         </motion.div>
 
-        <div className="overflow-visible relative mb-6">
-          <h1 className="text-[14vw] md:text-[9vw] lg:text-[8rem] font-heading font-black tracking-normal leading-[0.85] uppercase flex flex-col items-center">
-            <div className="flex overflow-visible [filter:drop-shadow(0_0_18px_rgba(255,255,255,0.16))]">
+        {/* Title */}
+        <div className="overflow-visible relative mb-4" style={{ perspective: "600px" }}>
+          <h1 className="text-[15vw] md:text-[9.5vw] lg:text-[8.5rem] font-heading font-black tracking-tight leading-[0.82] uppercase flex flex-col items-center">
+            {/* WOLF */}
+            <div className="flex overflow-visible [filter:drop-shadow(0_0_24px_rgba(255,255,255,0.12))]">
               {["W", "O", "L", "F"].map((char, i) => (
                 <motion.span
                   key={i}
                   custom={i}
-                  variants={textVariants}
+                  variants={letterVariants}
                   initial="hidden"
                   animate="visible"
-                  className="bg-[linear-gradient(180deg,#ffffff_0%,#fffdf8_22%,#f3eee4_58%,#cfc6b7_100%)] bg-clip-text text-transparent [-webkit-text-stroke:0.35px_rgba(255,255,255,0.2)] p-[0.2em] -m-[0.2em]"
+                  className="hero-title-light p-[0.15em] -m-[0.15em]"
                 >
                   {char}
                 </motion.span>
               ))}
             </div>
-            <div className="mt-2 flex overflow-visible [filter:drop-shadow(0_0_18px_rgba(255,212,122,0.16))]">
+            {/* CUSTOMS */}
+            <div className="mt-1 flex overflow-visible [filter:drop-shadow(0_0_22px_rgba(255,195,90,0.18))]">
               {["C", "U", "S", "T", "O", "M", "S"].map((char, i) => (
                 <motion.span
                   key={i}
                   custom={i + 4}
-                  variants={textVariants}
+                  variants={letterVariants}
                   initial="hidden"
                   animate="visible"
-                  className="bg-[linear-gradient(180deg,#fff8dc_0%,#ffe199_18%,#ffc45d_42%,#f39a32_64%,#cf6c0a_84%,#7f3000_100%)] bg-clip-text text-transparent [-webkit-text-stroke:0.35px_rgba(255,242,214,0.14)] p-[0.2em] -m-[0.2em]"
+                  className="hero-title-gold p-[0.15em] -m-[0.15em]"
                 >
                   {char}
                 </motion.span>
               ))}
             </div>
           </h1>
+
+
         </div>
 
+        {/* Description */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 2.5 }}
-          className="text-lg md:text-2xl text-gray-300 max-w-3xl mb-12 font-light leading-relaxed"
+          {...fadeUp(2.4)}
+          className="text-lg md:text-2xl text-gray-300 max-w-2xl mb-14 font-light leading-relaxed"
         >
           {content.hero.description}
         </motion.p>
 
+        {/* CTAs */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 2.8 }}
-          className="flex flex-col sm:flex-row gap-6"
+          {...fadeUp(2.7)}
+          className="flex flex-col sm:flex-row gap-5"
         >
           <Magnetic>
             <a
               href="#contact"
-              className="group relative px-10 py-5 bg-wolf-red text-wolf-black font-heading tracking-[0.2em] uppercase overflow-hidden flex items-center justify-center gap-3 text-sm font-bold shadow-[0_0_34px_rgba(243,163,55,0.28)] hover:shadow-[0_0_56px_rgba(243,163,55,0.42)] transition-shadow duration-500"
+              className="hero-cta-primary group relative px-11 py-5 font-heading tracking-[0.22em] uppercase overflow-hidden flex items-center justify-center gap-3 text-sm font-bold"
             >
-              <span className="relative z-10">{content.hero.primaryCtaLabel}</span>
-              <ChevronRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              <div className="absolute inset-0 bg-[linear-gradient(135deg,#fff7d6_0%,#ffe39f_50%,#ffbe57_100%)] transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out" />
-              <div className="absolute inset-0 bg-wolf-red-hover transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out delay-75" />
+              <span className="relative z-10 text-wolf-black">{content.hero.primaryCtaLabel}</span>
+              <ChevronRight className="relative z-10 w-5 h-5 text-wolf-black group-hover:translate-x-1.5 transition-transform duration-300" />
+              <div className="hero-cta-shine absolute inset-0 z-0" />
             </a>
           </Magnetic>
 
           <Magnetic>
             <a
               href="#portfolio"
-              className="group relative overflow-hidden px-10 py-5 border border-white/20 text-white font-heading tracking-[0.2em] uppercase hover:bg-wolf-silver transition-all duration-500 flex items-center justify-center text-sm font-bold backdrop-blur-sm"
+              className="hero-cta-secondary group relative overflow-hidden px-11 py-5 font-heading tracking-[0.22em] uppercase flex items-center justify-center text-sm font-bold backdrop-blur-sm"
             >
-              <span className="relative z-10 transition-colors duration-500 group-hover:text-wolf-black">
+              <span className="relative z-10 transition-colors duration-400 text-white group-hover:text-wolf-black">
                 {content.hero.secondaryCtaLabel}
               </span>
+              <div className="absolute inset-0 bg-wolf-silver scale-y-0 origin-bottom group-hover:scale-y-100 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
             </a>
           </Magnetic>
         </motion.div>
       </div>
 
+      {/* ── Rotating badge (desktop) ── */}
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, delay: 3 }}
-        className="absolute bottom-12 right-12 z-30 hidden lg:flex items-center justify-center w-32 h-32"
+        className="absolute bottom-14 right-14 z-30 hidden lg:flex items-center justify-center w-28 h-28"
       >
         <Magnetic>
           <div className="relative w-full h-full flex items-center justify-center cursor-hover">
-            <motion.div
-              className="hero-spin-slow absolute inset-0 border border-wolf-red/30 rounded-full border-dashed"
-            />
-            <motion.svg
+            <div className="hero-spin-slow absolute inset-0 border border-wolf-red/20 rounded-full border-dashed" />
+            <svg
               viewBox="0 0 100 100"
               className="hero-spin-slower w-full h-full text-wolf-silver fill-current"
             >
@@ -282,7 +241,7 @@ export default function Hero() {
                   {content.hero.rotatingBadgeText}
                 </textPath>
               </text>
-            </motion.svg>
+            </svg>
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <div className="w-2 h-2 bg-wolf-red rounded-full shadow-[0_0_14px_rgba(243,163,55,0.9)]" />
             </div>
@@ -290,20 +249,19 @@ export default function Hero() {
         </Magnetic>
       </motion.div>
 
+      {/* ── Scroll indicator ── */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 3.5, duration: 1 }}
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-1.5"
+        transition={{ delay: 3.4, duration: 1 }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2"
       >
-        <span className="text-[8px] uppercase tracking-[0.3em] text-gray-500 font-heading font-bold">
+        <div className="hero-mouse-icon">
+          <div className="hero-mouse-wheel" />
+        </div>
+        <span className="text-[8px] uppercase tracking-[0.35em] text-gray-500 font-heading font-bold">
           Scroll
         </span>
-        <div className="w-[1px] h-6 bg-gray-800 relative overflow-hidden">
-          <motion.div
-            className="hero-scroll-indicator w-full h-1/2 bg-wolf-red absolute top-0"
-          />
-        </div>
       </motion.div>
     </section>
   );

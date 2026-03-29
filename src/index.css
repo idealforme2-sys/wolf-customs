@@ -453,16 +453,117 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: translateY(24px); }
 }
 
+/* ── Hero Title Gradients ── */
+.hero-title-light {
+  background: linear-gradient(180deg, #ffffff 0%, #fffdf8 18%, #f3eee4 50%, #d4ccc0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 0.3px rgba(255, 255, 255, 0.15);
+}
+
+.hero-title-gold {
+  background: linear-gradient(180deg, #fff8dc 0%, #ffe199 14%, #ffc45d 36%, #f39a32 56%, #cf6c0a 78%, #8a3800 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: 0.3px rgba(255, 242, 214, 0.1);
+}
+
+/* ── Hero CTA Buttons ── */
+.hero-cta-primary {
+  background: linear-gradient(135deg, #fff1c4 0%, #ffcb6c 26%, #f29b34 58%, #d97a12 100%);
+  box-shadow:
+    0 0 0 1px rgba(255, 222, 150, 0.2),
+    0 16px 44px rgba(243, 163, 55, 0.3),
+    inset 0 1px 0 rgba(255, 246, 216, 0.5);
+  transition: box-shadow 0.5s ease, transform 0.3s ease;
+}
+
+.hero-cta-primary:hover {
+  box-shadow:
+    0 0 0 1px rgba(255, 222, 150, 0.35),
+    0 20px 56px rgba(243, 163, 55, 0.45),
+    0 0 80px rgba(255, 200, 80, 0.15),
+    inset 0 1px 0 rgba(255, 246, 216, 0.6);
+}
+
+.hero-cta-shine {
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.25) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.hero-cta-primary:hover .hero-cta-shine {
+  transform: translateX(100%);
+}
+
+.hero-cta-secondary {
+  border: 1px solid rgba(255, 240, 199, 0.15);
+  transition: border-color 0.5s ease;
+}
+
+.hero-cta-secondary:hover {
+  border-color: rgba(255, 240, 199, 0.35);
+}
+
+/* ── Hero Mouse Scroll Indicator ── */
+.hero-mouse-icon {
+  width: 22px;
+  height: 34px;
+  border: 1.5px solid rgba(255, 240, 199, 0.22);
+  border-radius: 11px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 7px;
+}
+
+.hero-mouse-wheel {
+  width: 3px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--color-wolf-red);
+  animation: hero-mouse-scroll 1.8s ease-in-out infinite;
+}
+
+@keyframes hero-mouse-scroll {
+  0%   { opacity: 1; transform: translateY(0); }
+  50%  { opacity: 0.4; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Floating Embers ── */
+.hero-ember {
+  position: absolute;
+  bottom: -10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffc55c, #f39a32);
+  box-shadow: 0 0 6px 1px rgba(243, 163, 55, 0.5);
+  animation: hero-ember-rise linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes hero-ember-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% { opacity: var(--ember-opacity, 0.3); }
+  70% { opacity: var(--ember-opacity, 0.3); }
+  100% {
+    transform: translateY(-105vh) translateX(40px) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* ── Hero spins ── */
 .hero-spin-slow {
   animation: spin 10s linear infinite;
 }
 
 .hero-spin-slower {
   animation: spin 20s linear infinite;
-}
-
-.hero-scroll-indicator {
-  animation: hero-scroll-indicator 1.5s linear infinite;
 }
 
 /* Noise Overlay */
