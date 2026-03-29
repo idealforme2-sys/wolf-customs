@@ -3,36 +3,26 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import Magnetic from "./Magnetic";
 import { useSiteContent } from "./SiteContentProvider";
+import heroBackgroundVideo from "../Untitled design.mp4";
 
 export default function Hero() {
   const { content } = useSiteContent();
+  const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const videoShellRef = useRef<HTMLDivElement>(null);
   const [videoReady, setVideoReady] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    let replayTimeout: number | null = null;
-
-    const clearReplayTimeout = () => {
-      if (replayTimeout !== null) {
-        window.clearTimeout(replayTimeout);
-        replayTimeout = null;
-      }
-    };
-
     const requestPlayback = () => {
-      if (document.hidden) return;
-      clearReplayTimeout();
-      replayTimeout = window.setTimeout(() => {
-        video.play().catch(() => {});
-      }, 80);
+      if (document.hidden || !video.paused) return;
+      video.play().catch(() => {});
     };
 
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        clearReplayTimeout();
         video.pause();
         return;
       }
@@ -40,19 +30,103 @@ export default function Hero() {
       requestPlayback();
     };
 
+    const handlePause = () => {
+      if (!document.hidden) {
+        requestPlayback();
+      }
+    };
+
     video.addEventListener("canplay", requestPlayback);
-    video.addEventListener("playing", clearReplayTimeout);
-    video.addEventListener("waiting", requestPlayback);
-    video.addEventListener("stalled", requestPlayback);
+    video.addEventListener("pause", handlePause);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      clearReplayTimeout();
       video.removeEventListener("canplay", requestPlayback);
-      video.removeEventListener("playing", clearReplayTimeout);
-      video.removeEventListener("waiting", requestPlayback);
-      video.removeEventListener("stalled", requestPlayback);
+      video.removeEventListener("pause", handlePause);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    const video = videoRef.current;
+    const shell = videoShellRef.current;
+    if (!section || !video || !shell) {
+      return;
+    }
+
+    let frameId = 0;
+    let refreshFlip = false;
+    let isHeroActive = true;
+
+    const forceRepaint = () => {
+      refreshFlip = !refreshFlip;
+      shell.style.transform = refreshFlip ? "translate3d(0,0,0.01px)" : "translate3d(0,0,0)";
+    };
+
+    const stop = () => {
+      if (frameId) {
+        window.cancelAnimationFrame(frameId);
+        frameId = 0;
+      }
+      shell.style.transform = "";
+    };
+
+    const tick = () => {
+      if (document.hidden || !isHeroActive) {
+        frameId = 0;
+        return;
+      }
+
+      forceRepaint();
+
+      if (video.paused) {
+        video.play().catch(() => {});
+      }
+
+      frameId = window.requestAnimationFrame(tick);
+    };
+
+    const start = () => {
+      if (frameId || document.hidden || !isHeroActive) {
+        return;
+      }
+
+      frameId = window.requestAnimationFrame(tick);
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stop();
+        return;
+      }
+
+      start();
+    };
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isHeroActive = entry.isIntersecting && entry.intersectionRatio > 0.45;
+
+        if (isHeroActive) {
+          start();
+        } else {
+          stop();
+        }
+      },
+      {
+        threshold: [0, 0.45, 0.7],
+      },
+    );
+
+    observer.observe(section);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    start();
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      stop();
     };
   }, []);
 
@@ -70,11 +144,15 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-wolf-black pt-32 pb-24">
+    <section
+      ref={sectionRef}
+      data-native-cursor-zone="true"
+      className="relative min-h-screen w-full flex flex-col justify-center overflow-hidden bg-wolf-black pt-32 pb-24"
+    >
       {/* Dynamic Background Video */}
-      <div className="absolute inset-0 z-0 isolate [contain:paint]">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,218,134,0.14),transparent_30%),linear-gradient(180deg,#110b05_0%,#060301_100%)]" />
-        <div className="absolute inset-0 overflow-hidden [backface-visibility:hidden] [contain:paint] [transform:translateZ(0)]">
+        <div ref={videoShellRef} className="absolute inset-0 overflow-hidden">
           <video
             ref={videoRef}
             autoPlay
@@ -84,13 +162,12 @@ export default function Hero() {
             playsInline
             disablePictureInPicture
             onLoadedData={() => setVideoReady(true)}
-            className={`absolute inset-0 h-full w-full object-cover object-center [backface-visibility:hidden] [transform:translateZ(0)] [will-change:transform,opacity] transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-500 ${videoReady ? "opacity-100" : "opacity-0"}`}
           >
-            <source src="/hero-background.mp4" type="video/mp4" />
+            <source src={heroBackgroundVideo} type="video/mp4" />
           </video>
         </div>
-        <div className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(8,5,2,0.84)_0%,rgba(8,5,2,0.36)_36%,rgba(8,5,2,0.58)_70%,rgba(8,5,2,0.9)_100%),radial-gradient(circle_at_center,rgba(255,204,110,0.1)_0%,transparent_58%)]" />
-        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_top,rgba(255,241,192,0.08)_0%,transparent_28%),linear-gradient(105deg,rgba(0,0,0,0.18)_0%,transparent_24%,rgba(255,224,149,0.05)_46%,transparent_62%,rgba(0,0,0,0.14)_100%)] opacity-90" />
+        <div className="absolute inset-0 z-10 bg-[linear-gradient(180deg,rgba(8,5,2,0.84)_0%,rgba(8,5,2,0.34)_34%,rgba(8,5,2,0.56)_68%,rgba(8,5,2,0.9)_100%),radial-gradient(circle_at_50%_22%,rgba(255,214,126,0.11)_0%,transparent_32%),linear-gradient(108deg,rgba(0,0,0,0.15)_0%,transparent_24%,rgba(255,224,149,0.045)_46%,transparent_62%,rgba(0,0,0,0.12)_100%)]" />
       </div>
 
       <div className="relative z-30 max-w-7xl mx-auto px-6 lg:px-8 w-full flex flex-col items-center text-center">
@@ -189,15 +266,11 @@ export default function Hero() {
         <Magnetic>
           <div className="relative w-full h-full flex items-center justify-center cursor-hover">
             <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
-              className="absolute inset-0 border border-wolf-red/30 rounded-full border-dashed"
+              className="hero-spin-slow absolute inset-0 border border-wolf-red/30 rounded-full border-dashed"
             />
             <motion.svg
-              animate={{ rotate: 360 }}
-              transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
               viewBox="0 0 100 100"
-              className="w-full h-full text-wolf-silver fill-current"
+              className="hero-spin-slower w-full h-full text-wolf-silver fill-current"
             >
               <path
                 id="circlePath"
@@ -228,9 +301,7 @@ export default function Hero() {
         </span>
         <div className="w-[1px] h-6 bg-gray-800 relative overflow-hidden">
           <motion.div
-            animate={{ y: [0, 24] }}
-            transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
-            className="w-full h-1/2 bg-wolf-red absolute top-0"
+            className="hero-scroll-indicator w-full h-1/2 bg-wolf-red absolute top-0"
           />
         </div>
       </motion.div>

@@ -30,7 +30,7 @@ export default function Preloader({ onComplete }: { onComplete: () => void; key?
         animate={{ y: isExiting ? '-100%' : 0 }}
         transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
       >
-        <div className="translate-y-[50%] whitespace-nowrap px-4 text-[14vw] font-heading font-black tracking-[0.14em] flex items-center gap-2 leading-none sm:text-6xl sm:gap-3 sm:tracking-[0.18em] md:text-8xl md:gap-4 md:tracking-widest">
+        <div className="translate-y-[50%] whitespace-nowrap px-4 text-[clamp(2rem,8.8vw,3.4rem)] font-heading font-black tracking-[0.06em] flex items-center gap-1 leading-none sm:text-6xl sm:gap-3 sm:tracking-[0.18em] md:text-8xl md:gap-4 md:tracking-widest">
           <span className="molten-swap-primary">WOLF</span>
           <span className="text-white">CUSTOMS</span>
         </div>
@@ -43,7 +43,7 @@ export default function Preloader({ onComplete }: { onComplete: () => void; key?
         animate={{ y: isExiting ? '100%' : 0 }}
         transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
       >
-        <div className="-translate-y-[50%] whitespace-nowrap px-4 text-[14vw] font-heading font-black tracking-[0.14em] flex items-center gap-2 leading-none sm:text-6xl sm:gap-3 sm:tracking-[0.18em] md:text-8xl md:gap-4 md:tracking-widest">
+        <div className="-translate-y-[50%] whitespace-nowrap px-4 text-[clamp(2rem,8.8vw,3.4rem)] font-heading font-black tracking-[0.06em] flex items-center gap-1 leading-none sm:text-6xl sm:gap-3 sm:tracking-[0.18em] md:text-8xl md:gap-4 md:tracking-widest">
           <span className="molten-swap-primary">WOLF</span>
           <span className="text-white">CUSTOMS</span>
         </div>

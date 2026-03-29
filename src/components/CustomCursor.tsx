@@ -49,6 +49,7 @@ export default function CustomCursor() {
 
       const target = e.target as HTMLElement;
       const usesNativeCursor =
+        target.closest('[data-native-cursor-zone="true"]') !== null ||
         target.closest('.eapps-instagram-feed-popup') !== null ||
         target.closest('.eapps-instagram-feed-posts-item-link') !== null ||
         target.closest('.eapps-instagram-feed-posts-slider-nav') !== null ||
@@ -123,11 +124,11 @@ export default function CustomCursor() {
         transition={{ type: 'tween', ease: 'backOut', duration: 0.1 }}
       />
       <motion.div
-        className="pointer-events-none fixed left-0 top-0 z-[9999] hidden h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-wolf-red/60 bg-black/15 backdrop-blur-[2px] shadow-[0_0_30px_rgba(199,161,74,0.2)] md:flex"
+        className="pointer-events-none fixed left-0 top-0 z-[9999] hidden h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-wolf-red/60 bg-[radial-gradient(circle_at_center,rgba(255,226,162,0.12),rgba(0,0,0,0.02)_68%)] shadow-[0_0_20px_rgba(199,161,74,0.16)] md:flex"
         style={{ x: ringX, y: ringY }}
         animate={{
           scale: isHovering ? 1.2 : 1,
-          backgroundColor: isHovering ? 'rgba(199,161,74,0.9)' : 'rgba(0,0,0,0.08)',
+          backgroundColor: isHovering ? 'rgba(199,161,74,0.88)' : 'rgba(0,0,0,0.04)',
         }}
         transition={{ type: 'tween', ease: 'backOut', duration: 0.2 }}
       >

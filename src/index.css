@@ -448,6 +448,23 @@ h1, h2, h3, h4, h5, h6 {
   100% { transform: translateX(-50%); }
 }
 
+@keyframes hero-scroll-indicator {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(24px); }
+}
+
+.hero-spin-slow {
+  animation: spin 10s linear infinite;
+}
+
+.hero-spin-slower {
+  animation: spin 20s linear infinite;
+}
+
+.hero-scroll-indicator {
+  animation: hero-scroll-indicator 1.5s linear infinite;
+}
+
 /* Noise Overlay */
 .noise-bg {
   position: absolute;
