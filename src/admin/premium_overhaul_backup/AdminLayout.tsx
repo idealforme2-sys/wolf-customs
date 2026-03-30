@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Outlet, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";

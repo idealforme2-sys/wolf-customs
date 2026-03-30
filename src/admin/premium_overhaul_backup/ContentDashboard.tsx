@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { doc, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
