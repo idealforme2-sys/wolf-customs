@@ -1,15 +1,14 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { ChevronRight } from "lucide-react";
 import Magnetic from "./Magnetic";
 import { useSiteContent } from "./SiteContentProvider";
-import heroBackgroundVideo from "../FINAAAAAAAL.mp4";
+
 
 export default function Hero() {
   const { content } = useSiteContent();
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoReady, setVideoReady] = useState(false);
 
   /* ── video playback management ── */
   useEffect(() => {
@@ -97,10 +96,9 @@ export default function Hero() {
             preload="auto"
             playsInline
             disablePictureInPicture
-            onLoadedData={() => setVideoReady(true)}
-            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-700 ${videoReady ? "opacity-100" : "opacity-0"}`}
+            className="absolute inset-0 h-full w-full object-cover object-center"
           >
-            <source src={heroBackgroundVideo} type="video/mp4" />
+            <source src="/hero-bg.mp4" type="video/mp4" />
           </video>
         </div>
 
