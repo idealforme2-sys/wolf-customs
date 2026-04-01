@@ -18,7 +18,7 @@ export default function AdminLayout() {
   };
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-3 rounded-[20px] px-4 py-3 text-sm font-heading uppercase tracking-widest transition-all duration-200 ${
+    `flex min-w-0 items-center justify-center gap-2 rounded-[18px] px-2 py-3 text-[11px] font-heading uppercase tracking-[0.14em] transition-all duration-200 md:justify-start md:gap-3 md:rounded-[20px] md:px-4 md:text-sm md:tracking-widest ${
       isActive
         ? "bg-[linear-gradient(135deg,#fff1c4_0%,#ffcb6c_24%,#f29b34_56%,#bf5900_100%)] text-wolf-black shadow-[0_14px_30px_rgba(243,163,55,0.24),inset_0_1px_0_rgba(255,246,216,0.38)]"
         : "text-gray-200 hover:text-white hover:bg-[linear-gradient(180deg,rgba(255,244,214,0.09),rgba(37,20,4,0.82))] hover:border-wolf-red/25"
@@ -99,7 +99,7 @@ export default function AdminLayout() {
           </div>
         </div>
 
-        <nav className="flex-none md:flex-1 flex flex-row md:flex-col overflow-x-auto py-2 md:py-4 px-2 md:px-3 space-x-2 md:space-x-0 md:space-y-1">
+        <nav className="grid flex-none grid-cols-3 gap-2 px-2 py-2 md:flex md:flex-1 md:flex-col md:space-y-1 md:px-3 md:py-4">
           <NavLink to="/admin/dashboard" className={linkClass}>
             <LayoutDashboard className="w-4 h-4" /> Overview
           </NavLink>
