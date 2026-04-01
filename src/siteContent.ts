@@ -93,6 +93,7 @@ export interface PortfolioContent {
   title: string;
   highlight: string;
   description: string;
+  useCustomItems?: boolean;
   items: PortfolioItem[];
 }
 
@@ -239,6 +240,7 @@ export const defaultSiteContent: SiteContent = {
     title: "Latest",
     highlight: "Work",
     description: PORTFOLIO_DEFAULT_DESCRIPTION,
+    useCustomItems: false,
     items: [],
   },
   faq: {
@@ -374,6 +376,9 @@ export function mergeSiteContent(incoming?: Partial<SiteContent> | null): SiteCo
     portfolio: {
       ...defaultSiteContent.portfolio,
       ...(incoming?.portfolio ?? {}),
+      useCustomItems:
+        incoming?.portfolio?.useCustomItems ??
+        Boolean(Array.isArray(incoming?.portfolio?.items) && incoming!.portfolio!.items.length),
       items: Array.isArray(incoming?.portfolio?.items)
         ? incoming!.portfolio!.items
             .map((item): PortfolioItem => ({

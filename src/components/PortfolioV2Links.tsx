@@ -1,15 +1,13 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode } from "react";
 import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, ExternalLink, Volume2, VolumeX } from "lucide-react";
 import { useSiteContent } from "./SiteContentProvider";
-
-const urlsGlob = import.meta.glob<{ default: string }>("../assets/Instagram reels and posts/**/url.txt", {
-  eager: true,
-  query: "?raw",
-});
+import { getInstagramEmbedUrl, getInstagramItemType, normalizeInstagramUrl, resolvePortfolioItems } from "../utils/portfolioInstagram";
 
 interface EmbedItem {
   id: string;
   type: "post" | "reel";
+  media: string[];
   link: string;
 }
 
@@ -31,67 +29,8 @@ const EMBED_CROP_MAP: Record<string, { frame: string; iframe: string }> = {
 const EMBED_PORTFOLIO_DESCRIPTION =
   "This version is simple: you paste the Instagram post or reel link into the owner dashboard, and that content will show on the website. I recommend it because it allows you to select handpicked posts and reels that best represent the business, which is often better than showing every single piece of Instagram content.";
 
-const getFolderName = (path: string) => {
-  const parts = path.split("/");
-  return parts[parts.length - 2];
-};
-
-const compareFolders = (a: string, b: string) => {
-  const typeA = a.startsWith("Reel") ? "reel" : "post";
-  const typeB = b.startsWith("Reel") ? "reel" : "post";
-
-  if (typeA !== typeB) {
-    return typeA === "post" ? -1 : 1;
-  }
-
-  const numA = parseInt(a.replace(/\D/g, ""), 10) || 0;
-  const numB = parseInt(b.replace(/\D/g, ""), 10) || 0;
-  return numA - numB;
-};
-
-const normalizeInstagramUrl = (value: string) => {
-  const trimmed = value.trim();
-  if (!trimmed) {
-    return "";
-  }
-
-  try {
-    const parsed = new URL(trimmed);
-    const cleanedPath = parsed.pathname.endsWith("/") ? parsed.pathname : `${parsed.pathname}/`;
-    return `${parsed.origin}${cleanedPath}`;
-  } catch {
-    return "";
-  }
-};
-
-const getEmbedUrl = (url: string) => {
-  const normalized = normalizeInstagramUrl(url);
-  if (!normalized) {
-    return "";
-  }
-
-  try {
-    const parsed = new URL(normalized);
-    return `${parsed.origin}${parsed.pathname}embed/`;
-  } catch {
-    return "";
-  }
-};
-
-const fallbackEmbedItems: EmbedItem[] = Object.entries(urlsGlob)
-  .map(([path, module]) => {
-    const folder = getFolderName(path);
-    return {
-      id: folder,
-      type: (folder.startsWith("Reel") ? "reel" : "post") as EmbedItem["type"],
-      link: normalizeInstagramUrl(module.default),
-    };
-  })
-  .filter((item) => item.link)
-  .sort((a, b) => compareFolders(a.id, b.id));
-
 function EmbedCard({ item }: { item: EmbedItem }) {
-  const embedUrl = getEmbedUrl(item.link);
+  const embedUrl = getInstagramEmbedUrl(item.link);
   const crop = EMBED_CROP_MAP[item.id] ?? (item.type === "reel"
     ? { frame: "h-[610px] md:h-[690px]", iframe: "h-[980px] md:h-[1060px]" }
     : { frame: "h-[500px] md:h-[560px]", iframe: "h-[820px] md:h-[900px]" });
@@ -114,27 +53,180 @@ function EmbedCard({ item }: { item: EmbedItem }) {
   );
 }
 
+function PreviewShell({ children }: { children: ReactNode }) {
+  return (
+    <div className="break-inside-avoid overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] shadow-[0_20px_60px_rgba(0,0,0,0.28)]">
+      <div className="bg-[radial-gradient(circle_at_top,rgba(199,161,74,0.12),transparent_32%),linear-gradient(180deg,#161109,#090603)] p-2">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function PostPreviewCard({ item }: { item: EmbedItem }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const media = item.media.filter((value) => value.trim());
+  const currentMedia = media[currentIndex] ?? "";
+
+  const nextSlide = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setCurrentIndex((prev) => (prev === media.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevSlide = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    setCurrentIndex((prev) => (prev === 0 ? media.length - 1 : prev - 1));
+  };
+
+  return (
+    <PreviewShell>
+      <div className="group relative overflow-hidden rounded-[24px] border border-white/8 bg-black aspect-[4/5]">
+        {currentMedia ? <img src={currentMedia} alt={item.id} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" /> : null}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+
+        {media.length > 1 ? (
+          <>
+            <button
+              type="button"
+              onClick={prevSlide}
+              className="absolute left-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/55 text-white transition-colors hover:border-wolf-red hover:bg-wolf-red hover:text-wolf-black"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={nextSlide}
+              className="absolute right-3 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/10 bg-black/55 text-white transition-colors hover:border-wolf-red hover:bg-wolf-red hover:text-wolf-black"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+            <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-1.5">
+              {media.map((_, index) => (
+                <span
+                  key={index}
+                  className={`h-1.5 w-1.5 rounded-full ${index === currentIndex ? "bg-wolf-red" : "bg-white/45"}`}
+                />
+              ))}
+            </div>
+          </>
+        ) : null}
+
+        {item.link ? (
+          <a
+            href={item.link}
+            target="_blank"
+            rel="noreferrer"
+            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-black/55 text-white transition-colors hover:border-wolf-red hover:bg-wolf-red hover:text-wolf-black"
+          >
+            <ExternalLink className="h-4 w-4" />
+          </a>
+        ) : null}
+      </div>
+    </PreviewShell>
+  );
+}
+
+function ReelPreviewCard({ item }: { item: EmbedItem }) {
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoSrc = item.media.find((value) => value.trim()) ?? "";
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(video);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <PreviewShell>
+      <div className="group relative overflow-hidden rounded-[24px] border border-white/8 bg-black aspect-[9/14]">
+        {videoSrc ? (
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            autoPlay
+            loop
+            muted={isMuted}
+            playsInline
+            preload="metadata"
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : null}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsMuted((current) => {
+              const next = !current;
+              if (videoRef.current) {
+                videoRef.current.muted = next;
+              }
+              return next;
+            });
+          }}
+          className="absolute bottom-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-black/55 text-white transition-colors hover:border-wolf-red hover:bg-wolf-red hover:text-wolf-black"
+        >
+          {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+        </button>
+
+        {item.link ? (
+          <a
+            href={item.link}
+            target="_blank"
+            rel="noreferrer"
+            className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/12 bg-black/55 text-white transition-colors hover:border-wolf-red hover:bg-wolf-red hover:text-wolf-black"
+          >
+            <ExternalLink className="h-4 w-4" />
+          </a>
+        ) : null}
+      </div>
+    </PreviewShell>
+  );
+}
+
 export default function PortfolioV2Links() {
   const { content } = useSiteContent();
 
   const embedItems = useMemo<EmbedItem[]>(() => {
-    const managedItems = content.portfolio.items
+    return resolvePortfolioItems(content.portfolio.items, content.portfolio.useCustomItems)
       .map((item, index) => {
         const normalizedLink = normalizeInstagramUrl(item.link);
-        if (!normalizedLink) {
+        const media = item.media.filter((value) => value.trim());
+
+        if (!normalizedLink && media.length === 0) {
           return null;
         }
 
+        const resolvedType = media.length ? item.type : getInstagramItemType(normalizedLink);
+
         return {
-          id: item.label.trim() || `${item.type === "reel" ? "Reel" : "Post"} ${index + 1}`,
-          type: item.type,
+          id: item.label.trim() || `${resolvedType === "reel" ? "Reel" : "Post"} ${index + 1}`,
+          type: resolvedType,
+          media,
           link: normalizedLink,
         } satisfies EmbedItem;
       })
       .filter((item): item is EmbedItem => item !== null);
-
-    return managedItems.length ? managedItems : fallbackEmbedItems;
-  }, [content.portfolio.items]);
+  }, [content.portfolio.items, content.portfolio.useCustomItems]);
 
   return (
     <section id="portfolio-v2" className="relative bg-[linear-gradient(180deg,#0b0804,#050301)] py-28 text-white">
@@ -167,7 +259,11 @@ export default function PortfolioV2Links() {
           <div className="columns-1 gap-6 space-y-6 md:columns-2 xl:columns-3">
             {embedItems.map((item) => (
               <div key={item.id} className="break-inside-avoid">
-                <EmbedCard item={item} />
+                {item.media.length ? (
+                  item.type === "reel" ? <ReelPreviewCard item={item} /> : <PostPreviewCard item={item} />
+                ) : (
+                  <EmbedCard item={item} />
+                )}
               </div>
             ))}
           </div>

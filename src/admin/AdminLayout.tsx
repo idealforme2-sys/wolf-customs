@@ -25,7 +25,7 @@ export default function AdminLayout() {
     }`;
 
   return (
-    <div className="min-h-screen bg-wolf-black text-white flex flex-col md:flex-row">
+    <div className="min-h-screen overflow-x-hidden bg-wolf-black text-white flex flex-col md:flex-row">
       {/* Sidebar */}
       <aside className="relative z-30 w-full md:w-64 bg-[linear-gradient(180deg,rgba(34,21,7,0.995),rgba(14,8,2,0.995))] border-b md:border-b-0 md:border-r border-wolf-gunmetal flex flex-col shrink-0 md:sticky md:top-0 md:h-screen md:self-start md:overflow-y-auto shadow-[24px_0_80px_rgba(0,0,0,0.34)]">
         <div className="p-4 md:p-6 border-b border-wolf-gunmetal">
@@ -115,7 +115,7 @@ export default function AdminLayout() {
       </aside>
 
       {/* Main Content */}
-      <main className="relative z-0 min-w-0 flex-1">
+      <main className="relative z-0 min-w-0 w-full flex-1 overflow-x-hidden">
         <Outlet />
       </main>
     </div>

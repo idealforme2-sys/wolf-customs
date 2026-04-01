@@ -265,7 +265,7 @@ h1, h2, h3, h4, h5, h6 {
 .content-dashboard {
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at 50% -6%, rgba(255, 220, 128, 0.18), transparent 30%),
     radial-gradient(circle at 15% 12%, rgba(243, 163, 55, 0.15), transparent 26%),

@@ -28,6 +28,13 @@ import {
 import { Link } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { defaultSiteContent, mergeSiteContent, type SiteContent } from "../siteContent";
+import {
+  clonePortfolioItems,
+  getInstagramEmbedUrl,
+  getInstagramItemType,
+  normalizeInstagramUrl,
+  resolvePortfolioItems,
+} from "../utils/portfolioInstagram";
 import { uploadToCloudinary } from "../utils/cloudinary";
 
 type SectionId =
@@ -118,30 +125,17 @@ function formatPublishedLabel(value: Date | null) {
   return value.toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
 }
 
-function normalizeInstagramUrl(value: string) {
-  const trimmed = value.trim();
-  if (!trimmed) return "";
+const getResolvedPortfolioItems = (source: SiteContent) =>
+  resolvePortfolioItems(source.portfolio.items, source.portfolio.useCustomItems);
 
-  try {
-    const parsed = new URL(trimmed);
-    const cleanedPath = parsed.pathname.endsWith("/") ? parsed.pathname : `${parsed.pathname}/`;
-    return `${parsed.origin}${cleanedPath}`;
-  } catch {
-    return "";
+const getPortfolioItemType = (item: SiteContent["portfolio"]["items"][number]) => {
+  const hasUploadedMedia = item.media.some((mediaUrl) => mediaUrl.trim());
+  if (hasUploadedMedia) {
+    return item.type === "reel" ? "reel" : "post";
   }
-}
 
-function getInstagramEmbedUrl(value: string) {
-  const normalized = normalizeInstagramUrl(value);
-  if (!normalized) return "";
-
-  try {
-    const parsed = new URL(normalized);
-    return `${parsed.origin}${parsed.pathname}embed/`;
-  } catch {
-    return "";
-  }
-}
+  return normalizeInstagramUrl(item.link) ? getInstagramItemType(item.link) : "post";
+};
 
 function buildSectionSnapshots(source: SiteContent): Record<SectionId, unknown> {
   return {
@@ -168,7 +162,7 @@ function buildSectionSnapshots(source: SiteContent): Record<SectionId, unknown> 
 }
 
 function buildSectionSummaries(source: SiteContent): Record<SectionId, string> {
-  const portfolioItems = source.portfolio.items.filter(
+  const portfolioItems = getResolvedPortfolioItems(source).filter(
     (item) => item.link.trim() || item.media.some((mediaUrl) => mediaUrl.trim()),
   );
   const portfolioCustomCount = portfolioItems.filter((item) => item.media.some((mediaUrl) => mediaUrl.trim())).length;
@@ -190,7 +184,7 @@ function buildSectionSummaries(source: SiteContent): Record<SectionId, string> {
 }
 
 function buildPremiumSectionSummaries(source: SiteContent): Record<SectionId, string> {
-  const portfolioItems = source.portfolio.items.filter(
+  const portfolioItems = getResolvedPortfolioItems(source).filter(
     (item) => item.link.trim() || item.media.some((mediaUrl) => mediaUrl.trim()),
   );
   const portfolioCustomCount = portfolioItems.filter((item) => item.media.some((mediaUrl) => mediaUrl.trim())).length;
@@ -302,13 +296,14 @@ function CompactSectionPreview({ sectionId, content }: { sectionId: SectionId; c
         </div>
       );
     case "portfolio":
+      const portfolioItems = getResolvedPortfolioItems(content);
       return (
         <div className="grid grid-cols-3 gap-2">
-          {content.portfolio.items.length ? (
-            content.portfolio.items.slice(0, 3).map((item, index) => (
+          {portfolioItems.length ? (
+            portfolioItems.slice(0, 3).map((item, index) => (
               <div key={index} className="rounded-[18px] border border-white/10 bg-black/35 p-2">
-                <div className={`rounded-[12px] ${item.type === "reel" ? "aspect-[9/14]" : "aspect-[4/5]"} bg-[linear-gradient(135deg,rgba(250,231,178,0.24),rgba(214,177,99,0.18),rgba(255,255,255,0.06))]`} />
-                <p className="mt-2 truncate text-[10px] text-white">{item.label || `${item.type === "reel" ? "Reel" : "Post"} ${index + 1}`}</p>
+                <div className={`rounded-[12px] ${getPortfolioItemType(item) === "reel" ? "aspect-[9/14]" : "aspect-[4/5]"} bg-[linear-gradient(135deg,rgba(250,231,178,0.24),rgba(214,177,99,0.18),rgba(255,255,255,0.06))]`} />
+                <p className="mt-2 truncate text-[10px] text-white">{item.label || `${getPortfolioItemType(item) === "reel" ? "Reel" : "Post"} ${index + 1}`}</p>
               </div>
             ))
           ) : (
@@ -386,12 +381,19 @@ function PublishReviewModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
-      <div className="relative w-full max-w-3xl overflow-hidden rounded-[34px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,250,239,0.08),rgba(10,7,3,0.92))] shadow-[0_40px_120px_rgba(0,0,0,0.55)]">
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(250,231,178,0.62)] to-transparent" />
-        <div className="px-6 py-6 md:px-8">
+    <div
+      className="fixed inset-0 z-40 overflow-y-auto bg-black/70 px-4 backdrop-blur-sm sm:px-6"
+      style={{
+        paddingTop: "calc(env(safe-area-inset-top, 0px) + 1rem)",
+        paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)",
+      }}
+    >
+      <div className="flex min-h-full items-center justify-center">
+        <div className="relative w-full max-w-3xl overflow-hidden rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,250,239,0.08),rgba(10,7,3,0.92))] shadow-[0_40px_120px_rgba(0,0,0,0.55)] sm:rounded-[34px]">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(250,231,178,0.62)] to-transparent" />
+          <div className="max-h-[calc(100dvh-2rem)] overflow-y-auto px-4 py-5 sm:px-6 sm:py-6 md:px-8">
           <p className="text-[11px] uppercase tracking-[0.28em] text-wolf-red">Review & Publish</p>
-          <h2 className="mt-3 text-3xl font-luxury font-black uppercase tracking-[0.12em] text-white">Ready to update the website?</h2>
+          <h2 className="mt-3 text-2xl font-luxury font-black uppercase tracking-[0.12em] text-white sm:text-3xl">Ready to update the website?</h2>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-gray-400">
             Take one last look before publishing. Nothing changes on the live website until you confirm.
           </p>
@@ -427,11 +429,11 @@ function PublishReviewModal({
             )}
           </div>
 
-          <div className="mt-6 flex flex-wrap justify-end gap-3">
+          <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:flex-wrap sm:justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="inline-flex items-center gap-2 rounded-2xl border border-white/10 px-4 py-3 text-sm text-gray-300 transition-colors hover:border-wolf-red hover:text-white"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border border-white/10 px-4 py-3 text-sm text-gray-300 transition-colors hover:border-wolf-red hover:text-white sm:w-auto"
             >
               Keep editing
             </button>
@@ -439,7 +441,7 @@ function PublishReviewModal({
               type="button"
               onClick={onConfirm}
               disabled={saving || !changedSections.length}
-              className="inline-flex items-center gap-2 rounded-2xl bg-wolf-red px-5 py-3 text-sm font-heading uppercase tracking-[0.18em] text-white transition-colors hover:bg-wolf-red-hover disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-wolf-red px-5 py-3 text-sm font-heading uppercase tracking-[0.18em] text-white transition-colors hover:bg-wolf-red-hover disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               Publish to website
@@ -447,6 +449,7 @@ function PublishReviewModal({
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
@@ -459,6 +462,7 @@ function OwnerField({
   placeholder = "",
   hint,
   rows = 4,
+  disabled = false,
 }: {
   label: string;
   value: string;
@@ -467,43 +471,29 @@ function OwnerField({
   placeholder?: string;
   hint?: string;
   rows?: number;
+  disabled?: boolean;
 }) {
   return (
     <label className="block space-y-2.5">
-      <span className="block text-sm font-medium text-white">{label}</span>
+      <span className={`block text-sm font-medium ${disabled ? "text-gray-500" : "text-white"}`}>{label}</span>
       {multiline ? (
-        <textarea value={value} onChange={(event) => onChange(event.target.value)} rows={rows} placeholder={placeholder} className={`${fieldClassName} resize-y`} />
+        <textarea
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          rows={rows}
+          placeholder={placeholder}
+          disabled={disabled}
+          className={`${fieldClassName} resize-y ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
+        />
       ) : (
-        <input value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} className={fieldClassName} />
+        <input
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder={placeholder}
+          disabled={disabled}
+          className={`${fieldClassName} ${disabled ? "cursor-not-allowed opacity-50" : ""}`}
+        />
       )}
-      {hint ? <p className="text-xs leading-relaxed text-gray-500">{hint}</p> : null}
-    </label>
-  );
-}
-
-function OwnerSelect({
-  label,
-  value,
-  onChange,
-  options,
-  hint,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  options: { value: string; label: string }[];
-  hint?: string;
-}) {
-  return (
-    <label className="block space-y-2.5">
-      <span className="block text-sm font-medium text-white">{label}</span>
-      <select value={value} onChange={(event) => onChange(event.target.value)} className={fieldClassName}>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
       {hint ? <p className="text-xs leading-relaxed text-gray-500">{hint}</p> : null}
     </label>
   );
@@ -977,8 +967,11 @@ export default function ContentDashboard() {
     if ((content.beforeAfter.beforeImageUrl ?? "") !== (savedContent.beforeAfter.beforeImageUrl ?? "")) count += 1;
     if ((content.beforeAfter.afterImageUrl ?? "") !== (savedContent.beforeAfter.afterImageUrl ?? "")) count += 1;
 
-    content.portfolio.items.forEach((item, itemIndex) => {
-      const savedItem = savedContent.portfolio.items[itemIndex];
+    const currentPortfolioItems = getResolvedPortfolioItems(content);
+    const savedPortfolioItems = getResolvedPortfolioItems(savedContent);
+
+    currentPortfolioItems.forEach((item, itemIndex) => {
+      const savedItem = savedPortfolioItems[itemIndex];
       const mediaSlots = Math.max(item.media.length, savedItem?.media.length ?? 0);
       for (let mediaIndex = 0; mediaIndex < mediaSlots; mediaIndex += 1) {
         if ((item.media[mediaIndex] ?? "") !== (savedItem?.media[mediaIndex] ?? "")) count += 1;
@@ -988,10 +981,11 @@ export default function ContentDashboard() {
     return count;
   }, [content, savedContent]);
 
+  const portfolioEditorItems = useMemo(() => getResolvedPortfolioItems(content), [content.portfolio.items]);
+
   const portfolioPreparedCount = useMemo(
-    () =>
-      content.portfolio.items.filter((item) => item.link.trim() || item.media.some((mediaUrl) => mediaUrl.trim())).length,
-    [content.portfolio.items],
+    () => portfolioEditorItems.filter((item) => item.link.trim() || item.media.some((mediaUrl) => mediaUrl.trim())).length,
+    [portfolioEditorItems],
   );
 
   const setSectionField = (section: keyof SiteContent, field: string, value: string) => {
@@ -1021,22 +1015,34 @@ export default function ContentDashboard() {
     });
   };
 
-  const setPortfolioItem = (index: number, updates: Partial<SiteContent["portfolio"]["items"][number]>) => {
+  const updatePortfolioItems = (
+    updater: (items: SiteContent["portfolio"]["items"]) => SiteContent["portfolio"]["items"],
+  ) => {
     setContent((current) => ({
       ...current,
       portfolio: {
         ...current.portfolio,
-        items: current.portfolio.items.map((item, itemIndex) => (itemIndex === index ? { ...item, ...updates } : item)),
+        useCustomItems: true,
+        items: updater(current.portfolio.items.length ? current.portfolio.items : clonePortfolioItems(getResolvedPortfolioItems(current))),
       },
     }));
   };
 
+  const setPortfolioItem = (index: number, updates: Partial<SiteContent["portfolio"]["items"][number]>) => {
+    updatePortfolioItems((items) => items.map((item, itemIndex) => (itemIndex === index ? { ...item, ...updates } : item)));
+  };
+
+  const setPortfolioLink = (itemIndex: number, value: string) => {
+    const normalized = normalizeInstagramUrl(value);
+    setPortfolioItem(itemIndex, {
+      link: value,
+      type: normalized ? getInstagramItemType(normalized) : "post",
+    });
+  };
+
   const setPortfolioMedia = (itemIndex: number, mediaIndex: number, value: string) => {
-    setContent((current) => ({
-      ...current,
-      portfolio: {
-        ...current.portfolio,
-        items: current.portfolio.items.map((item, currentIndex) =>
+    updatePortfolioItems((items) =>
+      items.map((item, currentIndex) =>
           currentIndex === itemIndex
             ? {
                 ...item,
@@ -1044,57 +1050,45 @@ export default function ContentDashboard() {
               }
             : item,
         ),
-      },
-    }));
+    );
   };
 
   const addPortfolioItem = () => {
-    setContent((current) => ({
-      ...current,
-      portfolio: {
-        ...current.portfolio,
-        items: [
-          ...current.portfolio.items,
+    updatePortfolioItems((items) => [
+      ...items,
           {
-            label: `Showcase item ${current.portfolio.items.length + 1}`,
+            label: `Showcase item ${items.length + 1}`,
             type: "post",
             media: [""],
             link: "",
           },
-        ],
-      },
-    }));
+        ]);
     setOpenSection("portfolio");
   };
 
   const removePortfolioItem = (index: number) => {
-    setContent((current) => ({
-      ...current,
-      portfolio: {
-        ...current.portfolio,
-        items: current.portfolio.items.filter((_, itemIndex) => itemIndex !== index),
-      },
-    }));
+    updatePortfolioItems((items) => items.filter((_, itemIndex) => itemIndex !== index));
+  };
+
+  const clearPortfolioLink = (itemIndex: number) => {
+    setPortfolioItem(itemIndex, { link: "" });
+  };
+
+  const clearPortfolioMedia = (itemIndex: number) => {
+    updatePortfolioItems((items) =>
+      items.map((item, currentIndex) => (currentIndex === itemIndex ? { ...item, media: [""] } : item)),
+    );
   };
 
   const addPortfolioMediaSlot = (itemIndex: number) => {
-    setContent((current) => ({
-      ...current,
-      portfolio: {
-        ...current.portfolio,
-        items: current.portfolio.items.map((item, currentIndex) =>
-          currentIndex === itemIndex ? { ...item, media: [...item.media, ""] } : item,
-        ),
-      },
-    }));
+    updatePortfolioItems((items) =>
+      items.map((item, currentIndex) => (currentIndex === itemIndex ? { ...item, media: [...item.media, ""] } : item)),
+    );
   };
 
   const removePortfolioMediaSlot = (itemIndex: number, mediaIndex: number) => {
-    setContent((current) => ({
-      ...current,
-      portfolio: {
-        ...current.portfolio,
-        items: current.portfolio.items.map((item, currentIndex) =>
+    updatePortfolioItems((items) =>
+      items.map((item, currentIndex) =>
           currentIndex === itemIndex
             ? {
                 ...item,
@@ -1102,8 +1096,7 @@ export default function ContentDashboard() {
               }
             : item,
         ),
-      },
-    }));
+    );
   };
 
   const uploadAsset = async (fieldKey: string, onComplete: (url: string) => void, file: File) => {
@@ -1120,6 +1113,45 @@ export default function ContentDashboard() {
     } finally {
       setUploadingField("");
     }
+  };
+
+  const handlePortfolioMediaUpload = (itemIndex: number, mediaIndex: number, file: File) => {
+    const nextType = file.type.startsWith("video/") ? "reel" : "post";
+
+    uploadAsset(
+      `portfolio-${itemIndex}-${mediaIndex}`,
+      (url) => {
+        updatePortfolioItems((items) =>
+          items.map((item, currentIndex) => {
+            if (currentIndex !== itemIndex) {
+              return item;
+            }
+
+            if (nextType === "reel") {
+              return {
+                ...item,
+                type: "reel",
+                link: "",
+                media: [url],
+              };
+            }
+
+            const media = item.media.length ? [...item.media] : [""];
+            const nextMedia = media.map((mediaValue, currentMediaIndex) =>
+              currentMediaIndex === mediaIndex ? url : mediaValue,
+            );
+
+            return {
+              ...item,
+              type: "post",
+              link: "",
+              media: nextMedia,
+            };
+          }),
+        );
+      },
+      file,
+    );
   };
 
   const handleSave = async () => {
@@ -1904,7 +1936,7 @@ export default function ContentDashboard() {
                 <PreviewTile label="How this section works">
                   <div className="rounded-[24px] border border-white/10 bg-black/30 p-5">
                     <p className="text-sm leading-relaxed text-gray-300">
-                      This showcase now defaults to the Instagram embed style. Paste an Instagram post or reel link and it will appear on the website using the native embed look. If you also upload photos or video for that item, it switches to the richer custom preview style while still opening the original Instagram post or reel.
+                      Each preview uses one source only. You can either paste an Instagram post or reel URL to use the native embed style, or upload custom photos/video to use a custom preview style. To switch modes, remove the existing URL or uploaded media first.
                     </p>
                   </div>
                 </PreviewTile>
@@ -1935,25 +1967,34 @@ export default function ContentDashboard() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-3">
-                  <button
-                    type="button"
-                    onClick={addPortfolioItem}
-                    className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-gray-200 transition-colors hover:border-wolf-red hover:text-white"
-                  >
-                    <Plus className="h-4 w-4" />
-                    Add post or reel
-                  </button>
-                </div>
-
-                {content.portfolio.items.length === 0 ? (
+                {portfolioEditorItems.length === 0 ? (
                   <EmptyStateCard
                     title="No showcase items yet"
-                    description="Add your first post or reel to start building this section. Paste a link to use the default embed style, then optionally upload media if you want the custom preview style instead."
+                    description="Add your first post or reel to start building this section. Each new preview can use either an Instagram URL or uploaded media, depending on how you want it to appear on the website."
                   />
                 ) : (
                   <div className="space-y-4">
-                    {content.portfolio.items.map((item, itemIndex) => (
+                    {portfolioEditorItems.map((item, itemIndex) => {
+                      const hasEmbedLink = Boolean(normalizeInstagramUrl(item.link));
+                      const hasUploadedMedia = item.media.some((mediaUrl) => mediaUrl.trim());
+                      const portfolioItemType = getPortfolioItemType(item);
+                      const uploadAccept = hasUploadedMedia
+                        ? portfolioItemType === "reel"
+                          ? "video/*"
+                          : "image/*"
+                        : "image/*,video/*";
+                      const uploadLabel = hasUploadedMedia
+                        ? portfolioItemType === "reel"
+                          ? "Upload video"
+                          : "Upload image"
+                        : "Upload image or video";
+                      const uploadTitle = hasUploadedMedia
+                        ? portfolioItemType === "reel"
+                          ? "Reel video"
+                          : `Post image`
+                        : "Preview media";
+
+                      return (
                       <div key={itemIndex} className="rounded-[30px] border border-white/10 bg-black/25 p-5">
                         <div className="grid gap-5 xl:grid-cols-[280px_minmax(0,1fr)]">
                           <div className="space-y-4">
@@ -1961,7 +2002,7 @@ export default function ContentDashboard() {
                               <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Preview</p>
                               <div className="mt-3 h-56 overflow-hidden rounded-[18px] border border-white/10 bg-black/40">
                                 {item.media.some((mediaUrl) => mediaUrl.trim()) ? (
-                                  item.type === "reel" ? (
+                                  portfolioItemType === "reel" ? (
                                     <video src={item.media.find((mediaUrl) => mediaUrl.trim())} className="h-full w-full object-cover" muted playsInline />
                                   ) : (
                                     <img
@@ -1992,7 +2033,7 @@ export default function ContentDashboard() {
                                 <p className="text-sm font-semibold text-white">{item.label || `Showcase item ${itemIndex + 1}`}</p>
                                 <div className="mt-2 flex flex-wrap gap-2">
                                   <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] uppercase tracking-[0.18em] text-gray-400">
-                                    {item.type === "reel" ? "Reel" : "Post"}
+                                    {portfolioItemType === "reel" ? "Reel" : "Post"}
                                   </span>
                                   <span className="rounded-full border border-wolf-red/20 bg-wolf-red/10 px-2.5 py-1 text-[11px] uppercase tracking-[0.18em] text-wolf-red">
                                     {item.media.some((mediaUrl) => mediaUrl.trim()) ? "Custom preview style" : "Embed style"}
@@ -2011,7 +2052,7 @@ export default function ContentDashboard() {
                           </div>
 
                           <div className="space-y-5">
-                            <div className="grid gap-5 md:grid-cols-[1.25fr_0.75fr]">
+                            <div className="grid gap-5">
                               <OwnerField
                                 label="Private label"
                                 value={item.label}
@@ -2019,41 +2060,48 @@ export default function ContentDashboard() {
                                 placeholder="Example: Black Mustang reel"
                                 hint="This is only visible in your dashboard."
                               />
-                              <OwnerSelect
-                                label="Content type"
-                                value={item.type}
-                                onChange={(value) =>
-                                  setPortfolioItem(itemIndex, {
-                                    type: value === "reel" ? "reel" : "post",
-                                    media: value === "reel" ? [item.media[0] ?? ""] : item.media.length ? item.media : [""],
-                                  })
-                                }
-                                options={[
-                                  { value: "post", label: "Post" },
-                                  { value: "reel", label: "Reel" },
-                                ]}
-                              />
                             </div>
 
                             <OwnerField
                               label="Instagram source link"
                               value={item.link}
-                              onChange={(value) => setPortfolioItem(itemIndex, { link: value })}
+                              onChange={(value) => setPortfolioLink(itemIndex, value)}
+                              disabled={hasUploadedMedia}
                               placeholder="Paste the Instagram post or reel link"
-                              hint="If you only add this link, the item uses the default embed style on the website."
+                              hint={
+                                hasUploadedMedia
+                                  ? "This preview is currently using uploaded media. Remove the uploaded media first if you want to switch this item back to URL embed mode."
+                                  : "Paste an Instagram link here and the preview type will be detected automatically."
+                              }
                             />
+                            {hasEmbedLink ? (
+                              <div className="flex flex-wrap gap-3">
+                                <button
+                                  type="button"
+                                  onClick={() => clearPortfolioLink(itemIndex)}
+                                  className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs text-gray-300 transition-colors hover:border-wolf-red hover:text-white"
+                                >
+                                  <Undo2 className="h-4 w-4" />
+                                  Remove Instagram URL
+                                </button>
+                              </div>
+                            ) : null}
 
                             <div className="rounded-[24px] border border-white/10 bg-black/20 p-4">
                               <div className="flex items-center justify-between gap-3">
                                 <div>
-                                  <p className="text-base font-heading font-bold text-white">Optional uploaded media</p>
+                                  <p className="text-base font-heading font-bold text-white">Uploaded preview media</p>
                                   <p className="mt-1 text-sm text-gray-500">
-                                    {item.type === "reel"
-                                      ? "Upload a reel video here if you want this item to switch from the default embed style to the custom preview style."
-                                      : "Upload one or more photos here if you want this item to switch from the default embed style to the custom preview style."}
+                                    {hasEmbedLink
+                                      ? "This preview is currently using an Instagram URL. Remove that URL first if you want to upload custom preview media instead."
+                                      : hasUploadedMedia
+                                        ? portfolioItemType === "reel"
+                                          ? "This preview is using uploaded video, so it behaves like a reel."
+                                          : "This preview is using uploaded images, so one image stays as a post and multiple images become a carousel."
+                                        : "Upload one image for a post, multiple images for a carousel, or one video for a reel-style preview."}
                                   </p>
                                 </div>
-                                {item.type === "post" ? (
+                                {!hasEmbedLink && hasUploadedMedia && portfolioItemType === "post" ? (
                                   <button
                                     type="button"
                                     onClick={() => addPortfolioMediaSlot(itemIndex)}
@@ -2065,18 +2113,37 @@ export default function ContentDashboard() {
                                 ) : null}
                               </div>
 
+                              {hasUploadedMedia ? (
+                                <div className="mt-4 flex flex-wrap gap-3">
+                                  <button
+                                    type="button"
+                                    onClick={() => clearPortfolioMedia(itemIndex)}
+                                    className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs text-gray-300 transition-colors hover:border-wolf-red hover:text-white"
+                                  >
+                                    <Undo2 className="h-4 w-4" />
+                                    Remove uploaded media
+                                  </button>
+                                </div>
+                              ) : null}
+
                               <div className="mt-4 grid gap-4 lg:grid-cols-2">
                                 {item.media.map((mediaValue, mediaIndex) => (
                                   <div key={mediaIndex} className="rounded-[22px] border border-white/10 bg-black/35 p-4">
                                     <div className="flex items-start justify-between gap-3">
                                       <div>
                                         <p className="text-sm font-semibold text-white">
-                                          {item.type === "reel" ? "Reel video" : `Post image ${mediaIndex + 1}`}
+                                          {portfolioItemType === "reel"
+                                            ? "Reel video"
+                                            : hasUploadedMedia
+                                              ? `Post image ${mediaIndex + 1}`
+                                              : `${uploadTitle} ${mediaIndex + 1}`}
                                         </p>
                                         <p className="mt-1 text-xs leading-relaxed text-gray-500">
-                                          {item.type === "reel"
+                                          {portfolioItemType === "reel"
                                             ? "This video is what people will see in the showcase."
-                                            : "This image becomes part of the post gallery."}
+                                            : hasUploadedMedia
+                                              ? "This image becomes part of the post gallery."
+                                              : "Choose an image or a video and the preview type will update automatically."}
                                         </p>
                                       </div>
                                       <button
@@ -2091,7 +2158,7 @@ export default function ContentDashboard() {
 
                                     <div className="mt-4 h-32 overflow-hidden rounded-[18px] border border-white/10 bg-black/40">
                                       {mediaValue ? (
-                                        item.type === "reel" ? (
+                                        portfolioItemType === "reel" ? (
                                           <video src={mediaValue} className="h-full w-full object-cover" muted playsInline />
                                         ) : (
                                           <img src={mediaValue} alt={`Portfolio media ${mediaIndex + 1}`} className="h-full w-full object-cover" />
@@ -2103,23 +2170,24 @@ export default function ContentDashboard() {
                                       )}
                                     </div>
 
-                                    <label className="mt-4 inline-flex cursor-pointer items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-gray-200 transition-colors hover:border-wolf-red hover:text-white">
+                                    <label className={`mt-4 inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-gray-200 transition-colors ${hasEmbedLink ? "cursor-not-allowed opacity-40" : "cursor-pointer hover:border-wolf-red hover:text-white"}`}>
                                       {uploadingField === `portfolio-${itemIndex}-${mediaIndex}` ? (
                                         <Loader2 className="h-4 w-4 animate-spin" />
-                                      ) : item.type === "reel" ? (
+                                      ) : portfolioItemType === "reel" && hasUploadedMedia ? (
                                         <Film className="h-4 w-4" />
                                       ) : (
                                         <ImagePlus className="h-4 w-4" />
                                       )}
-                                      {item.type === "reel" ? "Upload video" : "Upload image"}
+                                      {uploadLabel}
                                       <input
                                         type="file"
-                                        accept={item.type === "reel" ? "video/*" : "image/*"}
+                                        accept={uploadAccept}
+                                        disabled={hasEmbedLink}
                                         className="hidden"
                                         onChange={(event) => {
                                           const file = event.target.files?.[0];
                                           if (file) {
-                                            uploadAsset(`portfolio-${itemIndex}-${mediaIndex}`, (url) => setPortfolioMedia(itemIndex, mediaIndex, url), file);
+                                            handlePortfolioMediaUpload(itemIndex, mediaIndex, file);
                                           }
                                           event.target.value = "";
                                         }}
@@ -2132,9 +2200,28 @@ export default function ContentDashboard() {
                           </div>
                         </div>
                       </div>
-                    ))}
+                    )})}
                   </div>
                 )}
+
+                <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(206,214,225,0.05),rgba(10,7,3,0.56))] p-5 shadow-[0_18px_44px_rgba(0,0,0,0.22)]">
+                  <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <p className="text-base font-heading font-bold text-white">Add another preview</p>
+                      <p className="mt-1 max-w-2xl text-sm leading-relaxed text-gray-400">
+                        Use this to append a brand new Instagram preview after the current ones. Each new preview can use either an Instagram URL or uploaded preview media, but not both at the same time.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={addPortfolioItem}
+                      className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-gray-200 transition-colors hover:border-wolf-red hover:text-white"
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add another preview
+                    </button>
+                  </div>
+                </div>
               </div>
             </EditableSectionCard>
 
@@ -2451,7 +2538,10 @@ export default function ContentDashboard() {
         </div>
       </div>
 
-      <div className={`fixed inset-x-4 bottom-4 z-30 rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(20,14,7,0.94),rgba(9,6,3,0.86))] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl xl:hidden ${isDirty || saving ? "" : "hidden"}`}>
+      <div
+        className={`fixed inset-x-3 bottom-3 z-30 rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(20,14,7,0.94),rgba(9,6,3,0.86))] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:inset-x-4 sm:bottom-4 xl:hidden ${isDirty || saving ? "" : "hidden"}`}
+        style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)" }}
+      >
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Draft & Publish</p>
