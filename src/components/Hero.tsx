@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronRight } from "lucide-react";
 import Magnetic from "./Magnetic";
 import { useSiteContent } from "./SiteContentProvider";
@@ -9,6 +9,7 @@ export default function Hero() {
   const { content } = useSiteContent();
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   /* ── video playback management ── */
   useEffect(() => {
@@ -27,11 +28,21 @@ export default function Hero() {
 
     const handlePause = () => { if (!document.hidden) requestPlayback(); };
 
+    const handleCanPlayThrough = () => {
+      setIsVideoLoaded(true);
+    };
+
+    if (video.readyState >= 4) {
+      setIsVideoLoaded(true);
+    }
+
+    video.addEventListener("canplaythrough", handleCanPlayThrough);
     video.addEventListener("canplay", requestPlayback);
     video.addEventListener("pause", handlePause);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
+      video.removeEventListener("canplaythrough", handleCanPlayThrough);
       video.removeEventListener("canplay", requestPlayback);
       video.removeEventListener("pause", handlePause);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
@@ -87,7 +98,7 @@ export default function Hero() {
     >
       {/* ── Background video + overlays ── */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden bg-wolf-black">
           <video
             ref={videoRef}
             autoPlay
@@ -96,7 +107,9 @@ export default function Hero() {
             preload="auto"
             playsInline
             disablePictureInPicture
-            className="absolute inset-0 h-full w-full object-cover object-center"
+            className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-1000 ease-out ${
+              isVideoLoaded ? "opacity-100" : "opacity-0"
+            }`}
           >
             <source src="/hero-bg.mp4" type="video/mp4" />
           </video>
