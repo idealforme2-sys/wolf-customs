@@ -42,9 +42,9 @@ function PublicSite() {
         <Services />
         <BeforeAfter />
         <Gallery />
-        <Portfolio />
+        {/* <Portfolio /> */}
         <PortfolioV2Links />
-        <PortfolioV3Embed />
+        {/* <PortfolioV3Embed /> */}
         <Process />
         <Trust />
         <FAQ />

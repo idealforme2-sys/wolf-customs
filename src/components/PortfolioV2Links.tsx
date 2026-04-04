@@ -27,7 +27,7 @@ const EMBED_CROP_MAP: Record<string, { frame: string; iframe: string }> = {
 };
 
 const EMBED_PORTFOLIO_DESCRIPTION =
-  "This version is simple: you paste the Instagram post or reel link into the owner dashboard, and that content will show on the website. I recommend it because it allows you to select handpicked posts and reels that best represent the business, which is often better than showing every single piece of Instagram content.";
+  "Explore our latest transformations and custom builds. We take pride in delivering excellence through precision and craftsmanship, ensuring every project meets our high standards.";
 
 function EmbedCard({ item }: { item: EmbedItem }) {
   const embedUrl = getInstagramEmbedUrl(item.link);
@@ -229,7 +229,7 @@ export default function PortfolioV2Links() {
   }, [content.portfolio.items, content.portfolio.useCustomItems]);
 
   return (
-    <section id="portfolio-v2" className="relative bg-[linear-gradient(180deg,#0b0804,#050301)] py-28 text-white">
+    <section id="portfolio" className="relative bg-[linear-gradient(180deg,#0b0804,#050301)] py-28 text-white">
       <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-wolf-red/40 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -243,7 +243,7 @@ export default function PortfolioV2Links() {
             <div className="mb-6 flex items-center gap-4">
               <div className="h-[1px] w-8 bg-wolf-red" />
               <span className="text-sm font-heading font-bold uppercase tracking-[0.2em] text-wolf-red">
-                Portfolio Ver 2
+                OUR WORK
               </span>
             </div>
             <h2 className="mb-6 text-5xl font-heading font-black uppercase leading-none tracking-tighter text-white md:text-7xl">

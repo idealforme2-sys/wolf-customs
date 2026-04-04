@@ -101,8 +101,6 @@ export default function Navbar() {
   const navLinks = [
     { name: "Services", href: "#services" },
     { name: "Work", href: "#portfolio" },
-    { name: "Work V2", href: "#portfolio-v2" },
-    { name: "Work V3", href: "#portfolio-v3" },
     { name: "Process", href: "#process" },
     { name: "Contact", href: "#contact" },
   ];
@@ -285,7 +283,7 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <div className="mt-3 grid grid-cols-3 gap-2">
+              <div className="mt-3 grid grid-cols-4 gap-2">
                 {navLinks.map((link) => (
                   <button
                     key={link.name}
