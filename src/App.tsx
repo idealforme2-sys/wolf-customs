@@ -43,8 +43,8 @@ function PublicSite() {
         <BeforeAfter />
         <Gallery />
         <Portfolio />
-        {/* <PortfolioV2Links /> */}
-        {/* <PortfolioV3Embed /> */}
+        <PortfolioV2Links />
+        <PortfolioV3Embed />
         <Process />
         <Trust />
         <FAQ />
