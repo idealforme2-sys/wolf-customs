@@ -362,6 +362,14 @@ export default function PortfolioV3Embed() {
           overflow: hidden !important;
         }
 
+        @media (max-width: 768px) {
+          #portfolio-v3 .eapps-instagram-feed-posts-container {
+            padding-left: 14px !important;
+            padding-right: 14px !important;
+            padding-bottom: 16px !important;
+          }
+        }
+
         #portfolio-v3 .eapps-instagram-feed-posts-slider {
           overflow: hidden !important;
           background: transparent !important;
