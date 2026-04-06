@@ -73,18 +73,18 @@ export default function MerchSection() {
   return (
     <section className="relative bg-gray-50 min-h-screen overflow-hidden pb-20">
       
-      {/* Top Animated Border Separator */}
-      <div className="absolute top-0 left-0 w-full flex flex-col items-center z-50 pointer-events-none">
-        <div className="w-full h-1.5 md:h-[6px] bg-gradient-to-r from-wolf-red via-amber-400 to-wolf-red bg-[length:200%_100%] animate-bg-pan-x" />
-        <div className="w-[85%] h-1 md:h-[3px] bg-gradient-to-r from-amber-500 via-wolf-red to-amber-500 bg-[length:200%_100%] animate-bg-pan-x-reverse" />
-        <div className="w-[65%] h-0.5 md:h-[2px] bg-gradient-to-r from-wolf-red via-transparent to-wolf-red bg-[length:200%_100%] animate-bg-pan-x-slow" />
+      {/* Top Animated Laser Boundaries */}
+      <div className="absolute top-0 inset-x-0 pointer-events-none z-50 flex flex-col items-center gap-[1px] mt-[-1px]">
+        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-wolf-red/40 to-transparent"></div>
+        <div className="h-[2px] w-[50%] bg-gradient-to-r from-transparent via-amber-500/70 to-transparent animate-[merch-breathe_4s_ease-in-out_infinite]"></div>
+        <div className="h-[3px] w-[20%] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_3px_rgba(255,255,255,0.8)] animate-[merch-breathe_3s_ease-in-out_infinite_reverse]"></div>
       </div>
 
-      {/* Bottom Animated Border Separator */}
-      <div className="absolute bottom-0 left-0 w-full flex flex-col items-center z-50 pointer-events-none">
-        <div className="w-[65%] h-0.5 md:h-[2px] bg-gradient-to-r from-wolf-red via-transparent to-wolf-red bg-[length:200%_100%] animate-bg-pan-x-slow" />
-        <div className="w-[85%] h-1 md:h-[3px] bg-gradient-to-r from-amber-500 via-wolf-red to-amber-500 bg-[length:200%_100%] animate-bg-pan-x-reverse" />
-        <div className="w-full h-1.5 md:h-[6px] bg-gradient-to-r from-wolf-red via-amber-400 to-wolf-red bg-[length:200%_100%] animate-bg-pan-x" />
+      {/* Bottom Animated Laser Boundaries */}
+      <div className="absolute bottom-0 inset-x-0 pointer-events-none z-50 flex flex-col items-center gap-[1px] mb-[-1px]">
+        <div className="h-[3px] w-[20%] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_3px_rgba(255,255,255,0.8)] animate-[merch-breathe_3s_ease-in-out_infinite_reverse]"></div>
+        <div className="h-[2px] w-[50%] bg-gradient-to-r from-transparent via-amber-500/70 to-transparent animate-[merch-breathe_4s_ease-in-out_infinite]"></div>
+        <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-wolf-red/40 to-transparent"></div>
       </div>
 
       {/* Animated Header Area */}
@@ -125,10 +125,12 @@ export default function MerchSection() {
           <p className="mt-2 sm:mt-4 text-sm sm:text-xl text-gray-600 font-medium max-w-xl mx-auto">
             Stay tuned! Our new merch line is dropping soon.
           </p>
-          <div className="relative overflow-hidden group mt-4 sm:mt-8 inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 border border-transparent text-sm sm:text-base font-bold rounded-full text-amber-900 bg-amber-200 shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:bg-amber-300 transition-colors">
-            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent w-[150%] h-full animate-btn-shine pointer-events-none"></span>
-            <ShoppingBag className="w-4 h-4 sm:w-6 sm:h-6 mr-2 relative z-10" />
-            <span className="relative z-10">Coming Soon</span>
+          <div className="relative mt-4 sm:mt-8 inline-flex h-12 sm:h-14 overflow-hidden rounded-full p-[2px] shadow-[0_0_20px_rgba(251,191,36,0.25)] hover:shadow-[0_0_35px_rgba(251,191,36,0.4)] transition-shadow">
+            <span className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#fde68a_0%,#ffffff_20%,#fde68a_40%)]" />
+            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-amber-200 px-8 py-3 text-sm sm:text-base font-bold text-amber-900 transition-colors hover:bg-[#ffedb3] relative z-10">
+              <ShoppingBag className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
+              Coming Soon
+            </span>
           </div>
         </div>
       </div>
