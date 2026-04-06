@@ -9,6 +9,7 @@ import Gallery from "./components/Gallery";
 import Portfolio from "./components/Portfolio";
 import PortfolioV2Links from "./components/PortfolioV2Links";
 import PortfolioV3Embed from "./components/PortfolioV3Embed";
+import MerchSection from "./components/MerchSection";
 import Process from "./components/Process";
 import Trust from "./components/Trust";
 import FAQ from "./components/FAQ";
@@ -45,6 +46,7 @@ function PublicSite() {
         {/* <Portfolio /> */}
         <PortfolioV2Links />
         {/* <PortfolioV3Embed /> */}
+        <MerchSection />
         <Process />
         <Trust />
         <FAQ />
