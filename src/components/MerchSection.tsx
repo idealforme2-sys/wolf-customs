@@ -79,7 +79,7 @@ export default function MerchSection() {
         {/* Background Tickers */}
         <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
           {/* Ticker 1 - Dark */}
-          <div className="absolute w-[150vw] -rotate-4 sm:-rotate-3 -translate-y-8 sm:translate-y-0 bg-gray-900 text-white py-3 sm:py-5 shadow-2xl z-0">
+          <div className="absolute w-[200vw] -rotate-[12deg] sm:-rotate-3 bg-gray-900 text-white py-2.5 sm:py-5 shadow-2xl z-0">
             <div className="flex w-[200%] animate-marquee items-center">
               <div className="flex-1 flex justify-around items-center whitespace-nowrap">
                 <TickerContent />
@@ -91,7 +91,7 @@ export default function MerchSection() {
           </div>
 
           {/* Ticker 2 - Accent */}
-          <div className="absolute w-[150vw] rotate-3 sm:rotate-2 translate-y-8 sm:translate-y-0 bg-amber-400 text-gray-900 py-3 sm:py-4 shadow-xl z-0 mix-blend-multiply opacity-90">
+          <div className="absolute w-[200vw] rotate-[10deg] sm:rotate-2 bg-amber-400 text-gray-900 py-2.5 sm:py-4 shadow-xl z-0 mix-blend-multiply opacity-90">
             <div className="flex w-[200%] animate-marquee-reverse items-center">
               <div className="flex-1 flex justify-around items-center whitespace-nowrap">
                 <TickerContent />
@@ -104,15 +104,15 @@ export default function MerchSection() {
         </div>
 
         {/* Foreground Headline */}
-        <div className="relative z-10 text-center bg-white/90 backdrop-blur-md py-6 px-5 sm:py-10 sm:px-12 md:px-20 rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 max-w-[90%] sm:max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
+        <div className="relative z-10 text-center bg-white/90 backdrop-blur-xl py-5 px-4 sm:py-10 sm:px-12 md:px-20 rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 max-w-[85%] sm:max-w-3xl mx-auto">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-gray-900 uppercase">
             Official Merchandise
           </h2>
-          <p className="mt-3 sm:mt-4 text-lg sm:text-xl text-gray-600 font-medium max-w-xl mx-auto">
+          <p className="mt-2 sm:mt-4 text-sm sm:text-xl text-gray-600 font-medium max-w-xl mx-auto">
             Stay tuned! Our new merch line is dropping soon.
           </p>
-          <div className="mt-6 sm:mt-8 inline-flex items-center px-5 py-2.5 sm:px-6 sm:py-3 border border-transparent text-sm sm:text-base font-bold rounded-full text-amber-900 bg-amber-200 shadow-sm hover:bg-amber-300 transition-colors">
-            <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
+          <div className="mt-4 sm:mt-8 inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 border border-transparent text-sm sm:text-base font-bold rounded-full text-amber-900 bg-amber-200 shadow-sm hover:bg-amber-300 transition-colors">
+            <ShoppingBag className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
             Coming Soon
           </div>
         </div>
