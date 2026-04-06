@@ -21,10 +21,7 @@ View your app in AI Studio: https://ai.studio/apps/eb2ce052-9925-4224-85d7-99b19
 
 ## Latest Features & Improvements
 
-### 🎨 Premium UI/UX
-- **Dynamic Hero Section**: Split-screen design with Oswald/Montserrat typography and floating interactive elements.
-- **Before/After Slider**: Interactive restoration showcase component.
-- **Advanced Navigation**: Real-time scrolling transitions and authenticated dynamic toggles.
+- **Handpicked Showcase Portfolio**: Curated presentation of high-quality transformations and custom builds with direct Instagram links.
 - **Micro-interactions**: Custom magnetic cursor, noise grain overlays, and smooth Framer Motion transitions.
 
 ### 🛠 Administrative Suite
