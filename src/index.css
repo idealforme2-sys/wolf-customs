@@ -590,6 +590,32 @@ h1, h2, h3, h4, h5, h6 {
   animation: marquee-reverse 25s linear infinite;
 }
 
+/* Merch Button Glow */
+@keyframes btn-shine {
+  0% { transform: translateX(-150%) skewX(-20deg); }
+  25%, 100% { transform: translateX(250%) skewX(-20deg); }
+}
+
+.animate-btn-shine {
+  animation: btn-shine 3.5s ease-in-out infinite;
+}
+
+/* Merch Border Gradient Pan */
+@keyframes bg-pan-x {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.animate-bg-pan-x {
+  animation: bg-pan-x 3s linear infinite;
+}
+.animate-bg-pan-x-slow {
+  animation: bg-pan-x 4.5s linear infinite;
+}
+.animate-bg-pan-x-reverse {
+  animation: bg-pan-x 3.5s linear infinite reverse;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;

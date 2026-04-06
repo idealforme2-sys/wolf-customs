@@ -71,8 +71,22 @@ export default function MerchSection() {
   }, [isAutoPlaying]);
 
   return (
-    <section className="bg-gray-50 min-h-screen overflow-hidden pb-20">
+    <section className="relative bg-gray-50 min-h-screen overflow-hidden pb-20">
       
+      {/* Top Animated Border Separator */}
+      <div className="absolute top-0 left-0 w-full flex flex-col items-center z-50 pointer-events-none">
+        <div className="w-full h-1.5 md:h-[6px] bg-gradient-to-r from-wolf-red via-amber-400 to-wolf-red bg-[length:200%_100%] animate-bg-pan-x" />
+        <div className="w-[85%] h-1 md:h-[3px] bg-gradient-to-r from-amber-500 via-wolf-red to-amber-500 bg-[length:200%_100%] animate-bg-pan-x-reverse" />
+        <div className="w-[65%] h-0.5 md:h-[2px] bg-gradient-to-r from-wolf-red via-transparent to-wolf-red bg-[length:200%_100%] animate-bg-pan-x-slow" />
+      </div>
+
+      {/* Bottom Animated Border Separator */}
+      <div className="absolute bottom-0 left-0 w-full flex flex-col items-center z-50 pointer-events-none">
+        <div className="w-[65%] h-0.5 md:h-[2px] bg-gradient-to-r from-wolf-red via-transparent to-wolf-red bg-[length:200%_100%] animate-bg-pan-x-slow" />
+        <div className="w-[85%] h-1 md:h-[3px] bg-gradient-to-r from-amber-500 via-wolf-red to-amber-500 bg-[length:200%_100%] animate-bg-pan-x-reverse" />
+        <div className="w-full h-1.5 md:h-[6px] bg-gradient-to-r from-wolf-red via-amber-400 to-wolf-red bg-[length:200%_100%] animate-bg-pan-x" />
+      </div>
+
       {/* Animated Header Area */}
       <div className="relative pt-24 sm:pt-32 pb-20 sm:pb-24 mb-4 sm:mb-8 flex items-center justify-center">
         
@@ -111,9 +125,10 @@ export default function MerchSection() {
           <p className="mt-2 sm:mt-4 text-sm sm:text-xl text-gray-600 font-medium max-w-xl mx-auto">
             Stay tuned! Our new merch line is dropping soon.
           </p>
-          <div className="mt-4 sm:mt-8 inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 border border-transparent text-sm sm:text-base font-bold rounded-full text-amber-900 bg-amber-200 shadow-sm hover:bg-amber-300 transition-colors">
-            <ShoppingBag className="w-4 h-4 sm:w-6 sm:h-6 mr-2" />
-            Coming Soon
+          <div className="relative overflow-hidden group mt-4 sm:mt-8 inline-flex items-center px-4 py-2 sm:px-6 sm:py-3 border border-transparent text-sm sm:text-base font-bold rounded-full text-amber-900 bg-amber-200 shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:bg-amber-300 transition-colors">
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent w-[150%] h-full animate-btn-shine pointer-events-none"></span>
+            <ShoppingBag className="w-4 h-4 sm:w-6 sm:h-6 mr-2 relative z-10" />
+            <span className="relative z-10">Coming Soon</span>
           </div>
         </div>
       </div>
