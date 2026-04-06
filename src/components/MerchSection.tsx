@@ -74,14 +74,14 @@ export default function MerchSection() {
     <section className="relative bg-gray-50 min-h-screen overflow-hidden pb-20">
       
       {/* Top Animated Laser Boundaries */}
-      <div className="absolute top-0 inset-x-0 pointer-events-none z-50 flex flex-col items-center gap-[1px] mt-[-1px]">
+      <div className="absolute top-0 inset-x-0 pointer-events-none z-20 flex flex-col items-center gap-[1px] mt-[-1px]">
         <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-wolf-red/40 to-transparent"></div>
         <div className="h-[2px] w-[50%] bg-gradient-to-r from-transparent via-amber-500/70 to-transparent animate-[merch-breathe_4s_ease-in-out_infinite]"></div>
         <div className="h-[3px] w-[20%] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_3px_rgba(255,255,255,0.8)] animate-[merch-breathe_3s_ease-in-out_infinite_reverse]"></div>
       </div>
 
       {/* Bottom Animated Laser Boundaries */}
-      <div className="absolute bottom-0 inset-x-0 pointer-events-none z-50 flex flex-col items-center gap-[1px] mb-[-1px]">
+      <div className="absolute bottom-0 inset-x-0 pointer-events-none z-20 flex flex-col items-center gap-[1px] mb-[-1px]">
         <div className="h-[3px] w-[20%] bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_15px_3px_rgba(255,255,255,0.8)] animate-[merch-breathe_3s_ease-in-out_infinite_reverse]"></div>
         <div className="h-[2px] w-[50%] bg-gradient-to-r from-transparent via-amber-500/70 to-transparent animate-[merch-breathe_4s_ease-in-out_infinite]"></div>
         <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-wolf-red/40 to-transparent"></div>
@@ -118,7 +118,7 @@ export default function MerchSection() {
         </div>
 
         {/* Foreground Headline */}
-        <div className="relative z-10 text-center bg-white/90 backdrop-blur-xl py-5 px-4 sm:py-10 sm:px-12 md:px-20 rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 max-w-[85%] sm:max-w-3xl mx-auto">
+        <div className="relative z-10 bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-[2rem] p-6 pb-8 sm:p-10 shadow-2xl max-w-[290px] sm:max-w-xl mx-4 sm:mx-auto text-center border border-white/20">
           <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight text-gray-900 uppercase">
             Official Merchandise
           </h2>
