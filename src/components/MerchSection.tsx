@@ -14,14 +14,14 @@ const merchItems = [
 
 const TickerContent = () => (
   <>
-    <span className="text-2xl font-black tracking-widest mx-8">/// NEW GEAR</span>
-    <div className="w-16 h-1.5 bg-current opacity-50"></div>
-    <span className="text-2xl font-black tracking-widest mx-8">COMING SOON</span>
-    <div className="w-16 h-1.5 bg-current opacity-50"></div>
-    <span className="text-2xl font-black tracking-widest mx-8">/// EXCLUSIVE</span>
-    <div className="w-16 h-1.5 bg-current opacity-50"></div>
-    <span className="text-2xl font-black tracking-widest mx-8">STAY TUNED</span>
-    <div className="w-16 h-1.5 bg-current opacity-50"></div>
+    <span className="text-lg md:text-2xl font-black tracking-widest mx-4 md:mx-8">/// NEW GEAR</span>
+    <div className="w-10 sm:w-16 h-1 sm:h-1.5 bg-current opacity-50"></div>
+    <span className="text-lg md:text-2xl font-black tracking-widest mx-4 md:mx-8">COMING SOON</span>
+    <div className="w-10 sm:w-16 h-1 sm:h-1.5 bg-current opacity-50"></div>
+    <span className="text-lg md:text-2xl font-black tracking-widest mx-4 md:mx-8">/// EXCLUSIVE</span>
+    <div className="w-10 sm:w-16 h-1 sm:h-1.5 bg-current opacity-50"></div>
+    <span className="text-lg md:text-2xl font-black tracking-widest mx-4 md:mx-8">STAY TUNED</span>
+    <div className="w-10 sm:w-16 h-1 sm:h-1.5 bg-current opacity-50"></div>
   </>
 );
 
@@ -74,12 +74,12 @@ export default function MerchSection() {
     <section className="bg-gray-50 min-h-screen overflow-hidden pb-20">
       
       {/* Animated Header Area */}
-      <div className="relative pt-32 pb-24 mb-8 flex items-center justify-center">
+      <div className="relative pt-24 sm:pt-32 pb-20 sm:pb-24 mb-4 sm:mb-8 flex items-center justify-center">
         
         {/* Background Tickers */}
         <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
           {/* Ticker 1 - Dark */}
-          <div className="absolute w-[150vw] -rotate-3 bg-gray-900 text-white py-5 shadow-2xl z-0">
+          <div className="absolute w-[150vw] -rotate-6 sm:-rotate-3 -translate-y-16 sm:translate-y-0 bg-gray-900 text-white py-3 sm:py-5 shadow-2xl z-0">
             <div className="flex w-[200%] animate-marquee items-center">
               <div className="flex-1 flex justify-around items-center whitespace-nowrap">
                 <TickerContent />
@@ -91,7 +91,7 @@ export default function MerchSection() {
           </div>
 
           {/* Ticker 2 - Accent */}
-          <div className="absolute w-[150vw] rotate-2 bg-amber-400 text-gray-900 py-4 shadow-xl z-0 mix-blend-multiply opacity-90">
+          <div className="absolute w-[150vw] rotate-6 sm:rotate-2 translate-y-16 sm:translate-y-0 bg-amber-400 text-gray-900 py-3 sm:py-4 shadow-xl z-0 mix-blend-multiply opacity-90">
             <div className="flex w-[200%] animate-marquee-reverse items-center">
               <div className="flex-1 flex justify-around items-center whitespace-nowrap">
                 <TickerContent />
@@ -104,7 +104,7 @@ export default function MerchSection() {
         </div>
 
         {/* Foreground Headline */}
-        <div className="relative z-10 text-center bg-white/95 backdrop-blur-md py-8 px-6 sm:py-10 sm:px-12 md:px-20 rounded-3xl shadow-2xl border border-gray-100 max-w-3xl mx-4">
+        <div className="relative z-10 text-center bg-white/95 backdrop-blur-md py-6 px-5 sm:py-10 sm:px-12 md:px-20 rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100 max-w-[90%] sm:max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
             Official Merchandise
           </h2>
