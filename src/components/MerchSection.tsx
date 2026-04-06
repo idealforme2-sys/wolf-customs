@@ -28,6 +28,7 @@ const TickerContent = () => (
 export default function MerchSection() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 640 : false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const resumeRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -50,14 +51,21 @@ export default function MerchSection() {
     pauseAutoPlay();
   };
 
-  // Auto-play effect
+  // Auto-play and Resize effect
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    const handleResize = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener('resize', handleResize);
+
+    if (!isAutoPlaying) {
+      return () => window.removeEventListener('resize', handleResize);
+    }
+
     timerRef.current = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % merchItems.length);
     }, 3000);
     
     return () => {
+      window.removeEventListener('resize', handleResize);
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [isAutoPlaying]);
@@ -96,15 +104,15 @@ export default function MerchSection() {
         </div>
 
         {/* Foreground Headline */}
-        <div className="relative z-10 text-center bg-white/95 backdrop-blur-md py-10 px-12 sm:px-20 rounded-3xl shadow-2xl border border-gray-100 max-w-3xl mx-4">
-          <h2 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+        <div className="relative z-10 text-center bg-white/95 backdrop-blur-md py-8 px-6 sm:py-10 sm:px-12 md:px-20 rounded-3xl shadow-2xl border border-gray-100 max-w-3xl mx-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900">
             Official Merchandise
           </h2>
-          <p className="mt-4 text-xl text-gray-600 font-medium">
+          <p className="mt-3 sm:mt-4 text-lg sm:text-xl text-gray-600 font-medium max-w-xl mx-auto">
             Stay tuned! Our new merch line is dropping soon.
           </p>
-          <div className="mt-8 inline-flex items-center px-6 py-3 border border-transparent text-base font-bold rounded-full text-amber-900 bg-amber-200 shadow-sm hover:bg-amber-300 transition-colors">
-            <ShoppingBag className="w-6 h-6 mr-2" />
+          <div className="mt-6 sm:mt-8 inline-flex items-center px-5 py-2.5 sm:px-6 sm:py-3 border border-transparent text-sm sm:text-base font-bold rounded-full text-amber-900 bg-amber-200 shadow-sm hover:bg-amber-300 transition-colors">
+            <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 mr-2" />
             Coming Soon
           </div>
         </div>
@@ -112,21 +120,21 @@ export default function MerchSection() {
 
       {/* 3D Carousel Area */}
       <div 
-        className="relative w-full max-w-6xl mx-auto h-[550px] flex items-center justify-center mt-8"
+        className="relative w-full max-w-6xl mx-auto h-[480px] sm:h-[550px] flex items-center justify-center mt-4 sm:mt-8"
         style={{ perspective: '1200px' }}
       >
         {/* Controls */}
         <button 
           onClick={handlePrev} 
-          className="absolute left-4 md:left-12 z-40 p-4 rounded-full bg-white/70 backdrop-blur-xl border border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.1)] text-gray-800 hover:bg-white hover:scale-110 transition-all duration-300"
+          className="absolute left-2 sm:left-4 md:left-12 z-40 p-2 sm:p-3 md:p-4 rounded-full bg-white/70 backdrop-blur-xl border border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.1)] text-gray-800 hover:bg-white hover:scale-110 transition-all duration-300"
         >
-          <ChevronLeft className="w-8 h-8" />
+          <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8" />
         </button>
         <button 
           onClick={handleNext} 
-          className="absolute right-4 md:right-12 z-40 p-4 rounded-full bg-white/70 backdrop-blur-xl border border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.1)] text-gray-800 hover:bg-white hover:scale-110 transition-all duration-300"
+          className="absolute right-2 sm:right-4 md:right-12 z-40 p-2 sm:p-3 md:p-4 rounded-full bg-white/70 backdrop-blur-xl border border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.1)] text-gray-800 hover:bg-white hover:scale-110 transition-all duration-300"
         >
-          <ChevronRight className="w-8 h-8" />
+          <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8" />
         </button>
 
         {/* Cards Container */}
@@ -144,10 +152,10 @@ export default function MerchSection() {
             const sign = Math.sign(offset);
 
             // 3D Animation Values
-            const x = `${offset * 75}%`; // Shift horizontally based on card width
-            const scale = isCenter ? 1.1 : 1 - absOffset * 0.15;
+            const x = isMobile ? `${offset * 90}%` : `${offset * 75}%`; // Shift horizontally based on card width
+            const scale = isCenter ? (isMobile ? 1.05 : 1.1) : 1 - absOffset * 0.15;
             const zIndex = 30 - absOffset;
-            const opacity = isCenter ? 1 : Math.max(0, 1 - absOffset * 0.35);
+            const opacity = isCenter ? 1 : Math.max(0, 1 - absOffset * (isMobile ? 0.5 : 0.35));
             const rotateY = sign * -15; // Inward tilt
 
             return (
@@ -155,19 +163,19 @@ export default function MerchSection() {
                 key={item.id}
                 animate={{ x, scale, zIndex, opacity, rotateY }}
                 transition={{ duration: 0.7, ease: [0.32, 0.72, 0, 1] }}
-                className="absolute w-[280px] sm:w-[320px] flex flex-col bg-white/60 backdrop-blur-xl rounded-3xl shadow-[0_15px_50px_rgba(0,0,0,0.08)] border border-white/80 overflow-hidden"
+                className="absolute w-[260px] sm:w-[320px] flex flex-col bg-white/60 backdrop-blur-xl rounded-[20px] sm:rounded-3xl shadow-[0_15px_50px_rgba(0,0,0,0.08)] border border-white/80 overflow-hidden"
                 style={{ transformStyle: 'preserve-3d' }}
               >
                 {/* Image Placeholder */}
-                <div className="aspect-w-1 aspect-h-1 bg-white/40 w-full overflow-hidden flex items-center justify-center p-8 h-64 border-b border-white/50">
+                <div className="aspect-w-1 aspect-h-1 bg-white/40 w-full overflow-hidden flex items-center justify-center p-6 sm:p-8 h-48 sm:h-64 border-b border-white/50">
                   <div className="flex flex-col items-center justify-center text-gray-400">
-                    <Package className="w-12 h-12 mb-4 opacity-50" />
-                    <span className="text-sm font-bold tracking-widest uppercase text-gray-500">coming soon</span>
+                    <Package className="w-10 h-10 sm:w-12 sm:h-12 mb-3 sm:mb-4 opacity-50" />
+                    <span className="text-xs sm:text-sm font-bold tracking-widest uppercase text-gray-500">coming soon</span>
                   </div>
                 </div>
                 
                 {/* Product Details */}
-                <div className="p-8 flex-1 flex flex-col">
+                <div className="p-5 sm:p-8 flex-1 flex flex-col">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">
                     {item.name}
                   </h3>
