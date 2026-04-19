@@ -39,7 +39,7 @@ export default function Process() {
   const height = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   return (
-    <section ref={ref} id="process" className="py-32 bg-wolf-gray relative overflow-hidden">
+    <section ref={ref} id="process" className="relative overflow-hidden bg-wolf-gray py-32 scroll-mt-36 md:scroll-mt-32">
       <div className="max-w-5xl mx-auto px-6 lg:px-8 relative">
         <div className="text-center mb-32">
           <motion.div

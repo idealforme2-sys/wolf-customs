@@ -235,7 +235,7 @@ export default function PortfolioV2Links() {
   }, [content.portfolio.items, content.portfolio.useCustomItems]);
 
   return (
-    <section id="portfolio" className="relative bg-[linear-gradient(180deg,#0b0804,#050301)] py-28 text-white">
+    <section id="portfolio" className="relative bg-[linear-gradient(180deg,#0b0804,#050301)] py-28 text-white scroll-mt-36 md:scroll-mt-32">
       <div className="absolute left-0 top-0 h-px w-full bg-gradient-to-r from-transparent via-wolf-red/40 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">

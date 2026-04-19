@@ -69,7 +69,7 @@ export default function Services() {
   }));
 
   return (
-    <section id="services" className="py-32 bg-wolf-black relative">
+    <section id="services" className="relative bg-wolf-black py-32 scroll-mt-36 md:scroll-mt-32">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-wolf-red/30 to-transparent" />
       

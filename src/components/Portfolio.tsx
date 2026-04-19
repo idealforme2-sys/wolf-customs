@@ -223,7 +223,7 @@ export default function Portfolio() {
   const { content } = useSiteContent();
 
   return (
-    <section id="portfolio" className="relative bg-wolf-black py-32">
+    <section id="portfolio" className="relative bg-wolf-black py-32 scroll-mt-36 md:scroll-mt-32">
       <div className="absolute top-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-wolf-red/30 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">

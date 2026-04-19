@@ -62,7 +62,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="py-24 bg-wolf-black relative border-t border-wolf-gunmetal"
+      className="relative border-t border-wolf-gunmetal bg-wolf-black py-24 scroll-mt-36 md:scroll-mt-32"
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">

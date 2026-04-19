@@ -37,55 +37,30 @@ export default function Navbar() {
     if (!audio) return;
 
     audio.volume = 0.5;
-    let unlockListenersBound = false;
-
-    const removeUnlockListeners = () => {
-      if (!unlockListenersBound) return;
-      unlockListenersBound = false;
-      document.removeEventListener("click", unlockAudio);
-      document.removeEventListener("scroll", unlockAudio);
-      document.removeEventListener("touchstart", unlockAudio);
-      document.removeEventListener("keydown", unlockAudio);
-    };
-
-    const bindUnlockListeners = () => {
-      if (unlockListenersBound) return;
-      unlockListenersBound = true;
-      document.addEventListener("click", unlockAudio, { passive: true });
-      document.addEventListener("scroll", unlockAudio, { passive: true });
-      document.addEventListener("touchstart", unlockAudio, { passive: true });
-      document.addEventListener("keydown", unlockAudio);
-    };
 
     const attemptPlay = () => {
-      audio.muted = false;
       audio.play().then(() => {
         setIsMuted(false);
-        removeUnlockListeners();
-      }).catch((error: DOMException) => {
-        if (error.name === "NotAllowedError") {
-          console.warn("Autoplay with sound prevented by browser. Waiting for first interaction to start audio.");
-          bindUnlockListeners();
+      }).catch((error) => {
+        if (error.name === 'NotAllowedError') {
+          console.warn("Autoplay with sound prevented by browser. Falling back to muted autoplay.");
+          setIsMuted(true);
+          audio.muted = true;
+          audio.play().catch(console.error);
         } else {
+          // It might be a loading/buffer abort, wait and try again or ignore
           console.error("Audio playback failed for another reason:", error);
         }
       });
     };
 
-    const unlockAudio = () => {
-      attemptPlay();
-    };
-
+    // If already buffered enough to play, try it. Otherwise wait for it.
     if (audio.readyState >= 2) {
       attemptPlay();
     } else {
       audio.addEventListener('canplay', attemptPlay, { once: true });
     }
 
-    return () => {
-      removeUnlockListeners();
-      audio.removeEventListener("canplay", attemptPlay);
-    };
   }, []);
 
   useEffect(() => {
@@ -148,8 +123,9 @@ export default function Navbar() {
         return;
       }
 
-      const navHeight = navRef.current?.offsetHeight ?? 0;
-      const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 18;
+      const targetRect = target.getBoundingClientRect();
+      const navBottom = navRef.current?.getBoundingClientRect().bottom ?? 0;
+      const top = targetRect.top + window.scrollY - navBottom - 24;
       window.history.replaceState(null, "", href);
       window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
     });
