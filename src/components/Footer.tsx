@@ -21,6 +21,9 @@ export default function Footer() {
             <p className="text-gray-400 max-w-md leading-relaxed mb-8">
               {content.business.footerBlurb}
             </p>
+            <p className="text-sm text-gray-500 max-w-md leading-relaxed mb-8">
+              Proudly serving Adelaide, Salisbury South, and surrounding South Australian suburbs.
+            </p>
             <div className="flex gap-4">
               <a
                 href={content.business.instagramUrl}
@@ -42,9 +45,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-heading font-bold uppercase tracking-widest text-white mb-6">
+            <p className="font-heading font-bold uppercase tracking-widest text-white mb-6">
               Services
-            </h4>
+            </p>
             <ul className="space-y-4">
               {content.services.items.slice(0, 5).map((service) => (
                 <li key={service.title}>
@@ -60,9 +63,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-heading font-bold uppercase tracking-widest text-white mb-6">
+            <p className="font-heading font-bold uppercase tracking-widest text-white mb-6">
               Company
-            </h4>
+            </p>
             <ul className="space-y-4">
               <li>
                 <a

@@ -14,7 +14,7 @@ export default function CTA() {
         <div className="absolute inset-0 bg-[linear-gradient(120deg,transparent_18%,rgba(255,232,170,0.08)_36%,transparent_54%,rgba(243,163,55,0.08)_72%,transparent_88%)] z-10" />
         <img
           src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=2000&auto=format&fit=crop"
-          alt="Workshop"
+          alt="Wolf Customs workshop in Adelaide, South Australia"
           className="w-full h-full object-cover grayscale opacity-30"
         />
       </div>

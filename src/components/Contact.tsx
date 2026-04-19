@@ -98,9 +98,9 @@ export default function Contact() {
                   <MapPin className="w-6 h-6 text-wolf-red" />
                 </div>
                 <div>
-                  <h4 className="font-heading font-bold uppercase tracking-widest text-white mb-1">
+                  <p className="font-heading font-bold uppercase tracking-widest text-white mb-1">
                     Location
-                  </h4>
+                  </p>
                   <p className="text-gray-400 whitespace-pre-line">{content.business.address}</p>
                 </div>
               </motion.div>
@@ -116,9 +116,9 @@ export default function Contact() {
                   <Phone className="w-6 h-6 text-wolf-red" />
                 </div>
                 <div>
-                  <h4 className="font-heading font-bold uppercase tracking-widest text-white mb-1">
+                  <p className="font-heading font-bold uppercase tracking-widest text-white mb-1">
                     Phone
-                  </h4>
+                  </p>
                   <a href={content.business.phoneHref} className="text-gray-400 hover:text-white transition-colors">
                     {content.business.phoneDisplay}
                   </a>
@@ -136,9 +136,9 @@ export default function Contact() {
                   <Mail className="w-6 h-6 text-wolf-red" />
                 </div>
                 <div>
-                  <h4 className="font-heading font-bold uppercase tracking-widest text-white mb-1">
+                  <p className="font-heading font-bold uppercase tracking-widest text-white mb-1">
                     Email
-                  </h4>
+                  </p>
                   <a href={`mailto:${content.business.email}`} className="text-gray-400 hover:text-white transition-colors">
                     {content.business.email}
                   </a>
@@ -156,9 +156,9 @@ export default function Contact() {
                   <Clock className="w-6 h-6 text-wolf-red" />
                 </div>
                 <div>
-                  <h4 className="font-heading font-bold uppercase tracking-widest text-white mb-1">
+                  <p className="font-heading font-bold uppercase tracking-widest text-white mb-1">
                     Hours
-                  </h4>
+                  </p>
                   <p className="text-gray-400 whitespace-pre-line">{content.business.hours}</p>
                 </div>
               </motion.div>

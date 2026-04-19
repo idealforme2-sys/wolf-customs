@@ -16,6 +16,14 @@ const fallbackProjectImages = [
   rustTreatmentImg,
 ];
 
+const galleryImageAlts: Record<string, string> = {
+  "Custom Paint": "custom paint job Adelaide",
+  "Full Respray": "full car respray Adelaide",
+  "Panel Repair": "panel repair Adelaide",
+  "Classic Restoration": "car restoration Adelaide",
+  "Rust Treatment": "rust repair Adelaide",
+};
+
 export default function Gallery() {
   const { content } = useSiteContent();
   const targetRef = useRef<HTMLDivElement>(null);
@@ -60,7 +68,7 @@ export default function Gallery() {
               <div className="absolute inset-0 bg-wolf-black/40 group-hover:bg-transparent transition-colors duration-700 z-10" />
               <img
                 src={project.image}
-                alt={project.title}
+                alt={galleryImageAlts[project.title] ?? `${project.title} Adelaide`}
                 className="h-full w-full bg-[#050301] object-cover grayscale transition-transform duration-[1.5s] ease-out will-change-transform group-hover:scale-110 group-hover:grayscale-0"
               />
 

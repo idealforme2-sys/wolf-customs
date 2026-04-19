@@ -81,7 +81,13 @@ function PostPreviewCard({ item }: { item: EmbedItem }) {
   return (
     <PreviewShell>
       <div className="group relative overflow-hidden rounded-[24px] border border-white/8 bg-black aspect-[4/5]">
-        {currentMedia ? <img src={currentMedia} alt={item.id} className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" /> : null}
+        {currentMedia ? (
+          <img
+            src={currentMedia}
+            alt={`${item.id} project by Wolf Customs Adelaide`}
+            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : null}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
 
         {media.length > 1 ? (

@@ -141,7 +141,7 @@ export const defaultSiteContent: SiteContent = {
     phoneHref: "tel:+61423358302",
   },
   hero: {
-    eyebrow: "Adelaide's Premier Auto Studio",
+    eyebrow: "Adelaide's Premier Auto Restoration & Custom Paint Studio",
     description:
       "Professional vehicle restorations, custom paintwork and panel repairs. We bring automotive legends back to life.",
     primaryCtaLabel: "Request Quote",
@@ -164,7 +164,7 @@ export const defaultSiteContent: SiteContent = {
       {
         title: "Paint & Panel Repairs",
         description:
-          "Expert collision repair and dent removal to restore your vehicle to factory condition. We use advanced techniques to ensure a seamless finish.",
+          "Expert collision repair and dent removal in Adelaide to restore your vehicle to factory condition with seamless panel repair and paintwork.",
         iconKey: "wrench",
         imageKey: "paint-panel-repairs",
         imageUrl: "",
@@ -172,7 +172,7 @@ export const defaultSiteContent: SiteContent = {
       {
         title: "Vehicle Restorations",
         description:
-          "Full nut-and-bolt restorations for classic and muscle cars. Bringing legends back to life with uncompromising attention to detail.",
+          "Complete vehicle restorations in Adelaide for classic and modern cars, bringing automotive legends back to life with uncompromising attention to detail.",
         iconKey: "car",
         imageKey: "vehicle-restorations",
         imageUrl: "",
@@ -180,7 +180,7 @@ export const defaultSiteContent: SiteContent = {
       {
         title: "Full Car Resprays",
         description:
-          "Complete color changes or factory-matched resprays using premium automotive paints in our climate-controlled spray booths.",
+          "Full car resprays for Adelaide and South Australia drivers using premium automotive paints in our climate-controlled spray booths.",
         iconKey: "paintbrush",
         imageKey: "full-car-resprays",
         imageUrl: "",
@@ -196,7 +196,7 @@ export const defaultSiteContent: SiteContent = {
       {
         title: "Custom Paint Jobs",
         description:
-          "Show-quality custom finishes, pearls, candies, flakes, and bespoke designs tailored to your exact vision.",
+          "Show-quality custom paint jobs in Adelaide with pearls, candies, flakes, and bespoke finishes tailored to your exact vision.",
         iconKey: "palette",
         imageKey: "custom-paint-jobs",
         imageUrl: "",
@@ -286,7 +286,7 @@ export const defaultSiteContent: SiteContent = {
   contact: {
     title: "Get In",
     highlight: "Touch",
-    description: "Visit our Adelaide workshop or send us a message to discuss your next automotive project.",
+    description: "Visit our Salisbury South workshop in Adelaide, South Australia or send us a message to discuss your next automotive project.",
     quoteTitle: "Request a Quote",
   },
   business: {
@@ -298,7 +298,7 @@ export const defaultSiteContent: SiteContent = {
     mapEmbedUrl:
       "https://maps.google.com/maps?q=Wolf+Customs,77A+Rundle+Rd,+Salisbury+South+SA+5106&t=&z=15&ie=UTF8&iwloc=&output=embed",
     footerBlurb:
-      "Adelaide's premier automotive restoration and custom paint studio. We specialize in bringing legends back to life with uncompromising quality and precision.",
+      "Wolf Customs is an automotive restoration and custom paint studio based in Adelaide, South Australia. We specialise in bringing legends back to life with uncompromising quality and precision.",
     instagramUrl: "https://www.instagram.com/wolfcustoms_adelaide/",
     facebookUrl:
       "https://web.facebook.com/wolfcustomsadelaide?rdid=KcDxg51u4492qlPe&share_url=https%3A%2F%2Fweb.facebook.com%2Fshare%2F19LsBACZEz%2F%3Futm_source%3Dig%26utm_medium%3Dsocial%26utm_content%3Dlink_in_bio%26_rdc%3D1%26_rdr",

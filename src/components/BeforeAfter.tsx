@@ -58,7 +58,7 @@ export default function BeforeAfter() {
           <div className="absolute inset-0">
             <img
               src={afterImage}
-              alt={content.beforeAfter.afterLabel}
+              alt="car restoration Adelaide after"
               className="w-full h-full object-cover"
               draggable="false"
             />
@@ -75,7 +75,7 @@ export default function BeforeAfter() {
           >
             <img
               src={beforeImage}
-              alt={content.beforeAfter.beforeLabel}
+              alt="car restoration Adelaide before"
               className="w-full h-full object-cover grayscale opacity-80"
               draggable="false"
             />

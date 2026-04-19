@@ -42,9 +42,9 @@ export default function Trust() {
               className="flex flex-col items-center text-center"
             >
               <stat.icon className="w-10 h-10 text-wolf-red mb-4" />
-              <h4 className="text-4xl font-heading font-bold text-white mb-2">
+              <p className="text-4xl font-heading font-bold text-white mb-2">
                 {stat.value}
-              </h4>
+              </p>
               <p className="text-gray-400 uppercase tracking-widest text-xs font-semibold">
                 {stat.label}
               </p>
@@ -83,9 +83,9 @@ export default function Trust() {
                 "{testimonial.text}"
               </p>
               <div>
-                <h5 className="font-heading font-bold uppercase text-white tracking-wide">
+                <p className="font-heading font-bold uppercase text-white tracking-wide">
                   {testimonial.name}
-                </h5>
+                </p>
                 <p className="text-wolf-red text-sm font-semibold">
                   {testimonial.car}
                 </p>
