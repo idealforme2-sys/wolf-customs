@@ -37,30 +37,55 @@ export default function Navbar() {
     if (!audio) return;
 
     audio.volume = 0.5;
+    let unlockListenersBound = false;
+
+    const removeUnlockListeners = () => {
+      if (!unlockListenersBound) return;
+      unlockListenersBound = false;
+      document.removeEventListener("click", unlockAudio);
+      document.removeEventListener("scroll", unlockAudio);
+      document.removeEventListener("touchstart", unlockAudio);
+      document.removeEventListener("keydown", unlockAudio);
+    };
+
+    const bindUnlockListeners = () => {
+      if (unlockListenersBound) return;
+      unlockListenersBound = true;
+      document.addEventListener("click", unlockAudio, { passive: true });
+      document.addEventListener("scroll", unlockAudio, { passive: true });
+      document.addEventListener("touchstart", unlockAudio, { passive: true });
+      document.addEventListener("keydown", unlockAudio);
+    };
 
     const attemptPlay = () => {
+      audio.muted = false;
       audio.play().then(() => {
         setIsMuted(false);
-      }).catch((error) => {
-        if (error.name === 'NotAllowedError') {
-          console.warn("Autoplay with sound prevented by browser. Falling back to muted autoplay.");
-          setIsMuted(true);
-          audio.muted = true;
-          audio.play().catch(console.error);
+        removeUnlockListeners();
+      }).catch((error: DOMException) => {
+        if (error.name === "NotAllowedError") {
+          console.warn("Autoplay with sound prevented by browser. Waiting for first interaction to start audio.");
+          bindUnlockListeners();
         } else {
-          // It might be a loading/buffer abort, wait and try again or ignore
           console.error("Audio playback failed for another reason:", error);
         }
       });
     };
 
-    // If already buffered enough to play, try it. Otherwise wait for it.
+    const unlockAudio = () => {
+      attemptPlay();
+    };
+
     if (audio.readyState >= 2) {
       attemptPlay();
     } else {
       audio.addEventListener('canplay', attemptPlay, { once: true });
     }
 
+    return () => {
+      removeUnlockListeners();
+      audio.removeEventListener("canplay", attemptPlay);
+    };
   }, []);
 
   useEffect(() => {
