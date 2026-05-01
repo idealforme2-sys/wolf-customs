@@ -159,9 +159,9 @@ export default function PortfolioV3Embed() {
     }
 
     const syncTileKinds = () => {
-      widget.querySelectorAll<HTMLElement>(".eapps-instagram-feed-posts-item").forEach((item) => {
+      (widget.querySelectorAll(".eapps-instagram-feed-posts-item") as NodeListOf<HTMLElement>).forEach((item) => {
         const href =
-          item.querySelector<HTMLAnchorElement>(".eapps-instagram-feed-posts-item-link")?.href ?? "";
+          (item.querySelector(".eapps-instagram-feed-posts-item-link") as HTMLAnchorElement | null)?.href ?? "";
         item.dataset.previewKind = href.includes("/reel/") ? "reel" : "post";
       });
     };

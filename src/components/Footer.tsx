@@ -1,4 +1,4 @@
-import { Instagram, Facebook } from "lucide-react";
+import { Facebook } from "lucide-react";
 import { useSiteContent } from "./SiteContentProvider";
 
 export default function Footer() {
@@ -25,14 +25,6 @@ export default function Footer() {
               Proudly serving Adelaide, Salisbury South, and surrounding South Australian suburbs.
             </p>
             <div className="flex gap-4">
-              <a
-                href={content.business.instagramUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 bg-wolf-gunmetal flex items-center justify-center hover:bg-wolf-red hover:text-wolf-black transition-colors duration-300 text-gray-400"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
               <a
                 href={content.business.facebookUrl}
                 target="_blank"
