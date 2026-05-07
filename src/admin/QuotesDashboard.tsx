@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { collection, query, orderBy, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { Loader2, Phone, Calendar, ChevronDown, ChevronUp, ExternalLink, Search } from "lucide-react";
+import { isPlaceholderQuote } from "./quoteFilters";
 
 interface Quote {
   id: string;
@@ -32,7 +33,11 @@ export default function QuotesDashboard() {
   useEffect(() => {
     const q = query(collection(db, "quotes"), orderBy("createdAt", "desc"));
     const unsub = onSnapshot(q, (snap) => {
-      setQuotes(snap.docs.map((d) => ({ id: d.id, ...d.data() } as Quote)));
+      setQuotes(
+        snap.docs
+          .map((d) => ({ id: d.id, ...d.data() } as Quote))
+          .filter((quote) => !isPlaceholderQuote(quote))
+      );
       setLoading(false);
     });
     return unsub;

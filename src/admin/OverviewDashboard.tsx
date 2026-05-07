@@ -13,6 +13,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { isPlaceholderQuote } from "./quoteFilters";
 
 interface StatCardProps {
   title: string;
@@ -103,7 +104,9 @@ export default function OverviewDashboard() {
   useEffect(() => {
     const q = query(collection(db, "quotes"), orderBy("createdAt", "desc"));
     const unsub = onSnapshot(q, (snap) => {
-      const quotes = snap.docs.map(d => ({ id: d.id, ...d.data() } as Quote));
+      const quotes = snap.docs
+        .map(d => ({ id: d.id, ...d.data() } as Quote))
+        .filter((quote) => !isPlaceholderQuote(quote));
       
       setStats({
         total: quotes.length,
