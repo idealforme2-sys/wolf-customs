@@ -30,11 +30,11 @@ import { auth, db } from "../firebase";
 import { defaultSiteContent, mergeSiteContent, type SiteContent } from "../siteContent";
 import {
   clonePortfolioItems,
-  getInstagramEmbedUrl,
-  getInstagramItemType,
-  normalizeInstagramUrl,
+  getPortfolioEmbedUrl,
+  getPortfolioItemType as getPortfolioItemTypeFromUrl,
+  normalizePortfolioUrl,
   resolvePortfolioItems,
-} from "../utils/portfolioInstagram";
+} from "../utils/portfolioEmbeds";
 import { uploadToCloudinary } from "../utils/cloudinary";
 
 type SectionId =
@@ -72,9 +72,9 @@ const sectionDefinitions: SectionDefinition[] = [
   { id: "services", group: "Visual Showcase", navLabel: "Your Main Services", title: "Your Main Services", description: "Show the services you want customers to notice first, along with the visuals that represent them.", icon: Blocks },
   { id: "before-after", group: "Visual Showcase", navLabel: "Before & After Showcase", title: "Before & After Showcase", description: "This compares a before and after result so people can quickly see the impact of your work.", icon: Sparkles },
   { id: "gallery", group: "Visual Showcase", navLabel: "Featured Work", title: "Featured Work", description: "This row highlights selected work examples with supporting text.", icon: ImagePlus },
-  { id: "portfolio", group: "Instagram & Trust", navLabel: "Instagram Portfolio", title: "Instagram Portfolio", description: "Manage the posts and reels you want to feature on the website showcase.", icon: MessageSquareText },
-  { id: "faq", group: "Instagram & Trust", navLabel: "Questions Customers Ask", title: "Questions Customers Ask", description: "Answer the questions customers ask most often so they feel confident reaching out.", icon: MessageSquareText },
-  { id: "cta", group: "Instagram & Trust", navLabel: "Get In Touch Section", title: "Get In Touch Section", description: "This section encourages visitors to contact you or request a quote.", icon: Sparkles },
+  { id: "portfolio", group: "Showcase & Trust", navLabel: "Facebook Showcase", title: "Facebook Showcase", description: "Manage the Facebook posts and custom previews you want to feature on the website showcase.", icon: MessageSquareText },
+  { id: "faq", group: "Showcase & Trust", navLabel: "Questions Customers Ask", title: "Questions Customers Ask", description: "Answer the questions customers ask most often so they feel confident reaching out.", icon: MessageSquareText },
+  { id: "cta", group: "Showcase & Trust", navLabel: "Get In Touch Section", title: "Get In Touch Section", description: "This section encourages visitors to contact you or request a quote.", icon: Sparkles },
   { id: "contact", group: "Business Details", navLabel: "Business Details", title: "Business Details", description: "Keep your contact details, address, hours, and social links up to date.", icon: MapPin },
 ];
 
@@ -82,13 +82,13 @@ const sectionDefinitionMap = Object.fromEntries(sectionDefinitions.map((section)
 const sectionGroupDescriptions: Record<string, string> = {
   Homepage: "Top-of-page messaging, intro copy, and trust-building highlights.",
   "Visual Showcase": "Core service visuals, before-and-after proof, and featured work.",
-  "Instagram & Trust": "Social proof, common questions, and the main contact prompt.",
+  "Showcase & Trust": "Social proof, common questions, and the main contact prompt.",
   "Business Details": "Contact details, social links, and advanced tap-to-call or map settings.",
 };
 const sectionGroupTitleParts: Record<string, [string, string?]> = {
   Homepage: ["HOME", "PAGE"],
   "Visual Showcase": ["VISUAL", "SHOWCASE"],
-  "Instagram & Trust": ["INSTAGRAM", "& TRUST"],
+  "Showcase & Trust": ["SHOWCASE", "& TRUST"],
   "Business Details": ["BUSINESS", "DETAILS"],
 };
 const sectionGroupStyles: Record<
@@ -103,7 +103,7 @@ const sectionGroupStyles: Record<
   "Visual Showcase": {
     icon: Camera,
   },
-  "Instagram & Trust": {
+  "Showcase & Trust": {
     icon: ShieldCheck,
   },
   "Business Details": {
@@ -134,7 +134,7 @@ const getPortfolioItemType = (item: SiteContent["portfolio"]["items"][number]) =
     return item.type === "reel" ? "reel" : "post";
   }
 
-  return normalizeInstagramUrl(item.link) ? getInstagramItemType(item.link) : "post";
+  return normalizePortfolioUrl(item.link) ? getPortfolioItemTypeFromUrl(item.link) : "post";
 };
 
 function buildSectionSnapshots(source: SiteContent): Record<SectionId, unknown> {
@@ -176,7 +176,7 @@ function buildSectionSummaries(source: SiteContent): Record<SectionId, string> {
     gallery: `${source.gallery.items.length} showcase cards`,
     portfolio: portfolioItems.length
       ? `${portfolioItems.length} selected item${portfolioItems.length === 1 ? "" : "s"} • ${portfolioCustomCount} custom preview${portfolioCustomCount === 1 ? "" : "s"}`
-      : "Default Instagram embed showcase",
+      : "Default showcase embed setup",
     faq: `${source.faq.items.length} common question${source.faq.items.length === 1 ? "" : "s"}`,
     cta: truncateText(source.cta.buttonLabel || source.cta.description, 70),
     contact: [source.business.phoneDisplay, source.business.email].filter(Boolean).join(" • ") || "Business details ready",
@@ -198,7 +198,7 @@ function buildPremiumSectionSummaries(source: SiteContent): Record<SectionId, st
     gallery: `${source.gallery.items.length} showcase cards`,
     portfolio: portfolioItems.length
       ? `${portfolioItems.length} selected item${portfolioItems.length === 1 ? "" : "s"} | ${portfolioCustomCount} custom preview${portfolioCustomCount === 1 ? "" : "s"}`
-      : "Default Instagram embed showcase",
+      : "Default showcase embed setup",
     faq: `${source.faq.items.length} common question${source.faq.items.length === 1 ? "" : "s"}`,
     cta: truncateText(source.cta.buttonLabel || source.cta.description, 70),
     contact: [source.business.phoneDisplay, source.business.email].filter(Boolean).join(" | ") || "Business details ready",
@@ -408,7 +408,7 @@ function PublishReviewModal({
               <p className="mt-2 text-2xl font-heading font-bold text-white">{mediaChangeCount}</p>
             </div>
             <div className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,250,237,0.05),rgba(10,7,3,0.56))] p-4">
-              <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Instagram items</p>
+              <p className="text-[11px] uppercase tracking-[0.22em] text-gray-500">Showcase items</p>
               <p className="mt-2 text-2xl font-heading font-bold text-white">{portfolioPreparedCount}</p>
             </div>
           </div>
@@ -949,7 +949,7 @@ export default function ContentDashboard() {
   }, []);
   const homepageGroup = sectionGroups.find((group) => group.title === "Homepage") ?? null;
   const visualShowcaseGroup = sectionGroups.find((group) => group.title === "Visual Showcase") ?? null;
-  const instagramTrustGroup = sectionGroups.find((group) => group.title === "Instagram & Trust") ?? null;
+  const instagramTrustGroup = sectionGroups.find((group) => group.title === "Showcase & Trust") ?? null;
   const businessDetailsGroup = sectionGroups.find((group) => group.title === "Business Details") ?? null;
 
   const publishingLabel =
@@ -1033,10 +1033,10 @@ export default function ContentDashboard() {
   };
 
   const setPortfolioLink = (itemIndex: number, value: string) => {
-    const normalized = normalizeInstagramUrl(value);
+    const normalized = normalizePortfolioUrl(value);
     setPortfolioItem(itemIndex, {
       link: value,
-      type: normalized ? getInstagramItemType(normalized) : "post",
+      type: normalized ? getPortfolioItemTypeFromUrl(normalized) : "post",
     });
   };
 
@@ -1292,7 +1292,7 @@ export default function ContentDashboard() {
                 </h1>
               </div>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-gray-300 md:text-base">
-                Update your website content, visuals, and Instagram showcase with confidence. Your live website stays untouched until you publish.
+                Update your website content, visuals, and Facebook showcase with confidence. Your live website stays untouched until you publish.
               </p>
               <div className="mt-6 grid gap-3 sm:grid-cols-3">
                 <div className="rounded-[22px] border border-[rgba(255,225,171,0.08)] bg-[linear-gradient(180deg,rgba(255,224,168,0.03),rgba(12,8,3,0.82))] px-4 py-3 shadow-[inset_0_1px_0_rgba(255,224,168,0.03)]">
@@ -1326,9 +1326,9 @@ export default function ContentDashboard() {
               />
               <SummaryStatCard
                 icon={MessageSquareText}
-                label="Instagram Portfolio"
+                label="Facebook Showcase"
                 value={portfolioPreparedCount ? `${portfolioPreparedCount} item${portfolioPreparedCount === 1 ? "" : "s"}` : "Default setup"}
-                hint="Choose handpicked posts and reels or keep the current showcase setup."
+                hint="Choose handpicked Facebook posts or keep the current showcase setup."
               />
             </div>
           </div>
@@ -1924,7 +1924,7 @@ export default function ContentDashboard() {
 
             <EditableSectionCard
               id="portfolio"
-              title="Instagram Portfolio"
+              title="Facebook Showcase"
               description={sectionDefinitionMap.portfolio.description}
               summary={sectionSummaries.portfolio}
               status={sectionStatusMap.portfolio}
@@ -1936,7 +1936,7 @@ export default function ContentDashboard() {
                 <PreviewTile label="How this section works">
                   <div className="rounded-[24px] border border-white/10 bg-black/30 p-5">
                     <p className="text-sm leading-relaxed text-gray-300">
-                      Each preview uses one source only. You can either paste an Instagram post or reel URL to use the native embed style, or upload custom photos/video to use a custom preview style. To switch modes, remove the existing URL or uploaded media first.
+                      Each preview uses one source only. You can either paste a Facebook post link, reel link, or embed code to use the native embed style, or upload custom photos or video to use a custom preview style. To switch modes, remove the existing URL or uploaded media first.
                     </p>
                   </div>
                 </PreviewTile>
@@ -1970,12 +1970,12 @@ export default function ContentDashboard() {
                 {portfolioEditorItems.length === 0 ? (
                   <EmptyStateCard
                     title="No showcase items yet"
-                    description="Add your first post or reel to start building this section. Each new preview can use either an Instagram URL or uploaded media, depending on how you want it to appear on the website."
+                    description="Add your first Facebook post or reel to start building this section. Each new preview can use either a Facebook link or embed code, or uploaded media, depending on how you want it to appear on the website."
                   />
                 ) : (
                   <div className="space-y-4">
                     {portfolioEditorItems.map((item, itemIndex) => {
-                      const hasEmbedLink = Boolean(normalizeInstagramUrl(item.link));
+                      const hasEmbedLink = Boolean(normalizePortfolioUrl(item.link));
                       const hasUploadedMedia = item.media.some((mediaUrl) => mediaUrl.trim());
                       const portfolioItemType = getPortfolioItemType(item);
                       const uploadAccept = hasUploadedMedia
@@ -2011,18 +2011,18 @@ export default function ContentDashboard() {
                                       className="h-full w-full object-cover"
                                     />
                                   )
-                                ) : normalizeInstagramUrl(item.link) ? (
+                                ) : normalizePortfolioUrl(item.link) ? (
                                   <iframe
                                     title={item.label || `Portfolio item ${itemIndex + 1}`}
-                                    src={getInstagramEmbedUrl(item.link)}
-                                    className="h-[520px] w-full -translate-y-16 border-0"
+                                    src={getPortfolioEmbedUrl(item.link)}
+                                    className="h-[520px] w-full border-0"
                                     loading="lazy"
                                     allowTransparency={true}
                                     allow="encrypted-media"
                                   />
                                 ) : (
                                   <div className="flex h-full items-center justify-center px-4 text-center text-sm text-gray-500">
-                                    Add an Instagram source link to use the default embed style, or upload media to use the custom preview style.
+                                    Add a Facebook post link to use the default embed style, or upload media to use the custom preview style.
                                   </div>
                                 )}
                               </div>
@@ -2063,15 +2063,15 @@ export default function ContentDashboard() {
                             </div>
 
                             <OwnerField
-                              label="Instagram source link"
+                              label="Facebook post or embed link"
                               value={item.link}
                               onChange={(value) => setPortfolioLink(itemIndex, value)}
                               disabled={hasUploadedMedia}
-                              placeholder="Paste the Instagram post or reel link"
+                              placeholder="Paste the Facebook post, reel, video, or embed link"
                               hint={
                                 hasUploadedMedia
                                   ? "This preview is currently using uploaded media. Remove the uploaded media first if you want to switch this item back to URL embed mode."
-                                  : "Paste an Instagram link here and the preview type will be detected automatically."
+                                  : "Paste a Facebook post link, reel link, plugin URL, or full iframe embed code here to use the native embed."
                               }
                             />
                             {hasEmbedLink ? (
@@ -2082,7 +2082,7 @@ export default function ContentDashboard() {
                                   className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs text-gray-300 transition-colors hover:border-wolf-red hover:text-white"
                                 >
                                   <Undo2 className="h-4 w-4" />
-                                  Remove Instagram URL
+                                  Remove Facebook URL
                                 </button>
                               </div>
                             ) : null}
@@ -2093,7 +2093,7 @@ export default function ContentDashboard() {
                                   <p className="text-base font-heading font-bold text-white">Uploaded preview media</p>
                                   <p className="mt-1 text-sm text-gray-500">
                                     {hasEmbedLink
-                                      ? "This preview is currently using an Instagram URL. Remove that URL first if you want to upload custom preview media instead."
+                                      ? "This preview is currently using a Facebook URL. Remove that URL first if you want to upload custom preview media instead."
                                       : hasUploadedMedia
                                         ? portfolioItemType === "reel"
                                           ? "This preview is using uploaded video, so it behaves like a reel."
@@ -2209,7 +2209,7 @@ export default function ContentDashboard() {
                     <div>
                       <p className="text-base font-heading font-bold text-white">Add another preview</p>
                       <p className="mt-1 max-w-2xl text-sm leading-relaxed text-gray-400">
-                        Use this to append a brand new Instagram preview after the current ones. Each new preview can use either an Instagram URL or uploaded preview media, but not both at the same time.
+                        Use this to append a brand new Facebook preview after the current ones. Each new preview can use either a Facebook URL or uploaded preview media, but not both at the same time.
                       </p>
                     </div>
                     <button
@@ -2528,7 +2528,7 @@ export default function ContentDashboard() {
                     <p className="mt-1 text-lg font-heading font-bold text-white">{mediaChangeCount}</p>
                   </div>
                   <div className="rounded-[20px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,249,236,0.05),rgba(10,7,3,0.5))] px-4 py-3">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">Instagram items</p>
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-gray-500">Showcase items</p>
                     <p className="mt-1 text-lg font-heading font-bold text-white">{portfolioPreparedCount}</p>
                   </div>
                 </div>

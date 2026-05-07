@@ -1,3 +1,5 @@
+import { normalizePortfolioUrl } from "./utils/portfolioEmbeds";
+
 export interface TopBannerContent {
   text: string;
   phoneDisplay: string;
@@ -130,7 +132,7 @@ export interface SiteContent {
 }
 
 export const PORTFOLIO_DEFAULT_DESCRIPTION =
-  "This first portfolio demonstration was done manually on my side by downloading the reels/images, placing them into the website, and linking each one to its original Instagram source. So when someone clicks on an item, it opens the related Instagram post or reel. If you want to be able to edit and update the portfolio yourself, this method would not be the best option moving forward.";
+  "Explore some of our latest transformations and custom builds. Each showcase card can open the original Facebook post for a closer look at the work behind it.";
 
 export const LEGACY_TEST_EMBED_URL = "https://www.instagram.com/p/DWILQK6DLV7/";
 
@@ -348,7 +350,38 @@ const normalizePortfolioLink = (value: unknown) => {
   }
 };
 
+const isLegacyInstagramPortfolio = (items: PortfolioItem[]) => {
+  if (!items.length) {
+    return false;
+  }
+
+  const hasUploadedMedia = items.some((item) => item.media.some((mediaUrl) => mediaUrl.trim()));
+  if (hasUploadedMedia) {
+    return false;
+  }
+
+  const normalizedLinks = items.map((item) => normalizePortfolioUrl(item.link)).filter(Boolean);
+  if (!normalizedLinks.length) {
+    return false;
+  }
+
+  return normalizedLinks.every((link) => link.includes("instagram.com/"));
+};
+
 export function mergeSiteContent(incoming?: Partial<SiteContent> | null): SiteContent {
+  const incomingPortfolioItems: PortfolioItem[] = Array.isArray(incoming?.portfolio?.items)
+    ? incoming!.portfolio!.items
+        .map((item): PortfolioItem => ({
+          label: item.label ?? "",
+          type: item.type === "reel" ? "reel" : "post",
+          media: Array.isArray(item.media) ? item.media.filter((mediaUrl): mediaUrl is string => typeof mediaUrl === "string") : [],
+          link: item.link ?? "",
+        }))
+        .filter((item) => !(normalizePortfolioLink(item.link) === LEGACY_TEST_EMBED_URL && item.media.every((mediaUrl) => !mediaUrl.trim())))
+    : defaultSiteContent.portfolio.items;
+
+  const shouldResetPortfolioToFallback = isLegacyInstagramPortfolio(incomingPortfolioItems);
+
   return {
     topBanner: {
       ...defaultSiteContent.topBanner,
@@ -377,18 +410,11 @@ export function mergeSiteContent(incoming?: Partial<SiteContent> | null): SiteCo
       ...defaultSiteContent.portfolio,
       ...(incoming?.portfolio ?? {}),
       useCustomItems:
-        incoming?.portfolio?.useCustomItems ??
-        Boolean(Array.isArray(incoming?.portfolio?.items) && incoming!.portfolio!.items.length),
-      items: Array.isArray(incoming?.portfolio?.items)
-        ? incoming!.portfolio!.items
-            .map((item): PortfolioItem => ({
-              label: item.label ?? "",
-              type: item.type === "reel" ? "reel" : "post",
-              media: Array.isArray(item.media) ? item.media.filter((mediaUrl): mediaUrl is string => typeof mediaUrl === "string") : [],
-              link: item.link ?? "",
-            }))
-            .filter((item) => !(normalizePortfolioLink(item.link) === LEGACY_TEST_EMBED_URL && item.media.every((mediaUrl) => !mediaUrl.trim())))
-        : defaultSiteContent.portfolio.items,
+        shouldResetPortfolioToFallback
+          ? false
+          : incoming?.portfolio?.useCustomItems ??
+            Boolean(Array.isArray(incoming?.portfolio?.items) && incoming!.portfolio!.items.length),
+      items: shouldResetPortfolioToFallback ? [] : incomingPortfolioItems,
     },
     faq: {
       ...defaultSiteContent.faq,

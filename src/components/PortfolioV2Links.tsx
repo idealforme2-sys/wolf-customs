@@ -2,13 +2,14 @@ import { useEffect, useMemo, useRef, useState, type MouseEvent, type ReactNode }
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, ExternalLink, Volume2, VolumeX } from "lucide-react";
 import { useSiteContent } from "./SiteContentProvider";
-import { getInstagramEmbedUrl, getInstagramItemType, normalizeInstagramUrl, resolvePortfolioItems } from "../utils/portfolioInstagram";
+import { getPortfolioEmbedUrl, getPortfolioItemType, normalizePortfolioUrl, resolvePortfolioItems } from "../utils/portfolioEmbeds";
 
 interface EmbedItem {
   id: string;
   type: "post" | "reel";
   media: string[];
   link: string;
+  embedUrl: string;
 }
 
 const EMBED_CROP_MAP: Record<string, { frame: string; iframe: string }> = {
@@ -30,10 +31,12 @@ const EMBED_PORTFOLIO_DESCRIPTION =
   "Explore our latest transformations and custom builds. We take pride in delivering excellence through precision and craftsmanship, ensuring every project meets our high standards.";
 
 function EmbedCard({ item }: { item: EmbedItem }) {
-  const embedUrl = getInstagramEmbedUrl(item.link);
-  const crop = EMBED_CROP_MAP[item.id] ?? (item.type === "reel"
-    ? { frame: "h-[610px] md:h-[690px]", iframe: "h-[980px] md:h-[1060px]" }
-    : { frame: "h-[500px] md:h-[560px]", iframe: "h-[820px] md:h-[900px]" });
+  const isFacebookPost = item.link.includes("facebook.com/");
+  const crop = EMBED_CROP_MAP[item.id] ?? (isFacebookPost
+    ? { frame: "h-[540px] md:h-[600px]", iframe: "h-[540px] md:h-[600px]" }
+    : item.type === "reel"
+      ? { frame: "h-[610px] md:h-[690px]", iframe: "h-[980px] md:h-[1060px]" }
+      : { frame: "h-[500px] md:h-[560px]", iframe: "h-[820px] md:h-[900px]" });
 
   return (
     <div className="break-inside-avoid overflow-hidden rounded-[30px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03))] shadow-[0_20px_60px_rgba(0,0,0,0.28)]">
@@ -41,7 +44,7 @@ function EmbedCard({ item }: { item: EmbedItem }) {
         <div className={`overflow-hidden rounded-[24px] border border-white/8 bg-black ${crop.frame}`}>
           <iframe
             title={item.id}
-            src={embedUrl}
+            src={item.embedUrl}
             className={`w-full border-0 ${crop.iframe}`}
             loading="lazy"
             allowTransparency={true}
@@ -215,20 +218,22 @@ export default function PortfolioV2Links() {
   const embedItems = useMemo<EmbedItem[]>(() => {
     return resolvePortfolioItems(content.portfolio.items, content.portfolio.useCustomItems)
       .map((item, index) => {
-        const normalizedLink = normalizeInstagramUrl(item.link);
+        const normalizedLink = normalizePortfolioUrl(item.link);
+        const embedUrl = getPortfolioEmbedUrl(item.link);
         const media = item.media.filter((value) => value.trim());
 
-        if (!normalizedLink && media.length === 0) {
+        if ((!normalizedLink || !embedUrl) && media.length === 0) {
           return null;
         }
 
-        const resolvedType = media.length ? item.type : getInstagramItemType(normalizedLink);
+        const resolvedType = media.length ? item.type : getPortfolioItemType(normalizedLink);
 
         return {
           id: item.label.trim() || `${resolvedType === "reel" ? "Reel" : "Post"} ${index + 1}`,
           type: resolvedType,
           media,
           link: normalizedLink,
+          embedUrl,
         } satisfies EmbedItem;
       })
       .filter((item): item is EmbedItem => item !== null);
