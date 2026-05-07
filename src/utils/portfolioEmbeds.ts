@@ -17,13 +17,13 @@ const urlsGlob = import.meta.glob<{ default: string }>("../assets/Instagram reel
   query: "?raw",
 });
 
-const facebookShowcaseLinksGlob = import.meta.glob<{ default: string }>("../assets/facebook portfolio showcase/**/*.txt", {
+const facebookShowcaseLinksGlob = import.meta.glob<{ default: string }>("../assets/facebook_portfolio_showcase/**/*.txt", {
   eager: true,
   query: "?raw",
 });
 
 const facebookShowcaseMediaGlob = import.meta.glob<{ default: string }>(
-  "../assets/facebook portfolio showcase/**/*.{jpg,jpeg,png,webp,avif,mp4,webm,mov}",
+  "../assets/facebook_portfolio_showcase/**/*.{jpg,jpeg,png,webp,avif,mp4,webm,mov}",
   { eager: true },
 );
 
