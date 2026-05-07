@@ -2,7 +2,7 @@ interface QuoteLike {
   name?: string | null;
 }
 
-const PLACEHOLDER_QUOTE_NAME_PATTERN = /^test user(?:\s+\d+)?$/i;
+const PLACEHOLDER_QUOTE_NAME_PATTERN = /^test(?:\s+[a-z0-9]+)*$/i;
 
 export function isPlaceholderQuote(quote: QuoteLike) {
   const normalizedName = quote.name?.trim();
