@@ -17,13 +17,13 @@ const urlsGlob = import.meta.glob<{ default: string }>("../assets/Instagram reel
   query: "?raw",
 });
 
-const facebookShowcaseLinksGlob = import.meta.glob<{ default: string }>("/facebook portoflio showcase/**/*.txt", {
+const facebookShowcaseLinksGlob = import.meta.glob<{ default: string }>("../assets/facebook portfolio showcase/**/*.txt", {
   eager: true,
   query: "?raw",
 });
 
 const facebookShowcaseMediaGlob = import.meta.glob<{ default: string }>(
-  "/facebook portoflio showcase/**/*.{jpg,jpeg,png,webp,avif,mp4,webm,mov}",
+  "../assets/facebook portfolio showcase/**/*.{jpg,jpeg,png,webp,avif,mp4,webm,mov}",
   { eager: true },
 );
 
@@ -76,7 +76,7 @@ const extractIframeSrc = (value: string) => {
 };
 
 const parsePortfolioSource = (value: string): ParsedPortfolioSource | null => {
-  const trimmed = value.trim();
+  const trimmed = value.trim().split(/[\r\n]/)[0].trim();
   if (!trimmed) {
     return null;
   }
@@ -196,7 +196,10 @@ const facebookShowcaseItems: PortfolioEmbedItem[] = (() => {
 
   Object.entries(facebookShowcaseLinksGlob).forEach(([path, module]) => {
     const folder = getFolderName(path);
-    linksByFolder.set(folder, normalizePortfolioUrl(module.default));
+    const link = normalizePortfolioUrl(module.default);
+    if (link && (!linksByFolder.has(folder) || !linksByFolder.get(folder))) {
+      linksByFolder.set(folder, link);
+    }
   });
 
   Object.entries(facebookShowcaseMediaGlob)
