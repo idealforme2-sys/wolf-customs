@@ -1,4 +1,4 @@
-import { normalizePortfolioUrl } from "./utils/portfolioEmbeds";
+import { fallbackPortfolioItems, normalizePortfolioUrl } from "./utils/portfolioEmbeds";
 
 export interface TopBannerContent {
   text: string;
@@ -391,6 +391,22 @@ const isLegacyEmbedOnlyPortfolio = (items: PortfolioItem[]) => {
   return hasDefaultLikeLabels;
 };
 
+const hasBuiltInPortfolioMedia = fallbackPortfolioItems.some((item) => item.media.some((mediaUrl) => mediaUrl.trim()));
+
+const isUrlOnlyPortfolio = (items: PortfolioItem[]) => {
+  if (!items.length) {
+    return false;
+  }
+
+  const hasUploadedMedia = items.some((item) => item.media.some((mediaUrl) => mediaUrl.trim()));
+  if (hasUploadedMedia) {
+    return false;
+  }
+
+  const normalizedLinks = items.map((item) => normalizePortfolioUrl(item.link)).filter(Boolean);
+  return normalizedLinks.length > 0;
+};
+
 export function mergeSiteContent(incoming?: Partial<SiteContent> | null): SiteContent {
   const incomingPortfolioItems: PortfolioItem[] = Array.isArray(incoming?.portfolio?.items)
     ? incoming!.portfolio!.items
@@ -404,7 +420,9 @@ export function mergeSiteContent(incoming?: Partial<SiteContent> | null): SiteCo
     : defaultSiteContent.portfolio.items;
 
   const shouldResetPortfolioToFallback =
-    isLegacyInstagramPortfolio(incomingPortfolioItems) || isLegacyEmbedOnlyPortfolio(incomingPortfolioItems);
+    isLegacyInstagramPortfolio(incomingPortfolioItems) ||
+    isLegacyEmbedOnlyPortfolio(incomingPortfolioItems) ||
+    (hasBuiltInPortfolioMedia && isUrlOnlyPortfolio(incomingPortfolioItems));
 
   return {
     topBanner: {
