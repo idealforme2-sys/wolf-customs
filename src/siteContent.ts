@@ -368,6 +368,29 @@ const isLegacyInstagramPortfolio = (items: PortfolioItem[]) => {
   return normalizedLinks.every((link) => link.includes("instagram.com/"));
 };
 
+const isLegacyEmbedOnlyPortfolio = (items: PortfolioItem[]) => {
+  if (!items.length) {
+    return false;
+  }
+
+  const hasUploadedMedia = items.some((item) => item.media.some((mediaUrl) => mediaUrl.trim()));
+  if (hasUploadedMedia) {
+    return false;
+  }
+
+  const normalizedLinks = items.map((item) => normalizePortfolioUrl(item.link)).filter(Boolean);
+  if (!normalizedLinks.length) {
+    return false;
+  }
+
+  const hasDefaultLikeLabels = items.every((item) => {
+    const label = item.label.trim();
+    return !label || /^(post|reel|showcase)\s+\d+$/i.test(label);
+  });
+
+  return hasDefaultLikeLabels;
+};
+
 export function mergeSiteContent(incoming?: Partial<SiteContent> | null): SiteContent {
   const incomingPortfolioItems: PortfolioItem[] = Array.isArray(incoming?.portfolio?.items)
     ? incoming!.portfolio!.items
@@ -380,7 +403,8 @@ export function mergeSiteContent(incoming?: Partial<SiteContent> | null): SiteCo
         .filter((item) => !(normalizePortfolioLink(item.link) === LEGACY_TEST_EMBED_URL && item.media.every((mediaUrl) => !mediaUrl.trim())))
     : defaultSiteContent.portfolio.items;
 
-  const shouldResetPortfolioToFallback = isLegacyInstagramPortfolio(incomingPortfolioItems);
+  const shouldResetPortfolioToFallback =
+    isLegacyInstagramPortfolio(incomingPortfolioItems) || isLegacyEmbedOnlyPortfolio(incomingPortfolioItems);
 
   return {
     topBanner: {

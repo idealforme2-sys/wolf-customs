@@ -17,6 +17,16 @@ const urlsGlob = import.meta.glob<{ default: string }>("../assets/Instagram reel
   query: "?raw",
 });
 
+const facebookShowcaseLinksGlob = import.meta.glob<{ default: string }>("/facebook portoflio showcase/**/*.txt", {
+  eager: true,
+  query: "?raw",
+});
+
+const facebookShowcaseMediaGlob = import.meta.glob<{ default: string }>(
+  "/facebook portoflio showcase/**/*.{jpg,jpeg,png,webp,avif,mp4,webm,mov}",
+  { eager: true },
+);
+
 const FACEBOOK_HOSTS = new Set(["facebook.com", "www.facebook.com", "m.facebook.com", "web.facebook.com"]);
 const INSTAGRAM_HOSTS = new Set(["instagram.com", "www.instagram.com", "m.instagram.com"]);
 
@@ -24,6 +34,8 @@ const getFolderName = (path: string) => {
   const parts = path.split("/");
   return parts[parts.length - 2];
 };
+
+const getFolderNumber = (value: string) => parseInt(value.replace(/\D/g, ""), 10) || 0;
 
 const compareFolders = (a: string, b: string) => {
   const typeA = a.startsWith("Reel") ? "reel" : "post";
@@ -37,6 +49,10 @@ const compareFolders = (a: string, b: string) => {
   const numB = parseInt(b.replace(/\D/g, ""), 10) || 0;
   return numA - numB;
 };
+
+const compareShowcaseFolders = (a: string, b: string) => getFolderNumber(a) - getFolderNumber(b);
+
+const isVideoFile = (path: string) => /\.(mp4|webm|mov)$/i.test(path);
 
 const normalizeFacebookHost = (host: string) => {
   if (FACEBOOK_HOSTS.has(host)) {
@@ -174,7 +190,41 @@ export const getPortfolioItemType = (value: string): "post" | "reel" => {
     : "post";
 };
 
-export const fallbackPortfolioItems: PortfolioEmbedItem[] = Object.entries(urlsGlob)
+const facebookShowcaseItems: PortfolioEmbedItem[] = (() => {
+  const linksByFolder = new Map<string, string>();
+  const mediaByFolder = new Map<string, string[]>();
+
+  Object.entries(facebookShowcaseLinksGlob).forEach(([path, module]) => {
+    const folder = getFolderName(path);
+    linksByFolder.set(folder, normalizePortfolioUrl(module.default));
+  });
+
+  Object.entries(facebookShowcaseMediaGlob)
+    .sort(([pathA], [pathB]) => pathA.localeCompare(pathB))
+    .forEach(([path, module]) => {
+      const folder = getFolderName(path);
+      const current = mediaByFolder.get(folder) ?? [];
+      current.push(module.default);
+      mediaByFolder.set(folder, current);
+    });
+
+  return Array.from(new Set([...linksByFolder.keys(), ...mediaByFolder.keys()]))
+    .sort(compareShowcaseFolders)
+    .map((folder) => {
+      const media = mediaByFolder.get(folder) ?? [];
+      const labelNumber = getFolderNumber(folder) || 0;
+      const hasVideo = media.some((value) => isVideoFile(value));
+      return {
+        label: `Showcase ${labelNumber || folder}`,
+        type: hasVideo ? "reel" : "post",
+        media,
+        link: linksByFolder.get(folder) ?? "",
+      } satisfies PortfolioEmbedItem;
+    })
+    .filter((item) => item.media.length > 0);
+})();
+
+const legacyEmbedItems: PortfolioEmbedItem[] = Object.entries(urlsGlob)
   .map(([path, module]) => {
     const label = getFolderName(path);
     return {
@@ -186,6 +236,8 @@ export const fallbackPortfolioItems: PortfolioEmbedItem[] = Object.entries(urlsG
   })
   .filter((item) => item.link)
   .sort((a, b) => compareFolders(a.label, b.label));
+
+export const fallbackPortfolioItems: PortfolioEmbedItem[] = facebookShowcaseItems.length ? facebookShowcaseItems : legacyEmbedItems;
 
 export const clonePortfolioItems = (items: PortfolioEmbedItem[]) =>
   items.map((item) => ({
