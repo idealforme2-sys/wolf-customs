@@ -99,61 +99,112 @@ export default function Services() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="relative mb-24 overflow-hidden rounded-[30px] border border-[rgba(255,228,157,0.12)] bg-[linear-gradient(180deg,rgba(17,10,4,0.9),rgba(8,5,2,0.96))] px-6 py-8 shadow-[0_28px_80px_rgba(0,0,0,0.28)] md:px-8 md:py-10"
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative mb-24 overflow-hidden rounded-[32px] border border-white/[0.08] bg-[linear-gradient(135deg,rgba(18,12,6,0.92),rgba(8,5,2,0.97))] p-8 md:p-12 shadow-[0_32px_90px_rgba(0,0,0,0.35)] backdrop-blur-md"
         >
-          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(255,223,150,0.8)] to-transparent" />
-          <div className="absolute -left-16 top-0 h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(243,163,55,0.14)_0%,transparent_72%)] blur-3xl" />
+          {/* Decorative Glowing Gradients */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(255,223,150,0.6)] to-transparent" />
+          <div className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(243,163,55,0.15)_0%,transparent_70%)] blur-3xl pointer-events-none" />
+          <div className="absolute -left-24 -bottom-24 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(199,98,0,0.12)_0%,transparent_70%)] blur-3xl pointer-events-none" />
 
-          <div className="relative z-10 grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
-            <div>
-              <div className="mb-5 flex items-center gap-4">
-                <div className="h-[1px] w-10 bg-wolf-red" />
-                <span className="text-wolf-red font-heading tracking-[0.24em] uppercase text-xs font-bold">
-                  Adelaide, South Australia
-                </span>
+          <div className="relative z-10 grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-stretch">
+            {/* Left Brand Identity Pane */}
+            <div className="flex flex-col justify-between space-y-8 pr-0 lg:pr-8 lg:border-r border-white/[0.06]">
+              <div className="space-y-6">
+                <div className="flex items-center gap-3">
+                  <span className="h-[2px] w-8 bg-wolf-red shadow-[0_0_12px_rgba(243,163,55,0.8)]" />
+                  <span className="text-wolf-red font-heading tracking-[0.26em] uppercase text-xs font-bold [text-shadow:0_0_14px_rgba(243,163,55,0.3)]">
+                    Adelaide, South Australia
+                  </span>
+                </div>
+                
+                <h2 className="text-4xl font-heading font-black uppercase tracking-tight leading-[0.9] text-white sm:text-5xl md:text-6xl lg:text-5xl xl:text-6.5xl">
+                  Adelaide <span className="text-white font-light">Automotive</span>
+                  <br />
+                  <span className="molten-highlight">Restoration &amp; Custom Paint</span>
+                  <br />
+                  <span className="text-white text-3xl sm:text-4xl font-light tracking-wide block mt-3">By Wolf Customs</span>
+                </h2>
               </div>
-              <h2 className="text-4xl font-heading font-black uppercase tracking-tighter leading-[0.95] text-white md:text-6xl">
-                Adelaide <span className="text-white">Automotive</span>
-                <br />
-                <span className="molten-highlight">Restoration &amp; Custom Paint</span>
-                <br />
-                <span className="text-white">By Wolf Customs</span>
-              </h2>
+
+              {/* Status and ABN info Badges */}
+              <div className="space-y-4 pt-6 border-t border-white/[0.06]">
+                <div className="flex flex-wrap gap-3">
+                  <div className="inline-flex items-center gap-2.5 rounded-full border border-wolf-red/30 bg-wolf-red/5 px-4 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.15)] transition-all duration-300 hover:border-wolf-red/55">
+                    <span className="h-2 w-2 rounded-full bg-wolf-red animate-pulse shadow-[0_0_10px_rgba(243,163,55,1)]" />
+                    <p className="text-[11px] font-heading font-bold uppercase tracking-[0.24em] text-wolf-red">
+                      Salisbury South Workshop
+                    </p>
+                  </div>
+
+                  <div className="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.02] px-4 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+                    <Award className="h-3.5 w-3.5 text-wolf-cream-muted" />
+                    <p className="text-[10px] font-heading font-bold uppercase tracking-[0.2em] text-wolf-cream-muted">
+                      {content.business.abn}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div className="space-y-5 border-l border-[rgba(255,223,150,0.16)] pl-0 lg:pl-8">
-              <div className="inline-flex items-center gap-3 rounded-full border border-[rgba(255,223,150,0.16)] bg-white/[0.03] px-4 py-2 shadow-[0_12px_32px_rgba(0,0,0,0.18)]">
-                <span className="h-2 w-2 rounded-full bg-wolf-red shadow-[0_0_14px_rgba(243,163,55,0.7)]" />
-                <p className="text-[11px] font-heading font-bold uppercase tracking-[0.24em] text-wolf-red">
-                  Salisbury South Workshop
-                </p>
+            {/* Right Information & Process Cards */}
+            <div className="flex flex-col justify-between space-y-8 pl-0 lg:pl-4">
+              <div className="grid gap-6 sm:grid-cols-1">
+                {/* Philosophy Card */}
+                <div className="group relative overflow-hidden rounded-[24px] border border-white/[0.06] bg-[linear-gradient(135deg,rgba(255,244,220,0.02),rgba(56,28,5,0.2))] p-6 transition-all duration-500 hover:border-wolf-red/35 hover:bg-[linear-gradient(135deg,rgba(255,244,220,0.06),rgba(56,28,5,0.45))] hover:shadow-[0_20px_40px_rgba(0,0,0,0.3)]">
+                  <div className="absolute -right-16 -top-16 h-36 w-36 rounded-full bg-[radial-gradient(circle,rgba(243,163,55,0.1)_0%,transparent_70%)] blur-2xl transition-all duration-500 group-hover:scale-125" />
+                  <p className="text-[10px] font-heading font-bold uppercase tracking-[0.24em] text-wolf-red mb-3">
+                    01 / The Workshop Vision
+                  </p>
+                  <p className="relative z-10 text-base font-light leading-relaxed text-gray-300 md:text-lg">
+                    From Salisbury South, Wolf Customs restores, refinishes, and repairs vehicles for Adelaide owners who care about
+                    <span className="text-wolf-red font-medium transition-all duration-300 group-hover:text-white"> straighter body lines, deeper colour, and detail that still rewards a closer look.</span>
+                  </p>
+                </div>
+
+                {/* Process Steps Card */}
+                <div className="group relative overflow-hidden rounded-[24px] border border-white/[0.06] bg-black/40 p-6 transition-all duration-500 hover:border-wolf-red/30">
+                  <p className="text-[10px] font-heading font-bold uppercase tracking-[0.24em] text-[#ffd77f] mb-3">
+                    02 / Classic, Prestige &amp; Modern
+                  </p>
+                  <p className="text-sm font-light leading-relaxed text-gray-400 md:text-base mb-6">
+                    Every build moves through the same detail-first process: patient preparation, clean surfacing, controlled paintwork, and finishing work shaped to feel sharp on delivery day and years after.
+                  </p>
+
+                  {/* Visual Process Step Tracker */}
+                  <div className="grid grid-cols-4 gap-2 pt-2 border-t border-white/[0.05]">
+                    {[
+                      { num: "01", label: "Preparation", desc: "Patient Surface Prep" },
+                      { num: "02", label: "Surfacing", desc: "Clean Straight Lines" },
+                      { num: "03", label: "Paintwork", desc: "Controlled Booth Spray" },
+                      { num: "04", label: "Finishing", desc: "Sharp Delivery Detail" },
+                    ].map((step) => (
+                      <div key={step.label} className="text-center group/step">
+                        <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/[0.02] text-xs font-heading font-bold text-gray-500 transition-all duration-500 group-hover/step:border-wolf-red/50 group-hover/step:bg-wolf-red/10 group-hover/step:text-wolf-red group-hover:border-wolf-red/20">
+                          {step.num}
+                        </div>
+                        <p className="text-[9px] font-heading uppercase tracking-wider text-gray-400 font-bold group-hover/step:text-white">
+                          {step.label}
+                        </p>
+                        <p className="hidden md:block text-[8px] text-gray-600 group-hover/step:text-gray-400 transition-colors">
+                          {step.desc}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
 
-              <div className="relative overflow-hidden rounded-[26px] border border-[rgba(255,223,150,0.18)] bg-[linear-gradient(135deg,rgba(255,244,220,0.08),rgba(56,28,5,0.82))] p-6 shadow-[0_26px_60px_rgba(0,0,0,0.26)]">
-                <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-[radial-gradient(circle,rgba(243,163,55,0.24)_0%,transparent_72%)] blur-2xl" />
-                <p className="relative text-base font-light leading-relaxed text-gray-200 md:text-lg">
-                  From Salisbury South, Wolf Customs restores, refinishes, and repairs vehicles for Adelaide owners who care about
-                  <span className="text-[#ffe4a6]"> straighter body lines, deeper colour, and detail that still rewards a closer look.</span>
-                </p>
-              </div>
-
-              <div className="relative overflow-hidden rounded-[24px] border border-white/8 bg-black/35 p-5 backdrop-blur-sm">
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-wolf-red/70 to-transparent" />
-                <p className="mb-3 text-[10px] font-heading font-bold uppercase tracking-[0.26em] text-[#ffd77f]">
-                  Classic, Prestige &amp; Modern
-                </p>
-                <p className="text-sm font-light leading-relaxed text-gray-400 md:text-base">
-                  Every build moves through the same detail-first process: patient preparation, clean surfacing, controlled paintwork, and finishing work shaped to feel sharp on delivery day and years after.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2 rounded-full border border-white/8 bg-white/[0.03] px-4 py-3 text-[11px] font-heading font-bold uppercase tracking-[0.22em] text-gray-300">
-                <MapPin className="h-4 w-4 text-wolf-red" />
-                <span>Serving Adelaide & surrounding South Australian suburbs</span>
+              {/* Service Location Pill */}
+              <div className="flex items-center gap-3 rounded-full border border-white/[0.05] bg-white/[0.02] px-5 py-3.5 text-xs font-heading font-bold uppercase tracking-[0.22em] text-gray-300 transition-colors hover:bg-white/[0.04]">
+                <div className="relative flex h-3 w-3 shrink-0 items-center justify-center">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-wolf-red opacity-75" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-wolf-red" />
+                </div>
+                <span>Serving Adelaide &amp; surrounding South Australian suburbs</span>
               </div>
             </div>
           </div>
