@@ -2453,6 +2453,11 @@ export default function ContentDashboard() {
                       value={content.business.facebookUrl}
                       onChange={(value) => setSectionField("business", "facebookUrl", value)}
                     />
+                    <OwnerField
+                      label="Business ABN"
+                      value={content.business.abn}
+                      onChange={(value) => setSectionField("business", "abn", value)}
+                    />
                   </div>
                 </div>
               </div>

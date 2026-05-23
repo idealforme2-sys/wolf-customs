@@ -116,6 +116,7 @@ export interface BusinessContent {
   footerBlurb: string;
   instagramUrl: string;
   facebookUrl: string;
+  abn: string;
 }
 
 export interface SiteContent {
@@ -304,6 +305,7 @@ export const defaultSiteContent: SiteContent = {
     instagramUrl: "https://www.instagram.com/wolfcustoms_adelaide/",
     facebookUrl:
       "https://web.facebook.com/wolfcustomsadelaide?rdid=KcDxg51u4492qlPe&share_url=https%3A%2F%2Fweb.facebook.com%2Fshare%2F19LsBACZEz%2F%3Futm_source%3Dig%26utm_medium%3Dsocial%26utm_content%3Dlink_in_bio%26_rdc%3D1%26_rdr",
+    abn: "ABN 13 858 355 976",
   },
 };
 
