@@ -104,8 +104,10 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-wolf-gunmetal pt-8 flex flex-col items-center justify-center gap-3">
-          <p className="text-center text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} Wolf Customs. All rights reserved.
+          <p className="text-center text-sm text-gray-500 flex flex-col sm:flex-row items-center gap-1 sm:gap-2">
+            <span>&copy; {new Date().getFullYear()} Wolf Customs. All rights reserved.</span>
+            <span className="hidden sm:inline text-gray-700">•</span>
+            <span className="text-xs sm:text-sm text-gray-500/80">{content.business.abn}</span>
           </p>
           <a
             href="https://www.instagram.com/creative_webflow_co/"

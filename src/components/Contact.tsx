@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Phone, Mail, Clock, ChevronDown, UploadCloud, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, ChevronDown, UploadCloud, CheckCircle2, AlertCircle, Loader2, Award } from "lucide-react";
 import { useState, type FormEvent } from "react";
 import { db } from "../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
@@ -160,6 +160,24 @@ export default function Contact() {
                     Hours
                   </p>
                   <p className="text-gray-400 whitespace-pre-line">{content.business.hours}</p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6 }}
+                className="flex items-start gap-4"
+              >
+                <div className="w-12 h-12 bg-wolf-gunmetal flex items-center justify-center shrink-0">
+                  <Award className="w-6 h-6 text-wolf-red" />
+                </div>
+                <div>
+                  <p className="font-heading font-bold uppercase tracking-widest text-white mb-1">
+                    ABN
+                  </p>
+                  <p className="text-gray-400">{content.business.abn}</p>
                 </div>
               </motion.div>
             </div>
